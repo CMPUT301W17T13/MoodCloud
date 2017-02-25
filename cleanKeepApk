@@ -1,0 +1,35 @@
+# Cleans an Android Studio project, but keeps the debug APK
+# Omar Ahmad
+
+GRADLE_FILE=gradlew
+GRADLE_CLEAN=clean
+APK_FILE=app-debug.apk
+APK_DIRECTORY=app/build/outputs/apk
+
+cd "$( dirname "${BASH_SOURCE[0]}" )"    # cd to directory of this script
+
+# If there is a gradle file, clean
+if [ -f $GRADLE_FILE ]
+then
+
+	# If there is a debug APK, run gradle clean without deleting it
+	if [ -f "$APK_DIRECTORY/$APK_FILE" ]
+	then
+
+		mv "$APK_DIRECTORY/$APK_FILE" "$APK_FILE"
+		./$GRADLE_FILE $GRADLE_CLEAN
+		mkdir -p "$APK_DIRECTORY"
+		mv "$APK_FILE" "$APK_DIRECTORY/$APK_FILE"
+		echo "Cleaned, kept APK"
+
+	# If there is no debug APK, just run gradle clean
+	else
+
+		./$GRADLE_FILE $GRADLE_CLEAN
+		echo "Cleaned, no APK found"
+	fi
+
+# If there is no gradle file, print message
+else
+	echo "No gradle file found"
+fi
