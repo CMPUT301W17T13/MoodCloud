@@ -6,16 +6,18 @@ public class Post {
     private String text;
     private String mood;
     private String triggerText;
+    private String triggerImage;
     private String context;
     private Profile poster;
     private int[] location;
 
-    public Post(String text, String mood, String triggerText, String context, Profile poster,
-                int[] location) {
+    public Post(String text, String mood, String triggerText, String triggerImage, String context,
+                Profile poster, int[] location) {
 
         this.text = text;
         this.mood = mood;
         this.triggerText = triggerText;
+        this.triggerImage = triggerImage;
         this.context = context;
         this.poster = poster;
         this.location = location;
@@ -49,6 +51,16 @@ public class Post {
     public void setTriggerText(String triggerText) {
 
         this.triggerText = triggerText;
+    }
+
+    public String getTriggerImage() {
+
+        return this.triggerImage;
+    }
+
+    public void setTriggerImage(String triggerImage) {
+
+        this.triggerImage = triggerImage;
     }
 
     public String getContext() {
