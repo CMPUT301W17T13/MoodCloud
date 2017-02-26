@@ -17,6 +17,14 @@ public class Account {
         this.profile = profile;
     }
 
+    @Override
+    public boolean equals(Object other) {
+
+        if (!(other instanceof Account)) return false;
+        Account otherAccount = (Account) other;
+        return this.username == otherAccount.username;
+    }
+
     public String getUsername() {
 
         return this.username;
