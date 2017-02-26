@@ -2,7 +2,7 @@ package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
 
-/** A user profile */
+/** A user profile. */
 public class Profile {
 
     private String name;

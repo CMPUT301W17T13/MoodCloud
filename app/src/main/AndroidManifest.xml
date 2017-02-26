@@ -15,13 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignIn" />
-        <activity android:name=".CreateAccount" />
-        <activity android:name=".NewsFeed" />
-        <activity android:name=".AddOrEditPost" />
-        <activity android:name=".ViewProfile" />
-        <activity android:name=".EditProfile" />
-        <activity android:name=".Following"></activity>
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".MoodHistoryActivity" />
+        <activity android:name=".AddOrEditPostActivity" />
+        <activity android:name=".ViewProfileActivity" />
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".FollowingActivity"></activity>
     </application>
 
 </manifest>

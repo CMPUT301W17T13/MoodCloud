@@ -1,6 +1,6 @@
 package com.csahmad.moodcloud;
 
-/** A mood event */
+/** A mood event. */
 public class Post {
 
     private String text;

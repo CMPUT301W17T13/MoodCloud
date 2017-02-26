@@ -2,7 +2,7 @@ package com.csahmad.moodcloud;
 
 // TODO: 2017-02-25 Find a better way to store passwords
 
-/** A MoodCloud account */
+/** A MoodCloud account. */
 public class Account {
 
     private String username;

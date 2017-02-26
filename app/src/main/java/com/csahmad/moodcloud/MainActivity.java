@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/** The main activity. */
 public class MainActivity extends AppCompatActivity {
 
     @Override

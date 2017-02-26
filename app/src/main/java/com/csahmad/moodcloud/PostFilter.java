@@ -3,7 +3,7 @@ package com.csahmad.moodcloud;
 import java.util.ArrayList;
 import java.util.Date;
 
-/** Filter posts by keyword, mood, and/or location */
+/** Filter posts by keyword, mood, and/or location. */
 public class PostFilter {
 
     private ArrayList<Post> posts;
