@@ -39,6 +39,7 @@ public class Profile {
         this.name = name;
     }
 
+    // TODO: 2017-02-26 Throw an exception if duplicate post
     public void addPost(Post post) {
 
         this.posts.add(post);
