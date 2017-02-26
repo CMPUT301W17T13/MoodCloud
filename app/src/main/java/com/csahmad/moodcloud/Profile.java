@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import io.searchbox.annotations.JestId;
 
 /** A user profile. */
 public class Profile {
@@ -10,6 +11,10 @@ public class Profile {
     private ArrayList<Post> posts = new ArrayList<Post>();
     private ArrayList<Profile> followers = new ArrayList<Profile>();
     private ArrayList<Profile> followRequests = new ArrayList<Profile>();
+
+    /** This Profile's unique ID (creating IDs handled by Jest). */
+    @JestId
+    private String id;
 
     public Profile(String name) {
 
