@@ -2,7 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-/** Test the PostFilter class. */
+/** Test the {@link PostFilter} class. */
 public class PostFilterTest extends ActivityInstrumentationTestCase2 {
 
     public PostFilterTest() {

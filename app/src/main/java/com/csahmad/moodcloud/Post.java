@@ -1,5 +1,7 @@
 package com.csahmad.moodcloud;
 
+import io.searchbox.annotations.JestId;
+
 /** A mood event. */
 public class Post {
 
@@ -11,6 +13,10 @@ public class Post {
     private Profile poster;
     private int[] location;
 
+    /** This Post's unique ID (creating IDs handled by Jest). */
+    @JestId
+    private String id;
+
     public Post(String text, String mood, String triggerText, String triggerImage, String context,
                 Profile poster, int[] location) {
 
@@ -21,6 +27,14 @@ public class Post {
         this.context = context;
         this.poster = poster;
         this.location = location;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (!(other instanceof Post)) return false;
+        Post otherPost = (Post) other;
+        return this.id == otherPost.id;
     }
 
     public String getText() {

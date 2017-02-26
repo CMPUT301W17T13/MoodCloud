@@ -21,6 +21,14 @@ public class Profile {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object other) {
+
+        if (!(other instanceof Profile)) return false;
+        Profile otherProfile = (Profile) other;
+        return this.id == otherProfile.id;
+    }
+
     public String getName() {
 
         return this.name;
