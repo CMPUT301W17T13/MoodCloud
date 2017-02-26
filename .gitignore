@@ -2,3 +2,5 @@
 !/.idea/
 !/.gitignore
 *.~*
+build/generated/
+build/intermediates/
