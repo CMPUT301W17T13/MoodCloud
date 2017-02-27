@@ -69,13 +69,13 @@ public class PostFilter {
     }
 
     // TODO: 2017-02-26 Fill out (currently returns empty list)
-    public ArrayList<Post> getFilteredPosts() throws InvalidFilterException {
+    public ArrayList<Post> getFilteredPosts() {
 
         if (this.location == null && this.maxDistance != null)
-            throw new InvalidFilterException("Cannot set location without setting maxDistance.");
+            throw new IllegalStateException("Cannot set location without setting maxDistance.");
 
         if (this.location == null && this.maxDistance != null)
-            throw new InvalidFilterException("Cannot set maxDistance without setting location.");
+            throw new IllegalStateException("Cannot set maxDistance without setting location.");
 
         return new ArrayList<Post>();
     }
