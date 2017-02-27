@@ -16,6 +16,14 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
     public void testEquals() {
         Profile profile1 = new Profile("test");
         Profile profile2 = new Profile("test");
+
+        profile1.setId("100");
+        assertFalse(profile1.equals(profile2));
+
+        profile2.setId("101");
+        assertFalse(profile1.equals(profile2));
+
+        profile2.setId("100");
         assertTrue(profile1.equals(profile2));
     }
 

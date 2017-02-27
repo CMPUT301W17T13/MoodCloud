@@ -39,6 +39,16 @@ public class Post {
         return this.id == otherPost.id;
     }
 
+    public String getId() {
+
+        return this.id;
+    }
+
+    public void setId(String id) {
+
+        this.id = id;
+    }
+
     public String getText() {
 
         return this.text;

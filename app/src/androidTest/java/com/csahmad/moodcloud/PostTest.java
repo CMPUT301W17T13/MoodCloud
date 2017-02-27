@@ -15,8 +15,17 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testEquals() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
+
         Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc);
         Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc);
+
+        post1.setId("100");
+        assertFalse(post1.equals(post2));
+
+        post2.setId("101");
+        assertFalse(post1.equals(post2));
+
+        post2.setId("100");
         assertTrue(post1.equals(post2));
     }
 
