@@ -31,8 +31,6 @@ public class LocationTools {
      */
     public static double distance(double[] location1, double[] location2) {
 
-        double power1 = Math.pow(location2[0] - location1[0], 2);
-        double power2 = Math.pow(location2[1] - location1[1], 2);
-        return Math.sqrt(power1 + power2);
+        return 0;
     }
 }
