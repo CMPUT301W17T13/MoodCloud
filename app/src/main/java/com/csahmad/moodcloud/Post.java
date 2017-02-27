@@ -11,14 +11,16 @@ public class Post {
     private String triggerImage;
     private String context;
     private Profile poster;
-    private int[] location;
+
+    /** The location of the Post in the form {latitude, longitude, altitude} */
+    private double[] location;
 
     /** This Post's unique ID (creating IDs handled by Jest). */
     @JestId
     private String id;
 
     public Post(String text, String mood, String triggerText, String triggerImage, String context,
-                Profile poster, int[] location) {
+                Profile poster, double[] location) {
 
         this.text = text;
         this.mood = mood;
@@ -97,12 +99,12 @@ public class Post {
         this.poster = poster;
     }
 
-    public int[] getLocation() {
+    public double[] getLocation() {
 
         return this.location;
     }
 
-    public void setLocation(int[] location) {
+    public void setLocation(double[] location) {
 
         this.location = location;
     }
