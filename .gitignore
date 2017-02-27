@@ -1,9 +1,5 @@
 .*
-
-.idea/libraries/
-.idea/workspace.xml
 !.gitignore
-
 *.~*
-build/generated/
-build/intermediates/
+/build/generated/
+/build/intermediates/
