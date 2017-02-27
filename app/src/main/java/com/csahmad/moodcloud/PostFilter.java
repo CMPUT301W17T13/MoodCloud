@@ -1,14 +1,14 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 /** Filter posts by keyword, mood, and/or location. */
 public class PostFilter {
 
     private ArrayList<Post> posts;
     private String keyword;
-    private Date sinceDate;
+    private Calendar sinceDate;
     private String mood;
     private double[] location;
     private Integer maxDistance;
@@ -28,12 +28,12 @@ public class PostFilter {
         this.keyword = keyword;
     }
 
-    public Date getSinceDate() {
+    public Calendar getSinceDate() {
 
         return this.sinceDate;
     }
 
-    public void setSinceDate(Date sinceDate) {
+    public void setSinceDate(Calendar sinceDate) {
         
         this.sinceDate = sinceDate;
     }

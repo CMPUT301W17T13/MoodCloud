@@ -1,5 +1,7 @@
 package com.csahmad.moodcloud;
 
+import java.util.Calendar;
+
 import io.searchbox.annotations.JestId;
 
 /** A mood event. */
@@ -11,6 +13,7 @@ public class Post {
     private String triggerImage;
     private String context;
     private Profile poster;
+    private Calendar date;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
@@ -20,7 +23,7 @@ public class Post {
     private String id;
 
     public Post(String text, String mood, String triggerText, String triggerImage, String context,
-                Profile poster, double[] location) {
+                Profile poster, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
@@ -29,6 +32,7 @@ public class Post {
         this.context = context;
         this.poster = poster;
         this.location = location;
+        this.date = date;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Taylor on 2017-02-26.
@@ -15,9 +17,10 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testEquals() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
+        Calendar date = new GregorianCalendar();
 
-        Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc);
-        Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
+        Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
 
         post1.setId("100");
         assertFalse(post1.equals(post2));
@@ -32,7 +35,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testText() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setText("test");
         assertEquals("test", post.getText());
     }
@@ -40,7 +44,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testMood() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setMood("test");
         assertEquals("test", post.getMood());
     }
@@ -48,7 +53,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testTriggerText() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setTriggerText("test");
         assertEquals("test", post.getTriggerText());
     }
@@ -56,7 +62,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testTriggerImage() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setTriggerImage("test");
         assertEquals("test", post.getTriggerImage());
     }
@@ -64,7 +71,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
     public void testContext() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setContext("test");
         assertEquals("test", post.getContext());
     }
@@ -73,7 +81,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("test");
         Profile profile2 =  new Profile("test2");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setPoster(profile2);
         assertEquals(profile2, post.getPoster());
     }
@@ -82,7 +91,8 @@ public class PostTest extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
         double[] loc2 = new double[] {3,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         post.setLocation(loc2);
         assertEquals(loc2, post.getLocation());
     }
