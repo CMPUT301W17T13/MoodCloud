@@ -14,35 +14,50 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
-    public void testKeyWord() {
+    public void testKeyword() {
+
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
         Calendar date = new GregorianCalendar();
+
         Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
+
         ArrayList<Post> list = new ArrayList<Post>();
+
         list.add(post1);
         list.add(post2);
+
         PostFilter filter1 = new PostFilter(list);
+        assertEquals(null, filter1.getKeyword());
+
         filter1.setKeyword("test");
         assertEquals("test", filter1.getKeyword());
     }
 
     public void testMood() {
+
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
         Calendar date = new GregorianCalendar();
+
         Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
+
         ArrayList<Post> list = new ArrayList<Post>();
+
         list.add(post1);
         list.add(post2);
+
         PostFilter filter1 = new PostFilter(list);
+        assertEquals(null, filter1.getMood());
+
         filter1.setMood("test");
         assertEquals("test", filter1.getMood());
     }
 
     public void testLocationDistance() {
+
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
         double[] loc2 = new double[] {3,3,3};
