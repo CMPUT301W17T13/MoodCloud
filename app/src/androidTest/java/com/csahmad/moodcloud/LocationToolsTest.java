@@ -12,6 +12,7 @@ public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
 
     public void testDistance() {
 
+        double[] location1 = new double[]{};
         ;
     }
 }
