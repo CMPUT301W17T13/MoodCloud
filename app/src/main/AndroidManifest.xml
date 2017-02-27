@@ -21,7 +21,8 @@
         <activity android:name=".AddOrEditPostActivity" />
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".FollowingActivity"></activity>
+        <activity android:name=".FollowingActivity" />
+        <activity android:name=".ShowMapActivity"></activity>
     </application>
 
 </manifest>
