@@ -3,6 +3,9 @@ package com.csahmad.moodcloud;
 import android.renderscript.Double2;
 import android.test.ActivityInstrumentationTestCase2;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import static java.lang.Boolean.TRUE;
 
 /** Test the {@link Profile} class. */
@@ -43,7 +46,8 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
     public void testPostCount() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         profile.addPost(post);
         assertEquals(1, profile.postCount());
     }
@@ -51,7 +55,8 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
     public void testHasPost() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         profile.addPost(post);
         assertTrue(profile.hasPost(post));
     }
@@ -59,7 +64,8 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
     public void testRemovePost() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
-        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc);
+        Calendar date = new GregorianCalendar();
+        Post post = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         profile.addPost(post);
         profile.removePost(profile.getPost(0));
         assertTrue(profile.hasPost(post));

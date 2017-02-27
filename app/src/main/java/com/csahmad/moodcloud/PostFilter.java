@@ -11,7 +11,7 @@ public class PostFilter {
     private Calendar sinceDate;
     private String mood;
     private double[] location;
-    private Integer maxDistance;
+    private Double maxDistance;
 
     public PostFilter(ArrayList<Post> posts) {
 
@@ -53,28 +53,31 @@ public class PostFilter {
         return this.location;
     }
 
-    public void setLocation(double[] location) {
+    public void setLocationDistance(double[] location, Double maxDistance) {
+
+        if (location == null && maxDistance != null)
+            throw new IllegalArgumentException("Cannot set location without setting maxDistance.");
+
+        if (location != null && maxDistance == null)
+            throw new IllegalArgumentException("Cannot set maxDistance without setting location.");
 
         this.location = location;
     }
 
-    public int getMaxDistance() {
+    public Double getMaxDistance() {
 
         return this.maxDistance;
-    }
-
-    public void setMaxDistance(int maxDistance) {
-
-        this.maxDistance = maxDistance;
     }
 
     // TODO: 2017-02-26 Fill out (currently returns empty list)
     public ArrayList<Post> getFilteredPosts() {
 
+        // Should not be the case because setLocationDistance should enforce proper state
         if (this.location == null && this.maxDistance != null)
             throw new IllegalStateException("Cannot set location without setting maxDistance.");
 
-        if (this.location == null && this.maxDistance != null)
+        // Should not be the case because setLocationDistance should enforce proper state
+        if (this.location != null && this.maxDistance == null)
             throw new IllegalStateException("Cannot set maxDistance without setting location.");
 
         return new ArrayList<Post>();

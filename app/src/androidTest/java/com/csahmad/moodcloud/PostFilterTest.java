@@ -41,33 +41,52 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         assertEquals("test", filter1.getMood());
     }
 
-    public void testLocation() {
+    public void testLocationDistance() {
         Profile profile = new Profile("test");
         double[] loc = new double[] {1,2,3};
         double[] loc2 = new double[] {3,3,3};
         Calendar date = new GregorianCalendar();
-        Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
-        Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
-        ArrayList<Post> list = new ArrayList<Post>();
-        list.add(post1);
-        list.add(post2);
-        PostFilter filter1 = new PostFilter(list);
-        filter1.setLocation(loc2);
-        assertEquals(loc2, filter1.getLocation());
-    }
 
-    public void testMaxDistance() {
-        Profile profile = new Profile("test");
-        double[] loc = new double[] {1,2,3};
-        Calendar date = new GregorianCalendar();
         Post post1 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
         Post post2 = new Post("t", "m", "tr", "tri", "c", profile, loc, date);
+
         ArrayList<Post> list = new ArrayList<Post>();
+
         list.add(post1);
         list.add(post2);
+
         PostFilter filter1 = new PostFilter(list);
-        filter1.setMaxDistance(32);
-        assertEquals(32, filter1.getMaxDistance());
+        assertEquals(null, filter1.getLocation());
+        assertEquals(null, filter1.getMaxDistance());
+
+        filter1.setLocationDistance(loc2, 5.0);
+        assertEquals(loc2, filter1.getLocation());
+        assertEquals(5.0, filter1.getMaxDistance());
+
+        boolean exceptionThrown = false;
+
+        try {
+            filter1.setLocationDistance(loc2, null);
+        }
+
+        catch (IllegalArgumentException e) {
+
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+
+        try {
+            filter1.setLocationDistance(null, 5.0);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
     }
 
     // TODO: 2017-02-26 Finish
