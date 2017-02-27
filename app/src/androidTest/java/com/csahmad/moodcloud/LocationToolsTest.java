@@ -2,7 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-/** Test the {@link Profile} class. */
+/** Test the {@link LocationTools} class. */
 public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
 
     public LocationToolsTest() {
@@ -10,7 +10,7 @@ public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
-    public void testI() {
+    public void testDistance() {
 
         ;
     }
