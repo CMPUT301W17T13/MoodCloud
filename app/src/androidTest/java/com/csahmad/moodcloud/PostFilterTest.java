@@ -10,7 +10,7 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
-    public void testGetFilteredPosts() {
+    public void testDistance() {
 
         ;
     }

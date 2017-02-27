@@ -11,6 +11,8 @@ public class Post {
     private String triggerImage;
     private String context;
     private Profile poster;
+
+    /** The location of the Post in the form {latitude, longitude, altitude} */
     private int[] location;
 
     /** This Post's unique ID (creating IDs handled by Jest). */
