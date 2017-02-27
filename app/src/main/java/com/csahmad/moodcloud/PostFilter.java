@@ -10,7 +10,7 @@ public class PostFilter {
     private String keyword;
     private Date sinceDate;
     private String mood;
-    private int[] location;
+    private double[] location;
     private Integer maxDistance;
 
     public PostFilter(ArrayList<Post> posts) {
@@ -48,12 +48,12 @@ public class PostFilter {
         this.mood = mood;
     }
 
-    public int[] getLocation() {
+    public double[] getLocation() {
 
         return this.location;
     }
 
-    public void setLocation(int[] location) {
+    public void setLocation(double[] location) {
 
         this.location = location;
     }
