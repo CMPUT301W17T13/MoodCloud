@@ -11,6 +11,7 @@ public class PostFilter {
     private Calendar sinceDate;
     private String mood;
     private double[] location;
+    /** The maximum distance from {@link #location} in km. */
     private Double maxDistance;
 
     public PostFilter(ArrayList<Post> posts) {
@@ -53,6 +54,16 @@ public class PostFilter {
         return this.location;
     }
 
+    /**
+     * Set the maximum distance from the given location (in km) that should be included in filtered
+     * results.
+     *
+     * <p></>
+     * Ignores elevation.
+     *
+     * @param location the location in the form {latitude, longitude, altitude}
+     * @param maxDistance the maximum distance in km
+     */
     public void setLocationDistance(double[] location, Double maxDistance) {
 
         if (location == null && maxDistance != null)

@@ -90,7 +90,6 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    // TODO: 2017-02-26 Finish
     public void testGetFilteredPosts() {
 
         Profile profile = new Profile("test");
@@ -108,15 +107,16 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         Calendar date3 = new GregorianCalendar(currentYear, 8, 26);
         Calendar date4 = new GregorianCalendar(currentYear + 10, 8, 26);    // Future World
 
-        Post post1 = new Post("t", "mood1", "keyword1 hey", "tri", "c", profile, loc1, date1);
+        Post post1 = new Post("t", "mood1", "keyword1 keyword3", "tri", "c", profile, loc1, date1);
         Post post2 = new Post("t", "mood1", "keyword2hey", "tri", "c", profile, loc2, date2);
-        Post post3 = new Post("t", "mood2", "keyword2", "tri", "c", profile, loc3, date3);
+        Post post3 = new Post("t", "mood2", "keyword2 keyword3", "tri", "c", profile, loc3, date3);
         Post post4 = new Post("t", "mood2", "keyword2 hey", "tri", "c", profile, loc4, date4);
 
         ArrayList<Post> posts = new ArrayList<Post>();
         posts.add(post1);
         posts.add(post2);
         posts.add(post3);
+        posts.add(post4);
 
         // If no filters applied, should return all posts
         PostFilter filter = new PostFilter(posts);
@@ -153,6 +153,20 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
 
         filter.setMood(null);
 
-        ;
+        double[] loc = new double[] {65.0, 70.0, 0.0};
+        filter.setLocationDistance(loc, 3_000.0);
+        expected.add(post2);
+        expected.add(post3);
+        expected.add(post4);
+        results = filter.getFilteredPosts();
+        assertEquals(results, expected);
+        expected.clear();
+
+        // Location, distance still set + setting keyword
+        filter.setKeyword("keyword3");
+        expected.add(post3);
+        results = filter.getFilteredPosts();
+        assertEquals(results, expected);
+        expected.clear();
     }
 }
