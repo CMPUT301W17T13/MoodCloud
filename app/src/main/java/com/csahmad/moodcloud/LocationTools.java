@@ -13,7 +13,7 @@ public class LocationTools {
      * Returns the distance between the given locations in km.
      *
      * <p>
-     * Ignores elevation.
+     * Ignores altitude.
      *
      * @param location1 a location in the form {latitude, longitude, altitude}
      * @param location2 a location in the form {latitude, longitude, altitude}
@@ -28,7 +28,7 @@ public class LocationTools {
      * Returns the distance between the given locations in meters.
      *
      * <p>
-     * Ignores elevation.
+     * Ignores altitude.
      *
      * @param location1 a location in the form {latitude, longitude, altitude}
      * @param location2 a location in the form {latitude, longitude, altitude}
