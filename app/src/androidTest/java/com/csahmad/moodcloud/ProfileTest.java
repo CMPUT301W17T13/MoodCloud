@@ -29,7 +29,7 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
     public void testHomeProfile() {
         Profile profile = new Profile("test");
         profile.setHomeProfile(TRUE);
-        assertEquals(TRUE, profile.isHomeProfile());
+        assertEquals(Boolean.valueOf(profile.isHomeProfile()),TRUE);
     }
 
     public void testPostCount() {
