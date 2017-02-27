@@ -1,13 +1,8 @@
 .*
 
-!.idea/compiler.xml
-!.idea/copyright
-!.idea/gradle.xml
-!.idea/misc.xml
-!.idea/modules.xml
-!.idea/runConfigurations.xml
-!.idea/vcs.xml
-!/.gitignore
+.idea/libraries/
+.idea/workspace.xml
+!.gitignore
 
 *.~*
 build/generated/
