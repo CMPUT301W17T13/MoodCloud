@@ -10,11 +10,22 @@ public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
+    public void testKmDistance() {
+
+        double[] location1 = new double[]{0.0, 0.0, 0.0};
+        double[] location2 = new double[]{0.0, 0.0, 0.0};
+        double distance = LocationTools.kmDistance(location1, location2);
+        assertEquals(distance, 0.0);
+
+        ;
+    }
+
     public void testDistance() {
 
         double[] location1 = new double[]{0.0, 0.0, 0.0};
         double[] location2 = new double[]{0.0, 0.0, 0.0};
-        double distance = ;
+        double distance = LocationTools.distance(location1, location2);
+        assertEquals(distance, 0.0);
 
         ;
     }
