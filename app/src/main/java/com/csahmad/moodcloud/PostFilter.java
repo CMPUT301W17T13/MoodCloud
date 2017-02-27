@@ -62,6 +62,7 @@ public class PostFilter {
             throw new IllegalArgumentException("Cannot set maxDistance without setting location.");
 
         this.location = location;
+        this.maxDistance = maxDistance;
     }
 
     public Double getMaxDistance() {

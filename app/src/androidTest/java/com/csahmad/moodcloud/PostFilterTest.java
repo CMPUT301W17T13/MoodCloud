@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /** Test the {@link PostFilter} class. */
@@ -97,22 +98,60 @@ public class PostFilterTest extends ActivityInstrumentationTestCase2 {
         double[] loc1 = new double[] {3.2, 7.4, 1.2};
         double[] loc2 = new double[] {77.4, 87.3, 3.2};
         double[] loc3 = new double[] {77.4, 87.3, 88.3};
+        double[] loc4 = new double[] {44.4, 52.3, 0.0};
 
-        Calendar date1 = new GregorianCalendar(1994, 8, 26);
-        Calendar date2 = new GregorianCalendar(2015, 8, 26);
-        Calendar date3 = new GregorianCalendar(2014, 8, 26);
+        Calendar currentDate = Calendar.getInstance();
+        int currentYear = currentDate.get(Calendar.YEAR);
 
-        Post post1 = new Post("t", "m", "keyword1 hey", "tri", "c", profile, loc1, date1);
-        Post post2 = new Post("t", "m", "keyword2hey", "tri", "c", profile, loc2, date2);
-        Post post3 = new Post("t", "m", "keyword2", "tri", "c", profile, loc2, date3);
+        Calendar date1 = new GregorianCalendar(currentYear - 10, 8, 26);
+        Calendar date2 = new GregorianCalendar(currentYear - 1, 8, 26);
+        Calendar date3 = new GregorianCalendar(currentYear, 8, 26);
+        Calendar date4 = new GregorianCalendar(currentYear + 10, 8, 26);    // Future World
 
-        ArrayList<Post> list = new ArrayList<Post>();
-        list.add(post1);
-        list.add(post2);
-        list.add(post3);
+        Post post1 = new Post("t", "mood1", "keyword1 hey", "tri", "c", profile, loc1, date1);
+        Post post2 = new Post("t", "mood1", "keyword2hey", "tri", "c", profile, loc2, date2);
+        Post post3 = new Post("t", "mood2", "keyword2", "tri", "c", profile, loc3, date3);
+        Post post4 = new Post("t", "mood2", "keyword2 hey", "tri", "c", profile, loc4, date4);
 
-        PostFilter filter = new PostFilter(list);
+        ArrayList<Post> posts = new ArrayList<Post>();
+        posts.add(post1);
+        posts.add(post2);
+        posts.add(post3);
+
+        // If no filters applied, should return all posts
+        PostFilter filter = new PostFilter(posts);
         ArrayList<Post> results = filter.getFilteredPosts();
+        assertEquals(results, posts);
+
+        filter.setKeyword("keyword2");
+        results = filter.getFilteredPosts();
+        ArrayList<Post> expected = new ArrayList<Post>();
+        expected.add(post3);
+        expected.add(post4);
+        assertEquals(results, expected);
+        expected.clear();
+
+        filter.setKeyword(null);
+
+        Calendar date = new GregorianCalendar(currentYear - 1, 8, 26);
+        filter.setSinceDate(date);
+        expected.add(post2);
+        expected.add(post3);
+        expected.add(post4);
+        results = filter.getFilteredPosts();
+        assertEquals(results, expected);
+        expected.clear();
+
+        filter.setSinceDate(null);
+
+        filter.setMood("mood1");
+        expected.add(post1);
+        expected.add(post2);
+        results = filter.getFilteredPosts();
+        assertEquals(results, expected);
+        expected.clear();
+
+        filter.setMood(null);
 
         ;
     }
