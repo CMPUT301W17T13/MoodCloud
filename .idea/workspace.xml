@@ -4,7 +4,7 @@
     <list default="true" id="621dbcd0-d544-4329-98c3-6aad91169931" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostTest.java" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java" />
     </list>
     <ignored path="MoodCloud.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,32 +30,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PostTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LocationToolsTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PostFilterTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PostFilterTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostFilterTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1305">
+            <state relative-caret-position="599">
               <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
               <folding />
             </state>
@@ -1797,7 +1775,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/Profile.java" />
-        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/Post.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/LocationTools.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/PostFilter.java" />
@@ -1805,6 +1782,7 @@
         <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ProfileTest.java" />
         <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/AccountTest.java" />
         <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostTest.java" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java" />
       </list>
     </option>
   </component>
@@ -1838,8 +1816,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1848,51 +1826,8 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="moodcloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -1903,6 +1838,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1911,51 +1847,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="device.picker.selection" value="Nexus_5X_Nougat_7_1_1" />
   </component>
-  <component name="RunManager" selected="Android Tests.PostTest">
-    <configuration default="false" name="testMDistance()" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true" nameIsGenerated="true">
-      <module name="app" />
-      <option name="TESTING_TYPE" value="3" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="android.support.test.runner.AndroidJUnitRunner" />
-      <option name="METHOD_NAME" value="testMDistance" />
-      <option name="CLASS_NAME" value="com.csahmad.moodcloud.LocationToolsTest" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="DEBUGGER_TYPE" value="Auto" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <Auto>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Auto>
-      <Hybrid>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Hybrid>
-      <Java />
-      <Native>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Native>
-      <Profilers>
-        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
-        <option name="GAPID_ENABLED" value="false" />
-        <option name="GAPID_DISABLE_PCS" value="false" />
-        <option name="SUPPORT_LIB_ENABLED" value="true" />
-        <option name="INSTRUMENTATION_ENABLED" value="true" />
-      </Profilers>
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Android Tests.LocationToolsTest">
     <configuration default="false" name="testLocationDistan...()" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true" nameIsGenerated="true">
       <module name="app" />
       <option name="TESTING_TYPE" value="3" />
@@ -2094,6 +1986,50 @@
       <option name="INSTRUMENTATION_RUNNER_CLASS" value="android.support.test.runner.AndroidJUnitRunner" />
       <option name="METHOD_NAME" value="" />
       <option name="CLASS_NAME" value="com.csahmad.moodcloud.PostTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+      </Native>
+      <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
+        <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
+      </Profilers>
+      <method />
+    </configuration>
+    <configuration default="false" name="LocationToolsTest" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="TESTING_TYPE" value="2" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="android.support.test.runner.AndroidJUnitRunner" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="com.csahmad.moodcloud.LocationToolsTest" />
       <option name="PACKAGE_NAME" value="" />
       <option name="EXTRA_OPTIONS" value="" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
@@ -2408,19 +2344,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Android App.app" />
-      <item index="1" class="java.lang.String" itemvalue="Android Tests.testMDistance()" />
-      <item index="2" class="java.lang.String" itemvalue="Android Tests.testLocationDistan...()" />
-      <item index="3" class="java.lang.String" itemvalue="Android Tests.ProfileTest" />
-      <item index="4" class="java.lang.String" itemvalue="Android Tests.AccountTest" />
-      <item index="5" class="java.lang.String" itemvalue="Android Tests.PostTest" />
+      <item index="1" class="java.lang.String" itemvalue="Android Tests.testLocationDistan...()" />
+      <item index="2" class="java.lang.String" itemvalue="Android Tests.ProfileTest" />
+      <item index="3" class="java.lang.String" itemvalue="Android Tests.AccountTest" />
+      <item index="4" class="java.lang.String" itemvalue="Android Tests.PostTest" />
+      <item index="5" class="java.lang.String" itemvalue="Android Tests.LocationToolsTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Android Tests.PostTest" />
-        <item index="1" class="java.lang.String" itemvalue="Android Tests.AccountTest" />
-        <item index="2" class="java.lang.String" itemvalue="Android Tests.ProfileTest" />
-        <item index="3" class="java.lang.String" itemvalue="Android Tests.testLocationDistan...()" />
-        <item index="4" class="java.lang.String" itemvalue="Android Tests.testMDistance()" />
+        <item index="0" class="java.lang.String" itemvalue="Android Tests.LocationToolsTest" />
+        <item index="1" class="java.lang.String" itemvalue="Android Tests.PostTest" />
+        <item index="2" class="java.lang.String" itemvalue="Android Tests.AccountTest" />
+        <item index="3" class="java.lang.String" itemvalue="Android Tests.ProfileTest" />
+        <item index="4" class="java.lang.String" itemvalue="Android Tests.testLocationDistan...()" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
@@ -2453,8 +2389,8 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PostTest - 2017.02.27 at 09h 00m 59s.xml">
-      <configuration name="PostTest" configurationId="AndroidTestRunConfigurationType" />
+    <history-entry file="LocationToolsTest - 2017.02.27 at 09h 06m 08s.xml">
+      <configuration name="LocationToolsTest" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
     <history-entry file="ProfileTest - 2017.02.27 at 08h 49m 52s.xml">
       <configuration name="ProfileTest" configurationId="AndroidTestRunConfigurationType" />
@@ -2505,7 +2441,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2907916" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2956381" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2567,7 +2503,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="67" column="75" selection-start-line="67" selection-start-column="75" selection-end-line="67" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2609,7 +2544,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="67" column="75" selection-start-line="67" selection-start-column="75" selection-end-line="67" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2643,7 +2577,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="67" column="75" selection-start-line="67" selection-start-column="75" selection-end-line="67" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2677,7 +2610,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2711,7 +2643,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2755,7 +2686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2798,7 +2728,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2841,7 +2770,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="30" column="15" selection-start-line="30" selection-start-column="15" selection-end-line="30" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2856,7 +2784,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2909,14 +2836,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostFilterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1305">
-          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/Profile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -2929,7 +2848,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2937,7 +2855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2945,15 +2862,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2964,6 +2872,22 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/PostFilterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="599">
+          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

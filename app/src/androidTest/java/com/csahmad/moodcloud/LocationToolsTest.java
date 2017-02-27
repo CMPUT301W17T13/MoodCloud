@@ -34,6 +34,11 @@ public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
         location2 = new double[]{38.4, 29.8, 70.0};
         distance = LocationTools.kmDistance(location1, location2);
         assertEquals(distance, 4_736.0, 10.0);
+
+        location1 = new double[]{5.34, 8.7, 8.0};
+        location2 = new double[]{5.3, 8.7, 70.0};
+        distance = LocationTools.kmDistance(location1, location2);
+        assertEquals(distance, 4.0, 1.0);
     }
 
     public void testMDistance() {
@@ -57,5 +62,10 @@ public class LocationToolsTest extends ActivityInstrumentationTestCase2 {
         location2 = new double[]{38.4, 29.8, 70.0};
         distance = LocationTools.mDistance(location1, location2);
         assertEquals(distance, 4_736_000.0, 10_000.0);
+
+        location1 = new double[]{5.34, 8.7, 8.0};
+        location2 = new double[]{5.3, 8.7, 70.0};
+        distance = LocationTools.mDistance(location1, location2);
+        assertEquals(distance, 4_000.0, 1_000.0);
     }
 }
