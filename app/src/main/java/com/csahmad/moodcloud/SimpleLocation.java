@@ -31,6 +31,22 @@ public class SimpleLocation {
         this.altitude = altitude;
     }
 
+    @Override
+    public boolean equals(Object other) {
+
+        if (!(other instanceof SimpleLocation)) return false;
+
+        SimpleLocation otherLocation = (SimpleLocation) other;
+
+        if (this.latitude == otherLocation.latitude && this.longitude == otherLocation.longitude &&
+                this.altitude == otherLocation.altitude) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public double getLatitude() {
 
         return this.latitude;
