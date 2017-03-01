@@ -82,6 +82,7 @@ public class PostFilter {
     }
 
     // TODO: 2017-02-26 Fill out (currently returns empty list)
+    // TODO: 2017-03-01 Move to PostController 
     public ArrayList<Post> getFilteredPosts() {
 
         // Should not be the case because setLocationDistance should enforce proper state

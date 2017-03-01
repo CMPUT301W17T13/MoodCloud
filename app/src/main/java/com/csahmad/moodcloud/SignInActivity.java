@@ -11,5 +11,7 @@ public class SignInActivity extends AppCompatActivity {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        // Get sign in info from user and store pass to LocalData.store()
     }
 }
