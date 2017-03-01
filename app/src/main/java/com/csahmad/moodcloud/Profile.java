@@ -13,7 +13,7 @@ public class Profile {
 
     private ArrayList<Post> posts = new ArrayList<Post>();
     private ArrayList<Profile> followers = new ArrayList<Profile>();
-    private ArrayList<Profile> followRequests = new ArrayList<Profile>();
+    private ArrayList<Profile> followRequests = new ArrayList<FollowRequest>();
 
     /** This Profile's unique ID (creating IDs handled by Jest). */
     @JestId
