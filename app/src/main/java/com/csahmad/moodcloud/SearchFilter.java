@@ -9,6 +9,8 @@ import java.util.Calendar;
 
 public class SearchFilter {
 
+    public int from = 0;
+
     private ArrayList<String> keywords;
     private ArrayList<String> keywordFields;
 

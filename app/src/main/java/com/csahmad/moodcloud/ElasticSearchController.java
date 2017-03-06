@@ -131,32 +131,17 @@ public class ElasticSearchController {
             String query = "";
 
             // I
-            if (searchFilters.length == 0) {
-
-                query = "{\n" +
-                        "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
-                        "    \"query\" : {\n" +
-                        "        \"match_all\" : {}\n" +
-                        "    }\n" +
-                        "}";
-            }
+            if (searchFilters.length == 0)
+                query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
 
             // If keyword passed, make the query string (otherwise leave query as an empty string)
             //if (!keywordString.equals("")) {
             else {
 
                 SearchFilter searchFilter = searchFilters[0];
-                String keywordField = searchFilter.getKeywordField();
 
-                query = "{\n" +
-                        "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
-                        "    \"query\" : {\n" +
-                        "        \"query_string\" : {\n" +
-                        "            \"default_field\" : \"" + keywordField + "\",\n" +
-                        "            \"query\" : \"" + keywordString + "\"\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}";
+                query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize,
+                        searchFilter.from);
             }
 
             Search search = new Search.Builder(query)

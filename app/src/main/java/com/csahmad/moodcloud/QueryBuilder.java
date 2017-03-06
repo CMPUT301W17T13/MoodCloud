@@ -14,6 +14,16 @@ public class QueryBuilder {
 
     private static String dateFormat = "dd/MM/yyyy";
 
+    public static String buildGetAll(int resultSize) {
+
+        return "{\n" +
+                "    \"size\" : " + resultSize + ",\n" +
+                "    \"query\" : {\n" +
+                "        \"match_all\" : {}\n" +
+                "    }\n" +
+                "}";
+    }
+
     public static String build(SearchFilter filter, int resultSize, int from) {
 
         String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
