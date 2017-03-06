@@ -73,24 +73,13 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For searching for objects by keyword using elasticsearch.
+     * For searching for objects that match the given restrictions using elasticsearch.
      */
-    public static class GetByKeyword<T extends ElasticSearchObject>
-            extends AsyncTask<String, Void, ArrayList<T>> {
+    public static class Get<T extends ElasticSearchObject>
+            extends AsyncTask<SearchFilter, Void, ArrayList<T>> {
 
-        private String fieldToSearch;
         private String typeName;
         private Class type;
-
-        public String getFieldToSearch() {
-
-            return this.fieldToSearch;
-        }
-
-        public void setFieldToSearch(String fieldToSearch) {
-
-            this.fieldToSearch = fieldToSearch;
-        }
 
         public String getTypeName() {
 
@@ -113,19 +102,14 @@ public class ElasticSearchController {
         }
 
         /**
-         * Searches for objects using the given keywords.
+         * Searches for objects using the given search filter.
          *
-         * @param search_parameters the keywords to search by (currently only first used)
-         * @return the objects containing the given keywords
+         * @param searchFilters only pass one search filter to restrict the search (or pass no
+         *                      search filters to get all objects)
+         * @return the objects matching the restrictions in the given search filter
          */
         @Override
-        protected ArrayList<T> doInBackground(String... search_parameters) {
-
-            if (this.fieldToSearch == null) {
-
-                throw new IllegalStateException(
-                        "Cannot call doInBackground without setting fieldToSearch.");
-            }
+        protected ArrayList<T> doInBackground(SearchFilter... searchFilters) {
 
             if (this.typeName == null) {
 
@@ -144,12 +128,10 @@ public class ElasticSearchController {
             // Will store results (objects with the given keywords)
             ArrayList<T> results = new ArrayList<T>();
 
-            String fieldName = this.fieldToSearch;
             String query = "";
-            String keywordString = search_parameters[0];
 
             // I
-            if (keywordString.equals("")) {
+            if (searchFilters.length == 0) {
 
                 query = "{\n" +
                         "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
@@ -163,11 +145,14 @@ public class ElasticSearchController {
             //if (!keywordString.equals("")) {
             else {
 
+                SearchFilter searchFilter = searchFilters[0];
+                String keywordField = searchFilter.getKeywordField();
+
                 query = "{\n" +
                         "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
                         "    \"query\" : {\n" +
                         "        \"query_string\" : {\n" +
-                        "            \"default_field\" : \"" + fieldName + "\",\n" +
+                        "            \"default_field\" : \"" + keywordField + "\",\n" +
                         "            \"query\" : \"" + keywordString + "\"\n" +
                         "        }\n" +
                         "    }\n" +
