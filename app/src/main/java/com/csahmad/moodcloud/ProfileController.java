@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class ProfileController {
 
+    /*
+
     public Profile getProfileFromUsername(String username) {
 
         ;
@@ -22,4 +24,6 @@ public class ProfileController {
 
         ;
     }
+
+    */
 }

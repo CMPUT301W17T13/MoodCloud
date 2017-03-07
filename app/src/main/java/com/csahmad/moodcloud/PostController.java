@@ -14,6 +14,8 @@ public class PostController {
         ;
     }
 
+    /*
+
     // Note: Finds post in elasticsearch with newPost.id and updates with new fields
     public void updatePost(Post editedPost) {
 
@@ -34,4 +36,6 @@ public class PostController {
 
         ;
     }
+
+    */
 }

@@ -55,7 +55,7 @@ public class QueryBuilder {
         String query = "\"multi_match\": {\n";
 
         query += "\"query\": \"" + TextUtils.join("&", keywords) + "\",\n";
-        query += "\"fields\": " + QueryBuilder.buildStringList(keywords) + "\n";
+        query += "\"fields\": " + QueryBuilder.buildStringList(fields) + "\n";
 
         query += "}";
         return query;
