@@ -1,7 +1,6 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by oahmad on 2017-03-06.
@@ -14,7 +13,8 @@ public class SearchFilter {
     private ArrayList<String> keywords;
     private ArrayList<String> keywordFields;
 
-    private Calendar sinceDate;
+    private Integer maxTimeUnitsAgo;
+    private String timeUnits = "w";
     private String dateField = "date";
 
     private Integer maxDistance;
@@ -27,9 +27,9 @@ public class SearchFilter {
         return this.keywords != null;
     }
 
-    public boolean hasSinceDate() {
+    public boolean hasTimeUnitsAgo() {
 
-        return this.sinceDate != null;
+        return this.maxTimeUnitsAgo != null;
     }
 
     public boolean hasMaxDistance() {
@@ -59,14 +59,25 @@ public class SearchFilter {
         return this;
     }
 
-    public Calendar getSinceDate() {
+    public Integer getMaxTimeUnitsAgo() {
         
-        return this.sinceDate;
+        return this.maxTimeUnitsAgo;
     }
 
-    public SearchFilter setSinceDate(Calendar sinceDate) {
+    public SearchFilter setMaxTimeUnitsAgo(Integer maxTimeUnitsAgo) {
         
-        this.sinceDate = sinceDate;
+        this.maxTimeUnitsAgo = maxTimeUnitsAgo;
+        return this;
+    }
+
+    public String getTimeUnits() {
+
+        return this.timeUnits;
+    }
+
+    public SearchFilter setTimeUnits(String timeUnits) {
+
+        this.timeUnits = timeUnits;
         return this;
     }
 

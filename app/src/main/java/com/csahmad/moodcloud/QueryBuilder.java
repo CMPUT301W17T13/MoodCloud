@@ -2,17 +2,13 @@ package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by oahmad on 2017-03-06.
  */
 
 public class QueryBuilder {
-
-    private static String dateFormat = "dd/MM/yyyy";
 
     public static String buildGetAll(int resultSize) {
 
@@ -27,16 +23,17 @@ public class QueryBuilder {
     public static String build(SearchFilter filter, int resultSize, int from) {
 
         String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
-        query += "\"size\": " + Integer.toString(resultSize) + ",\n\n";
-        query += "\"query\": {\n\n";
+        query += "\"size\": " + Integer.toString(resultSize) + ",\n";
+        query += "\"query\": {\n";
 
         if (filter.hasKeywords()) {
             query += QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields());
             query += "\n";
         }
 
-        if (filter.hasSinceDate()) {
-            query += QueryBuilder.buildSinceDate(filter.getSinceDate(), filter.getDateField());
+        if (filter.hasTimeUnitsAgo()) {
+            query += QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
+                    filter.getDateField());
             query += "\n";
         }
 
@@ -61,14 +58,12 @@ public class QueryBuilder {
         return query;
     }
 
-    public static String buildSinceDate(Calendar date, String dateField) {
-
-        String dateString = QueryBuilder.dateToString(date);
+    public static String buildSinceDate(int timeUnitsAgo, String timeUnits, String dateField) {
 
         String query = "\"range\": {\n";
         query += "\"" + dateField + "\": {\n";
-        query += "\"gte\": \"" + dateString + "\",\n";
-        query += "\"format\": \"" + QueryBuilder.dateFormat + "\"\n";
+        query += "\"gte\": \"now-" + Integer.toString(timeUnitsAgo) + timeUnits + "/" + timeUnits +
+            "\"\n";
 
         query += "}\n}";
         return query;
@@ -96,11 +91,5 @@ public class QueryBuilder {
             quotedStrings.add("\"" + string + "\"");
 
         return "[" + TextUtils.join(", ", quotedStrings) + "]";
-    }
-
-    private static String dateToString(Calendar date) {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(date);
     }
 }

@@ -30,5 +30,22 @@ public class QueryBuilderTest extends ActivityInstrumentationTestCase2 {
                 "}";
 
         assertEquals(query, expected);
+
+        keywords.add("cat");
+
+        fields.add("field2");
+        fields.add("field3");
+
+        query = QueryBuilder.buildMultiMatch(keywords, fields);
+
+        expected = "\"multi_match\": {\n" +
+                "\"query\": \"dog&cat\",\n" +
+                "\"fields\": [\"field1\", \"field2\", \"field3\"]\n" +
+                "}";
+    }
+
+    public void testBuildSinceDate() {
+
+        ;
     }
 }
