@@ -10,19 +10,20 @@ public class ProfileController {
 
     /*
 
-    public Profile getProfileFromUsername(String username) {
-
-        ;
-    }
-
     public Profile getProfileFromID(String id) {
 
         ;
     }
 
-    public ArrayList<Profile> getProfiles(ProfileFilter filter) {
+    public ArrayList<Profile> getProfiles(SearchFilter filter, int from) {
 
         ;
+    }
+
+    public void addProfile(Profile profile) {
+
+        ;
+
     }
 
     */

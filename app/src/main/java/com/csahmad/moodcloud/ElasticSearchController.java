@@ -78,8 +78,24 @@ public class ElasticSearchController {
     public static class Get<T extends ElasticSearchObject>
             extends AsyncTask<SearchFilter, Void, ArrayList<T>> {
 
+        private int from = 0;
         private String typeName;
         private Class type;
+
+        public int getFrom() {
+
+            return this.from;
+        }
+
+        public void setFrom(int from) {
+
+            this.from = from;
+        }
+
+        public void addToFrom(int amount) {
+
+            this.from += amount;
+        }
 
         public String getTypeName() {
 
@@ -141,7 +157,7 @@ public class ElasticSearchController {
                 SearchFilter searchFilter = searchFilters[0];
 
                 query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize,
-                        searchFilter.from);
+                        this.from);
             }
 
             Search search = new Search.Builder(query)

@@ -27,7 +27,7 @@ public class PostController {
         ;
     }
 
-    public ArrayList<Post> getPosts(PostFilter filter) {
+    public ArrayList<Post> getPosts(SearchFilter filter, int from) {
 
         ;
     }

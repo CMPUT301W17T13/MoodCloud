@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class SearchFilter {
 
-    public int from = 0;
-
     private ArrayList<String> keywords;
     private ArrayList<String> keywordFields;
 
@@ -17,7 +15,7 @@ public class SearchFilter {
     private String timeUnits = "w";
     private String dateField = "date";
 
-    private Integer maxDistance;
+    private Double maxDistance;
     private SimpleLocation location;
     private String distanceUnits = "km";
     private String locationField = "location";
@@ -92,12 +90,12 @@ public class SearchFilter {
         return this;
     }
 
-    public Integer getMaxDistance() {
+    public Double getMaxDistance() {
         
         return this.maxDistance;
     }
 
-    public SearchFilter setMaxDistance(Integer maxDistance) {
+    public SearchFilter setMaxDistance(Double maxDistance) {
         
         this.maxDistance = maxDistance;
         return this;

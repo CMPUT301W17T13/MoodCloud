@@ -1,7 +1,6 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
-
 import java.util.ArrayList;
 
 /**
@@ -12,11 +11,14 @@ public class QueryBuilder {
 
     public static String buildGetAll(int resultSize) {
 
+        if (resultSize < 0)
+            throw new IllegalArgumentException("resultSize cannot be negative.");
+
         return "{\n" +
-                "    \"size\" : " + resultSize + ",\n" +
-                "    \"query\" : {\n" +
-                "        \"match_all\" : {}\n" +
-                "    }\n" +
+                "\"size\": " + resultSize + ",\n" +
+                "\"query\": {\n" +
+                "\"match_all\": {}\n" +
+                "}\n" +
                 "}";
     }
 
@@ -49,6 +51,9 @@ public class QueryBuilder {
 
     public static String buildMultiMatch(ArrayList<String> keywords, ArrayList<String> fields) {
 
+        if (keywords == null || fields == null)
+            throw new IllegalArgumentException("Cannot pass null arguments.");
+
         String query = "\"multi_match\": {\n";
 
         query += "\"query\": \"" + TextUtils.join("&", keywords) + "\",\n";
@@ -60,22 +65,35 @@ public class QueryBuilder {
 
     public static String buildSinceDate(int timeUnitsAgo, String timeUnits, String dateField) {
 
+        if (timeUnitsAgo < 0)
+            throw new IllegalArgumentException("timeUnitsAgo cannot be negative.");
+
+        if (timeUnits == null || dateField == null)
+            throw new IllegalArgumentException("Cannot pass null arguments.");
+
         String query = "\"range\": {\n";
         query += "\"" + dateField + "\": {\n";
         query += "\"gte\": \"now-" + Integer.toString(timeUnitsAgo) + timeUnits + "/" + timeUnits +
-            "\"\n";
+            "\",\n";
+        query += "\"format\": \"" + StringFormats.dateFormat + "\"\n";
 
         query += "}\n}";
         return query;
     }
 
-    public static String buildGeoDistance(SimpleLocation location, int maxDistance,
+    public static String buildGeoDistance(SimpleLocation location, double maxDistance,
                                           String locationField, String units) {
+
+        if (maxDistance < 0.0d)
+            throw new IllegalArgumentException("maxDistance cannot be negative.");
+
+        if (location == null || locationField == null || units == null)
+            throw new IllegalArgumentException("Cannot pass null arguments.");
 
         String query = "\"filter\": {\n";
         query += "\"geo_distance\": {\n";
-        query += "\"distance\": \"" + Integer.toString(maxDistance) + units + "\",\n";
-        query += "\"" + locationField + ": {\n";
+        query += "\"distance\": \"" + Double.toString(maxDistance) + units + "\",\n";
+        query += "\"" + locationField + "\": {\n";
         query += "\"latitude\": " + location.getLatitude() + ",\n";
         query += "\"longitude\": " + location.getLongitude() + "\n";
 
