@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 // TODO: 2017-03-08 Handle exceptions better
-// TODO: 2017-03-08 Update items
 
 public class ElasticSearch<T extends ElasticSearchObject> {
 
