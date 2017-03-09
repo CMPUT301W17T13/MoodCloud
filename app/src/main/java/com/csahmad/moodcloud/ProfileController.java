@@ -8,23 +8,31 @@ import java.util.ArrayList;
 
 public class ProfileController {
 
-    /*
-
     public Profile getProfileFromID(String id) {
 
-        ;
+        return ProfileController.getElasticSearch().getById(id);
     }
 
     public ArrayList<Profile> getProfiles(SearchFilter filter, int from) {
 
-        ;
+        ElasticSearch<Profile> elasticSearch = ProfileController.getElasticSearch();
+        elasticSearch.setFilter(filter);
+        return elasticSearch.getNext(from);
     }
 
-    public void addProfile(Profile profile) {
+    public void addOrUpdateProfiles(Profile... profiles) {
 
-        ;
+        ProfileController.getElasticSearch().addOrUpdate(profiles);
 
     }
 
-    */
+    public void deleteProfiles(Profile... profiles) {
+
+        ProfileController.getElasticSearch().delete(profiles);
+    }
+
+    public static ElasticSearch<Profile> getElasticSearch() {
+
+        return new ElasticSearch<Profile>(Profile.class, Profile.typeName);
+    }
 }

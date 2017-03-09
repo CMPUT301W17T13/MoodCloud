@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import io.searchbox.annotations.JestId;
 
 /** A user profile. */
-public class Profile {
+public class Profile implements ElasticSearchObject {
+
+    public static final String typeName = "profile";
 
     private String name;
 
@@ -30,6 +32,11 @@ public class Profile {
         if (!(other instanceof Profile)) return false;
         Profile otherProfile = (Profile) other;
         return this.id == otherProfile.id;
+    }
+
+    public String getTypeName() {
+
+        return Profile.typeName;
     }
 
     public String getId() {
