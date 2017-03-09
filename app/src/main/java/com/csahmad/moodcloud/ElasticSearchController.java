@@ -8,7 +8,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -32,6 +32,65 @@ public class ElasticSearchController {
     public static int getResultSize() {
 
         return ElasticSearchController.resultSize;
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For updating objects using elasticsearch.
+     */
+    public static class UpdateItems<T extends ElasticSearchObject>
+            extends AsyncTask<T, Void, Void> {
+
+        // TODO: 2017-03-08 Fill
+        /**
+         * Updates the given object(s) using elasticsearch.
+         *
+         * @param items the objects to update
+         * @return null
+         */
+        @Override
+        protected Void doInBackground(T... items) {
+
+            ;
+
+            return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For deleting objects using elasticsearch.
+     */
+    public static class DeleteItems<T extends ElasticSearchObject>
+            extends AsyncTask<T, Void, Void> {
+
+        /**
+         * Deletes the given object(s) using elasticsearch.
+         *
+         * @param items the objects to delete
+         * @return null
+         */
+        @Override
+        protected Void doInBackground(T... items) {
+
+            for (T item: items) {
+
+                Delete delete = new Delete.Builder(item.getId())
+                        .index(ElasticSearchController.index)
+                        .type(item.getTypeName())
+                        .build();
+
+                try {
+                    ElasticSearchController.client.execute(delete);
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
     }
 
     // AsyncTask<Params, Progress, Result>
@@ -127,7 +186,7 @@ public class ElasticSearchController {
                     .type(this.typeName).build();
 
             try {
-                return (T) client.execute(get).getSourceAsObject(this.type);
+                return (T) ElasticSearchController.client.execute(get).getSourceAsObject(this.type);
             }
 
             catch (IOException e) {
@@ -232,7 +291,7 @@ public class ElasticSearchController {
 
                 // Get the results of the query:
 
-                SearchResult result = client.execute(search);
+                SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
                     List<T> foundObjects = result.getSourceAsObjectList(this.type);
@@ -272,7 +331,7 @@ public class ElasticSearchController {
                 CreateIndex createIndex = new CreateIndex.Builder(ElasticSearchController.index)
                         .build();
 
-                client.execute(createIndex);
+                ElasticSearchController.client.execute(createIndex);
             }
         }
 

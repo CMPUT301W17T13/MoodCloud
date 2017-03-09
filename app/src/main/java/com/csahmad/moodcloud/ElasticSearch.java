@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 // TODO: 2017-03-08 Handle exceptions better
-// TODO: 2017-03-08 Update item
-// TODO: 2017-03-08 Delete items
+// TODO: 2017-03-08 Update items
 
 public class ElasticSearch<T extends ElasticSearchObject> {
 
@@ -109,6 +108,19 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public void add(T... objects) {
 
         ElasticSearchController.AddItems<T> controller = new ElasticSearchController.AddItems<T>();
+        controller.execute(objects);
+    }
+
+    public void update(T... objects) {
+
+        ;
+    }
+
+    public void delete(T... objects) {
+
+        ElasticSearchController.DeleteItems<T> controller =
+                new ElasticSearchController.DeleteItems<T>();
+
         controller.execute(objects);
     }
 }
