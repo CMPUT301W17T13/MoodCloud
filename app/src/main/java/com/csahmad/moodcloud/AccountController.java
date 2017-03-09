@@ -13,6 +13,11 @@ public class AccountController {
         return AccountController.getAccountFromUsername(username) == null;
     }
 
+    public static Account getAccountFromId(String id) {
+
+        return AccountController.getElasticSearch().getById(id);
+    }
+
     public static Account getAccountFromUsername(String username) {
 
         SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("username",

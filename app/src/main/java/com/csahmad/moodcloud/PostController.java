@@ -9,18 +9,12 @@ import java.util.ArrayList;
 public class PostController {
 
     // Note: stores post in LocoalData.homeProfile AND sends the post to the internets
-    public void addPost(Post post) {
+    public void addOrUpdatePost(Post post) {
 
         ;
     }
 
     /*
-
-    // Note: Finds post in elasticsearch with newPost.id and updates with new fields
-    public void updatePost(Post editedPost) {
-
-        ;
-    }
 
     public Post getPost(String id) {
 
