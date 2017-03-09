@@ -36,29 +36,6 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For updating objects using elasticsearch.
-     */
-    public static class UpdateItems<T extends ElasticSearchObject>
-            extends AsyncTask<T, Void, Void> {
-
-        // TODO: 2017-03-08 Fill
-        /**
-         * Updates the given object(s) using elasticsearch.
-         *
-         * @param items the objects to update
-         * @return null
-         */
-        @Override
-        protected Void doInBackground(T... items) {
-
-            ;
-
-            return null;
-        }
-    }
-
-    // AsyncTask<Params, Progress, Result>
-    /**
      * For deleting objects using elasticsearch.
      */
     public static class DeleteItems<T extends ElasticSearchObject>
@@ -95,14 +72,16 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For saving an object using elasticsearch.
+     * For saving or updating an object using elasticsearch.
+     *
+     * If the object's ID is null, add (otherwise update)
      */
     public static class AddItems<T extends ElasticSearchObject> extends AsyncTask<T, Void, Void> {
 
         /**
-         * Saves the given object(s) using elasticsearch.
+         * Saves/updates the given object(s) using elasticsearch.
          *
-         * @param items the objects to save
+         * @param items the objects to save/update
          * @return null
          */
         @Override
@@ -111,20 +90,48 @@ public class ElasticSearchController {
             ElasticSearchController.setClient();        // Set up client if it is null
             ElasticSearchController.makeIndex();        // Make index if not exists
 
-            // Save each object
+            boolean isNew;
+
+            // Save/update each object
             for (T item: items) {
 
-                Index index = new Index.Builder(item)
-                        .index(ElasticSearchController.index)
-                        .type(item.getTypeName())
-                        .build();
+                Index index;
+
+                if (item.getId() == null)
+                    isNew = true;
+
+                else
+                    isNew = false;
+
+                if (isNew) {
+
+                    index = new Index.Builder(item)
+                            .index(ElasticSearchController.index)
+                            .type(item.getTypeName())
+                            .build();
+                }
+
+                else {
+
+                    index = new Index.Builder(item)
+                            .index(ElasticSearchController.index)
+                            .type(item.getTypeName())
+                            .id(item.getId())
+                            .build();
+                }
 
                 try {
 
                     DocumentResult result = ElasticSearchController.client.execute(index);
 
-                    if (result.isSucceeded())
-                        item.setId(result.getId());
+                    if (result.isSucceeded()) {
+
+                        if (isNew)
+                            item.setId(result.getId());
+
+                        else if (item.getId() != result.getId())
+                            throw new RuntimeException("Them IDs should be equal.");
+                    }
 
                     else
                         Log.i("Error", "Elasticsearch was not able to add the object");

@@ -105,15 +105,11 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return this.getNext();
     }
 
-    public void add(T... objects) {
+    // Update if .id not null (otherwise add)
+    public void addOrUpdate(T... objects) {
 
         ElasticSearchController.AddItems<T> controller = new ElasticSearchController.AddItems<T>();
         controller.execute(objects);
-    }
-
-    public void update(T... objects) {
-
-        ;
     }
 
     public void delete(T... objects) {
