@@ -80,6 +80,51 @@ public class QueryBuilderTest extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
+    public void testBuildExactFieldValues() {
+
+        ArrayList<FieldValue> fieldValues = new ArrayList<FieldValue>();
+        fieldValues.add(new FieldValue("someField", 10));
+
+        String query = QueryBuilder.buildExactFieldValues(fieldValues);
+
+        String expected = "{\n" +
+                "\"filter\": {\n" +
+                "\"term\": {\n" +
+                "\"someField\": 10\n" +
+                "}\n" +
+                "}\n" +
+                "}";
+
+        assertEquals(query, expected);
+
+        fieldValues.add(new FieldValue("otherField", "heyo"));
+
+        query = QueryBuilder.buildExactFieldValues(fieldValues);
+
+        expected = "{\n" +
+                "\"filter\": {\n" +
+                "\"term\": {\n" +
+                "\"someField\": 10,\n" +
+                "\"otherField\": \"heyo\"\n" +
+                "}\n" +
+                "}\n" +
+                "}";
+
+        assertEquals(query, expected);
+
+        boolean exceptionThrown = false;
+
+        try {
+            QueryBuilder.buildExactFieldValues(null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+    }
+
     public void testBuildSinceDate() {
 
         int timeUnitsAgo = 0;

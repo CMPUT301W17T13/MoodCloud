@@ -11,6 +11,8 @@ public class SearchFilter {
     private ArrayList<String> keywords;
     private ArrayList<String> keywordFields;
 
+    private ArrayList<FieldValue> fieldValues;
+
     private Integer maxTimeUnitsAgo;
     private String timeUnits = "w";
     private String dateField = "date";
@@ -44,6 +46,32 @@ public class SearchFilter {
         
         this.keywords = keywords;
         return this;
+    }
+
+    public SearchFilter addFieldValue(FieldValue fieldValue) {
+
+        if (this.fieldValues == null) {
+            this.fieldValues = new ArrayList<FieldValue>();
+        }
+
+        this.fieldValues.add(fieldValue);
+        return this;
+    }
+
+    public ArrayList<FieldValue> getFieldValues() {
+
+        return this.fieldValues;
+    }
+
+    public SearchFilter setFieldValues(ArrayList<FieldValue> fieldValues) {
+
+        this.fieldValues = fieldValues;
+        return this;
+    }
+
+    public boolean hasFieldValues() {
+
+        return this.fieldValues != null;
     }
 
     public ArrayList<String> getKeywordFields() {

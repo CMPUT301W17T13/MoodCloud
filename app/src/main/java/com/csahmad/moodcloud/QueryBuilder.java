@@ -33,6 +33,11 @@ public class QueryBuilder {
             query += "\n";
         }
 
+        if (filter.hasFieldValues()) {
+            query += QueryBuilder.buildExactFieldValues(filter.getFieldValues());
+            query += "\n";
+        }
+
         if (filter.hasTimeUnitsAgo()) {
             query += QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
                     filter.getDateField());
@@ -47,6 +52,47 @@ public class QueryBuilder {
 
         query += "}\n}";
         return query;
+    }
+
+    public static String buildExactFieldValues(ArrayList<FieldValue> fieldValues) {
+
+        if (fieldValues == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "{\n" +
+                "\"filter\": {\n" +
+                "\"term\": {\n";
+
+        ArrayList<String> fieldValueStrings = new ArrayList<String>();
+        String fieldValueString;
+
+        for (FieldValue fieldValue: fieldValues) {
+
+            fieldValueString = QueryBuilder.buildExactFieldValue(fieldValue.getFieldName(),
+                    fieldValue.getValue());
+
+            fieldValueStrings.add(fieldValueString);
+        }
+
+        query += TextUtils.join(",\n", fieldValueStrings);
+        query += "\n";
+        query += "}\n}\n}";
+
+        return  query;
+    }
+
+    // Adds quotes to value if string
+    private static String buildExactFieldValue(String field, Object value) {
+
+        if (field == null || value == null)
+            throw new IllegalArgumentException("Cannot pass null values.");
+
+        String stringValue = value.toString();
+
+        if (value instanceof String)
+            stringValue = "\"" + stringValue + "\"";
+
+        return "\"" + field + "\": " + stringValue;
     }
 
     public static String buildMultiMatch(ArrayList<String> keywords, ArrayList<String> fields) {

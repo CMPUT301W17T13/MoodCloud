@@ -11,7 +11,6 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     private String typeName;
 
     private SearchFilter filter;
-    private int from = 0;
 
     public ElasticSearch(Class type, String typeName) {
 
@@ -40,7 +39,11 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public void setFilter(SearchFilter filter) {
 
         this.filter = filter;
-        this.from = 0;
+    }
+
+    public boolean itemExists(T object) {
+
+        return this.getById(object.getId()) != null;
     }
 
     public T getById(String id) {
@@ -67,21 +70,15 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
-    private void advanceFrom() {
-
-        this.from += ElasticSearchController.getResultSize();
-    }
-
-    public ArrayList<T> getNext() {
+    public ArrayList<T> getNext(int from) {
 
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
 
-        controller.setFrom(this.from);
+        controller.setFrom(from);
         controller.setType(this.type);
         controller.setTypeName(this.typeName);
 
         controller.execute(this.filter);
-        this.advanceFrom();
 
         try {
             return controller.get();
@@ -96,12 +93,6 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         }
 
         return null;
-    }
-
-    public ArrayList<T> getFromStart() {
-
-        this.from = 0;
-        return this.getNext();
     }
 
     // Update if .id not null (otherwise add)
