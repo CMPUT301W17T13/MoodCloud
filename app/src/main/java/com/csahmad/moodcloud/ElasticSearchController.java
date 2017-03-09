@@ -21,13 +21,18 @@ import io.searchbox.indices.IndicesExists;
 
 public class ElasticSearchController {
 
-    private static String url = "http://cmput301.softwareprocess.es:8080";
-    private static String index = "CMPUT301W17T13";
+    private static final String url = "http://cmput301.softwareprocess.es:8080";
+    private static final String index = "CMPUT301W17T13";
 
-    private static int resultSize = 25;
+    private static final int resultSize = 25;
 
     /** For building and executing save commands and search queries. */
     private static JestDroidClient client;
+
+    public static int getResultSize() {
+
+        return ElasticSearchController.resultSize;
+    }
 
     // AsyncTask<Params, Progress, Result>
     /**

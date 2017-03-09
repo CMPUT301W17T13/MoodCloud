@@ -69,6 +69,11 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
+    private void advanceFrom() {
+
+        this.from += ElasticSearchController.getResultSize();
+    }
+
     public ArrayList<T> getNext() {
 
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
@@ -78,6 +83,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         controller.setTypeName(this.typeName);
 
         controller.execute(this.filter);
+        this.advanceFrom();
 
         try {
             return controller.get();
