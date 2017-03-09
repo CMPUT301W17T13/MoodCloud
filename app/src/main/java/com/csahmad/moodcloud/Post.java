@@ -5,7 +5,10 @@ import java.util.Calendar;
 import io.searchbox.annotations.JestId;
 
 /** A mood event. */
-public class Post {
+public class Post implements ElasticSearchObject {
+
+    public static final Class type = Post.class;
+    public static final String typeName = "post";
 
     private String text;
     private String mood;
@@ -41,6 +44,12 @@ public class Post {
         if (!(other instanceof Post)) return false;
         Post otherPost = (Post) other;
         return this.id == otherPost.id;
+    }
+
+    @Override
+    public String getTypeName() {
+
+        return Post.typeName;
     }
 
     public String getId() {
@@ -121,5 +130,15 @@ public class Post {
     public void setLocation(double[] location) {
 
         this.location = location;
+    }
+
+    public Calendar getDate() {
+
+        return this.date;
+    }
+
+    public void setDate(Calendar date) {
+
+        this.date = date;
     }
 }
