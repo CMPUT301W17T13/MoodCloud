@@ -14,6 +14,8 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
+    /*
+
     public void testEquals() {
 
         Profile profile1 = new Profile("test");
@@ -169,4 +171,6 @@ public class ProfileTest extends ActivityInstrumentationTestCase2 {
         profile1.removeFollowRequest(profile2);
         assertFalse(profile1.hasFollowRequest(profile2));
     }
+
+    */
 }

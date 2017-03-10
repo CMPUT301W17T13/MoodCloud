@@ -6,5 +6,15 @@ package com.csahmad.moodcloud;
 
 public class FollowRequest {
 
-    ;
+    public Profile profile;
+
+    public FollowRequest(Profile profile) {
+
+        this.profile = profile;
+    }
+
+    public Profile getProfile() {
+
+        return this.profile;
+    }
 }

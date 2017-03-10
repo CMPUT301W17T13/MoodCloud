@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import io.searchbox.annotations.JestId;
 
 /** A user profile. */
-public class Profile {
+public class Profile implements ElasticSearchObject {
+
+    public static final String typeName = "profile";
 
     private String name;
 
@@ -13,7 +15,7 @@ public class Profile {
 
     private ArrayList<Post> posts = new ArrayList<Post>();
     private ArrayList<Profile> followers = new ArrayList<Profile>();
-    private ArrayList<Profile> followRequests = new ArrayList<FollowRequest>();
+    private ArrayList<FollowRequest> followRequests = new ArrayList<FollowRequest>();
 
     /** This Profile's unique ID (creating IDs handled by Jest). */
     @JestId
@@ -30,6 +32,12 @@ public class Profile {
         if (!(other instanceof Profile)) return false;
         Profile otherProfile = (Profile) other;
         return this.id == otherProfile.id;
+    }
+
+    @Override
+    public String getTypeName() {
+
+        return Profile.typeName;
     }
 
     public String getId() {
@@ -90,11 +98,7 @@ public class Profile {
 
     public boolean hasPost(Post post) {
 
-        for (Post p: this.posts) {
-            if (p.equals(post)) return true;
-        }
-
-        return false;
+        return this.posts.contains(post);
     }
 
     public int followerCount() {
@@ -117,11 +121,7 @@ public class Profile {
 
     public boolean hasFollower(Profile profile) {
 
-        for (Profile p: this.followers) {
-            if (p.equals(profile)) return true;
-        }
-
-        return false;
+        return this.followers.contains(profile);
     }
 
     public void removeFollower(Profile profile) {
@@ -137,42 +137,38 @@ public class Profile {
         return this.followRequests.size();
     }
 
-    public Profile getFollowRequest(int index) {
+    public FollowRequest getFollowRequest(int index) {
 
         return this.followRequests.get(index);
     }
 
-    public void addFollowRequest(Profile profile) {
+    public void addFollowRequest(FollowRequest followRequest) {
 
-        if (this.hasFollowRequest(profile))
+        if (this.hasFollowRequest(followRequest))
             throw new IllegalArgumentException("Cannot have duplicate follow requests.");
 
-        if (this.hasFollower(profile))
+        if (this.hasFollower(followRequest.getProfile()))
             throw new IllegalArgumentException("Cannot have follow request from current follower");
 
-        this.followRequests.add(profile);
+        this.followRequests.add(followRequest);
     }
 
-    public boolean hasFollowRequest(Profile profile) {
+    public boolean hasFollowRequest(FollowRequest followRequest) {
 
-        for (Profile p: this.followRequests) {
-            if (p.equals(profile)) return true;
-        }
-
-        return false;
+        return this.followRequests.contains(followRequest);
     }
 
-    public void acceptFollowRequest(Profile profile) {
+    public void acceptFollowRequest(FollowRequest followRequest) {
 
-        this.removeFollowRequest(profile);
-        this.addFollower(profile);
+        this.removeFollowRequest(followRequest);
+        this.addFollower(followRequest.getProfile());
     }
 
-    public void removeFollowRequest(Profile profile) {
+    public void removeFollowRequest(FollowRequest followRequest) {
 
-        if (!this.hasFollowRequest(profile))
+        if (!this.hasFollowRequest(followRequest))
             throw new IllegalArgumentException("Given profile not a follow request.");
 
-        this.followRequests.remove(profile);
+        this.followRequests.remove(followRequest);
     }
 }
