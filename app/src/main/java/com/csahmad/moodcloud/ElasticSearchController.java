@@ -22,7 +22,7 @@ import io.searchbox.indices.IndicesExists;
 public class ElasticSearchController {
 
     private static final String url = "http://cmput301.softwareprocess.es:8080";
-    private static final String index = "CMPUT301W17T13";
+    private static final String index = "cmput301w17t13";
 
     private static final int resultSize = 25;
 
@@ -136,8 +136,10 @@ public class ElasticSearchController {
                             throw new RuntimeException("Them IDs should be equal.");
                     }
 
-                    else
-                        Log.i("Error", "Elasticsearch was not able to add the object");
+                    else {
+                        Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
+                        item.setId("Barbie");
+                    }
                 }
 
                 catch (Exception e) {
