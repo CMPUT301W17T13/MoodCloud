@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.concurrent.TimeoutException;
+
+import static java.lang.Boolean.TRUE;
+
 /** The activity for creating an {@link Account}. */
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -19,26 +23,36 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ProfileController profileController = new ProfileController();
-        AccountController accountController = new AccountController();
+        final ProfileController profileController = new ProfileController();
+        final AccountController accountController = new AccountController();
 
         final EditText usernameText = (EditText) findViewById(R.id.username);
         final EditText passwordText = (EditText) findViewById(R.id.password);
+
 
         Button button = (Button) findViewById(R.id.create);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (AccountController.isUsernameUnique()) {
+                try{
+                    Boolean unique = accountController.isUsernameUnique(usernameText.getText().toString());
+
+                if (unique) {
                     Profile profile = new Profile(usernameText.getText().toString());
-                    
+                    profileController.addOrUpdateProfiles(profile);
                     Account account = new Account(usernameText.getText().toString(), passwordText.getText().toString(), profile);
-                    accountController.addAccount(account);
+                    accountController.addOrUpdateAccounts(account);
+                    profile.setHomeProfile(TRUE);
+                    LocalData.store(profile.getId());
                     //probably something to sign in the user
                     Context context = view.getContext();
                     Intent intent = new Intent(context, NewsFeedActivity.class);
                     startActivity(intent);
 
+                }
+
+                } catch (TimeoutException e){
+                    System.err.println("TimeoutException: " + e.getMessage());
                 }
 
             }
