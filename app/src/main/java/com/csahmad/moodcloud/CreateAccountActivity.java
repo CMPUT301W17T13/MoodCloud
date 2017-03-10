@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.concurrent.TimeoutException;
@@ -31,6 +32,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         final EditText usernameText = (EditText) findViewById(R.id.username);
         final EditText passwordText = (EditText) findViewById(R.id.password);
 
+        ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SignInActivity.class);
+                startActivity(intent);
+            }}
+        );
 
         Button button = (Button) findViewById(R.id.create);
         button.setOnClickListener(new View.OnClickListener() {
