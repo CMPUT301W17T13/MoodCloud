@@ -34,6 +34,7 @@ public class Profile implements ElasticSearchObject {
         return this.id == otherProfile.id;
     }
 
+    @Override
     public String getTypeName() {
 
         return Profile.typeName;
