@@ -16,7 +16,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
     private SearchFilter filter;
 
-    private AsyncTask lastController;
+    private AsyncTask lastTask;
     private Integer timeout;
 
     public ElasticSearch(Class type, String typeName) {
@@ -67,20 +67,20 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public void waitForTask()
             throws ExecutionException, InterruptedException, TimeoutException {
 
-        if (this.lastController == null)
+        if (this.lastTask == null)
             throw new IllegalStateException("Nothing to wait for.");
 
         if (this.timeout == null)
-            this.lastController.get();
+            this.lastTask.get();
 
         else
-            this.lastController.get(this.timeout, TimeUnit.MILLISECONDS);
+            this.lastTask.get(this.timeout, TimeUnit.MILLISECONDS);
     }
 
     public T getById(String id) throws TimeoutException {
 
         ElasticSearchController.GetById<T> controller = new ElasticSearchController.GetById<T>();
-        this.lastController = controller;
+        this.lastTask = controller;
 
         controller.setType(this.type);
         controller.setTypeName(this.typeName);
@@ -110,7 +110,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public ArrayList<T> getNext(int from) throws TimeoutException {
 
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
-        this.lastController = controller;
+        this.lastTask = controller;
 
         controller.setFrom(from);
         controller.setType(this.type);
@@ -142,7 +142,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public void addOrUpdate(T... objects) {
 
         ElasticSearchController.AddItems<T> controller = new ElasticSearchController.AddItems<T>();
-        this.lastController = controller;
+        this.lastTask = controller;
         controller.execute(objects);
     }
 
@@ -151,7 +151,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         ElasticSearchController.DeleteItems<T> controller =
                 new ElasticSearchController.DeleteItems<T>();
 
-        this.lastController = controller;
+        this.lastTask = controller;
         controller.execute(objects);
     }
 }

@@ -2,8 +2,6 @@ package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by oahmad on 2017-03-09.
  */
@@ -65,8 +63,14 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
 
         elasticSearch.addOrUpdate();
-        //elasticSearch.waitForTask();
-        TimeUnit.SECONDS.sleep(3);
+        elasticSearch.waitForTask();
+
+        TestElasticSearchObject object1 = new TestElasticSearchObject();
+        assertNull(object1.getId());
+
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+        assertNotNull(object1.getId());
 
         ;
     }
