@@ -17,7 +17,7 @@
         android:theme="?attr/actionBarTheme" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/create"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:textColor="@android:color/primary_text_dark"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/password"
@@ -58,11 +58,11 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/passwordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/password"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/usernameText"
         android:layout_marginTop="26dp"
         android:text="Password:"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -79,14 +79,20 @@
         android:inputType="textPassword" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/backButton"
         style="@android:style/Widget.Holo.Light.ImageButton"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/username"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/title"
-        app:srcCompat="?attr/homeAsUpIndicator" />
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <TextView
+        android:id="@+id/notUnique"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username"
+        android:layout_below="@+id/usernameText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
 </RelativeLayout>
