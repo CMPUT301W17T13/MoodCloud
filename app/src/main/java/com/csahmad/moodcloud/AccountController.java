@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -25,6 +26,11 @@ public class AccountController {
     public void setTimeout(Integer timeout) {
 
         this.elasticSearch.setTimeout(timeout);
+    }
+
+    public void waitForTask() throws InterruptedException, ExecutionException, TimeoutException {
+
+        this.elasticSearch.waitForTask();
     }
 
     public Account getAccountFromId(String id) throws TimeoutException {
