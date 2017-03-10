@@ -2,6 +2,8 @@ package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by oahmad on 2017-03-09.
  */
@@ -58,5 +60,25 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    ;
+    public void testAddOrUpdate() throws Exception {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+
+        elasticSearch.addOrUpdate();
+        //elasticSearch.waitForTask();
+        TimeUnit.SECONDS.sleep(3);
+
+        ;
+    }
+
+    private static ElasticSearch<TestElasticSearchObject> getElasticSearch() {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch =
+                new ElasticSearch<TestElasticSearchObject>(TestElasticSearchObject.class,
+                        TestElasticSearchObject.typeName);
+
+        elasticSearch.setTimeout(ElasticSearchTest.timeout);
+
+        return elasticSearch;
+    }
 }

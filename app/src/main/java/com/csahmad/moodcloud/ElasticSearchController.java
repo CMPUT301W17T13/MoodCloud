@@ -50,6 +50,9 @@ public class ElasticSearchController {
         @Override
         protected Void doInBackground(T... items) {
 
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
             for (T item: items) {
 
                 Delete delete = new Delete.Builder(item.getId())
@@ -255,6 +258,9 @@ public class ElasticSearchController {
         @Override
         protected ArrayList<T> doInBackground(SearchFilter... searchFilters) {
 
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
             if (this.typeName == null) {
 
                 throw new IllegalStateException(
@@ -266,9 +272,6 @@ public class ElasticSearchController {
                 throw new IllegalStateException(
                         "Cannot call doInBackground without setting type.");
             }
-
-            ElasticSearchController.setClient();        // Set up client if it is null
-            ElasticSearchController.makeIndex();        // Make index if not exists
 
             // Will store results (objects with the given keywords)
             ArrayList<T> results = new ArrayList<T>();
@@ -324,6 +327,8 @@ public class ElasticSearchController {
     // Accessed Mar 8, 2017
     /** Make index if not exists. */
     public static void makeIndex() {
+
+        ElasticSearchController.setClient();        // Set up client if it is null
 
         IndicesExists indicesExists = new IndicesExists.Builder(ElasticSearchController.index)
                 .build();

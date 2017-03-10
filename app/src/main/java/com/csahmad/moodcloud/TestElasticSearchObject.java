@@ -1,7 +1,6 @@
 package com.csahmad.moodcloud;
 
 import java.util.Calendar;
-
 import io.searchbox.annotations.JestId;
 
 /**
