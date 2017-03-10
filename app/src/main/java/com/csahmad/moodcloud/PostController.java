@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -26,6 +27,11 @@ public class PostController {
     public void addOrUpdatePosts(Post... posts) {
 
         this.elasticSearch.addOrUpdate(posts);
+    }
+
+    public void waitForTask() throws InterruptedException, ExecutionException, TimeoutException {
+
+        this.elasticSearch.waitForTask();
     }
 
     public Post getPostFromId(String id) throws TimeoutException {
