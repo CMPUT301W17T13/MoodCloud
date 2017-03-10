@@ -87,4 +87,12 @@
         android:layout_alignParentStart="true"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
+    <TextView
+        android:id="@+id/notUnique"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username"
+        android:layout_below="@+id/usernameText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
 </RelativeLayout>

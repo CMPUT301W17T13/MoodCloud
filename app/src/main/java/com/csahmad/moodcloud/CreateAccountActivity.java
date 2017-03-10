@@ -8,9 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 /** The activity for creating an {@link Account}. */
@@ -50,7 +52,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 }
-
+                if (unique == FALSE){
+                    final TextView notUnique = (TextView) findViewById(R.id.notUnique);
+                    notUnique.setText("Username already exists");
+                }
                 } catch (TimeoutException e){
                     System.err.println("TimeoutException: " + e.getMessage());
                 }
