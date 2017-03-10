@@ -27,6 +27,6 @@ public class LocalData {
     // Return false if not stored
     public static boolean tryReadProfile() {
 
-        ;
+        return true;
     }
 }

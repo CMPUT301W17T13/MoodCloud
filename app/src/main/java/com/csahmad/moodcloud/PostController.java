@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by oahmad on 2017-03-01.
@@ -8,30 +9,40 @@ import java.util.ArrayList;
 
 public class PostController {
 
+    private ElasticSearch<Post> elasticSearch =
+            new ElasticSearch<Post>(Post.class, Post.typeName);
+
+    public Integer getTimeout() {
+
+        return this.elasticSearch.getTimeout();
+    }
+
+    public void setTimeout(Integer timeout) {
+
+        this.elasticSearch.setTimeout(timeout);
+    }
+
     // Note: stores post in LocoalData.homeProfile AND sends the post to the internets
-    public void addPost(Post post) {
+    public void addOrUpdatePosts(Post... posts) {
 
-        ;
+        this.elasticSearch.addOrUpdate(posts);
     }
 
-    // Note: Finds post in elasticsearch with newPost.id and updates with new fields
-    public void updatePost(Post editedPost) {
+    public Post getPostFromId(String id) throws TimeoutException {
 
-        ;
+        return this.elasticSearch.getById(id);
     }
 
-    public Post getPost(String id) {
+    public ArrayList<Post> getPosts(SearchFilter filter, int from) throws TimeoutException {
 
-        ;
+        this.elasticSearch.setFilter(filter);
+        ArrayList<Post> result = this.elasticSearch.getNext(from);
+        this.elasticSearch.setFilter(null);
+        return result;
     }
 
-    public ArrayList<Post> getPosts(PostFilter filter) {
+    public void deletePosts(Post... posts) {
 
-        ;
-    }
-
-    public void deletePost(String postId) {
-
-        ;
+        this.elasticSearch.delete(posts);
     }
 }

@@ -5,58 +5,136 @@ import android.util.Log;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.indices.CreateIndex;
+import io.searchbox.indices.IndicesExists;
 
-/**
- * Created by oahmad on 2017-03-06.
- */
+// TODO: 2017-03-08 Handle exceptions better
 
 public class ElasticSearchController {
 
-    private static String url = "http://cmput301.softwareprocess.es:8080";
-    private static String index = "CMPUT301W17T13";
+    private static final String url = "http://cmput301.softwareprocess.es:8080";
+    private static final String index = "CMPUT301W17T13";
 
-    private static int resultSize = 25;
+    private static final int resultSize = 25;
 
     /** For building and executing save commands and search queries. */
     private static JestDroidClient client;
 
+    public static int getResultSize() {
+
+        return ElasticSearchController.resultSize;
+    }
+
     // AsyncTask<Params, Progress, Result>
     /**
-     * For saving an object using elasticsearch.
+     * For deleting objects using elasticsearch.
      */
-    public static class Add<T extends ElasticSearchObject> extends AsyncTask<T, Void, Void> {
+    public static class DeleteItems<T extends ElasticSearchObject>
+            extends AsyncTask<T, Void, Void> {
 
         /**
-         * Saves the given object(s) using elasticsearch.
+         * Deletes the given object(s) using elasticsearch.
          *
-         * @param items the objects to save
+         * @param items the objects to delete
          * @return null
          */
         @Override
         protected Void doInBackground(T... items) {
 
-            ElasticSearchController.setClientIfNull();        // Set up client if it is null
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
 
-            // Save each object
             for (T item: items) {
 
-                Index index = new Index.Builder(item)
+                Delete delete = new Delete.Builder(item.getId())
                         .index(ElasticSearchController.index)
                         .type(item.getTypeName())
                         .build();
 
                 try {
+                    ElasticSearchController.client.execute(delete);
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For saving or updating an object using elasticsearch.
+     *
+     * If the object's ID is null, add (otherwise update)
+     */
+    public static class AddItems<T extends ElasticSearchObject> extends AsyncTask<T, Void, Void> {
+
+        /**
+         * Saves/updates the given object(s) using elasticsearch.
+         *
+         * @param items the objects to save/update
+         * @return null
+         */
+        @Override
+        protected Void doInBackground(T... items) {
+
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
+            boolean isNew;
+
+            // Save/update each object
+            for (T item: items) {
+
+                Index index;
+
+                if (item.getId() == null)
+                    isNew = true;
+
+                else
+                    isNew = false;
+
+                if (isNew) {
+
+                    index = new Index.Builder(item)
+                            .index(ElasticSearchController.index)
+                            .type(item.getTypeName())
+                            .build();
+                }
+
+                else {
+
+                    index = new Index.Builder(item)
+                            .index(ElasticSearchController.index)
+                            .type(item.getTypeName())
+                            .id(item.getId())
+                            .build();
+                }
+
+                try {
 
                     DocumentResult result = ElasticSearchController.client.execute(index);
 
-                    if (result.isSucceeded())
-                        item.setId(result.getId());
+                    if (result.isSucceeded()) {
+
+                        if (isNew)
+                            item.setId(result.getId());
+
+                        else if (item.getId() != result.getId())
+                            throw new RuntimeException("Them IDs should be equal.");
+                    }
 
                     else
                         Log.i("Error", "Elasticsearch was not able to add the object");
@@ -73,23 +151,21 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For searching for objects by keyword using elasticsearch.
+     * For getting objects by ID.
      */
-    public static class GetByKeyword<T extends ElasticSearchObject>
-            extends AsyncTask<String, Void, ArrayList<T>> {
+    public static class GetById<T extends ElasticSearchObject> extends AsyncTask<String, Void, T> {
 
-        private String fieldToSearch;
-        private String typeName;
         private Class type;
+        private String typeName;
 
-        public String getFieldToSearch() {
+        public Class getType() {
 
-            return this.fieldToSearch;
+            return this.type;
         }
 
-        public void setFieldToSearch(String fieldToSearch) {
+        public void setType(Class type) {
 
-            this.fieldToSearch = fieldToSearch;
+            this.type = type;
         }
 
         public String getTypeName() {
@@ -102,6 +178,56 @@ public class ElasticSearchController {
             this.typeName = typeName;
         }
 
+        /**
+         * Gets the object with the given ID.
+         *
+         * @param ids the first argument is the id of the object to get
+         * @return the object with the given ID
+         */
+        @Override
+        protected T doInBackground(String... ids) {
+
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
+            String id = ids[0];
+
+            Get get = new Get.Builder(ElasticSearchController.index, id)
+                    .type(this.typeName).build();
+
+            try {
+                return (T) ElasticSearchController.client.execute(get).getSourceAsObject(this.type);
+            }
+
+            catch (IOException e) {
+                Log.i("Error", "Could not get object by ID.");
+            }
+
+            return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For searching for objects that match the given restrictions using elasticsearch.
+     */
+    public static class GetItems<T extends ElasticSearchObject>
+            extends AsyncTask<SearchFilter, Void, ArrayList<T>> {
+
+        private int from = 0;
+        private Class type;
+        private String typeName;
+
+        public int getFrom() {
+
+            return this.from;
+        }
+
+        public void setFrom(int from) {
+
+            this.from = from;
+        }
+
         public Class getType() {
 
             return this.type;
@@ -112,20 +238,28 @@ public class ElasticSearchController {
             this.type = type;
         }
 
+        public String getTypeName() {
+
+            return this.typeName;
+        }
+
+        public void setTypeName(String typeName) {
+
+            this.typeName = typeName;
+        }
+
         /**
-         * Searches for objects using the given keywords.
+         * Searches for objects using the given search filter.
          *
-         * @param search_parameters the keywords to search by (currently only first used)
-         * @return the objects containing the given keywords
+         * @param searchFilters only pass one search filter to restrict the search (or pass no
+         *                      search filters to get all objects)
+         * @return the objects matching the restrictions in the given search filter
          */
         @Override
-        protected ArrayList<T> doInBackground(String... search_parameters) {
+        protected ArrayList<T> doInBackground(SearchFilter... searchFilters) {
 
-            if (this.fieldToSearch == null) {
-
-                throw new IllegalStateException(
-                        "Cannot call doInBackground without setting fieldToSearch.");
-            }
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
 
             if (this.typeName == null) {
 
@@ -139,39 +273,23 @@ public class ElasticSearchController {
                         "Cannot call doInBackground without setting type.");
             }
 
-            ElasticSearchController.setClientIfNull();        // Set up client if it is null
-
             // Will store results (objects with the given keywords)
             ArrayList<T> results = new ArrayList<T>();
 
-            String fieldName = this.fieldToSearch;
-            String query = "";
-            String keywordString = search_parameters[0];
+            String query;
 
             // I
-            if (keywordString.equals("")) {
-
-                query = "{\n" +
-                        "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
-                        "    \"query\" : {\n" +
-                        "        \"match_all\" : {}\n" +
-                        "    }\n" +
-                        "}";
-            }
+            if (searchFilters.length == 0 || searchFilters[0] == null)
+                query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
 
             // If keyword passed, make the query string (otherwise leave query as an empty string)
             //if (!keywordString.equals("")) {
             else {
 
-                query = "{\n" +
-                        "    \"size\" : " + ElasticSearchController.resultSize + ",\n" +
-                        "    \"query\" : {\n" +
-                        "        \"query_string\" : {\n" +
-                        "            \"default_field\" : \"" + fieldName + "\",\n" +
-                        "            \"query\" : \"" + keywordString + "\"\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}";
+                SearchFilter searchFilter = searchFilters[0];
+
+                query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize,
+                        this.from);
             }
 
             Search search = new Search.Builder(query)
@@ -183,7 +301,7 @@ public class ElasticSearchController {
 
                 // Get the results of the query:
 
-                SearchResult result = client.execute(search);
+                SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
                     List<T> foundObjects = result.getSourceAsObjectList(this.type);
@@ -204,8 +322,38 @@ public class ElasticSearchController {
         }
     }
 
+    // Modified from this code:
+    // http://www.programcreek.com/java-api-examples/index.php?api=io.searchbox.indices.IndicesExists
+    // Accessed Mar 8, 2017
+    /** Make index if not exists. */
+    public static void makeIndex() {
+
+        ElasticSearchController.setClient();        // Set up client if it is null
+
+        IndicesExists indicesExists = new IndicesExists.Builder(ElasticSearchController.index)
+                .build();
+
+        try {
+
+            boolean indexExists = ElasticSearchController.client.execute(indicesExists)
+                    .isSucceeded();
+
+            if (!indexExists) {
+
+                CreateIndex createIndex = new CreateIndex.Builder(ElasticSearchController.index)
+                        .build();
+
+                ElasticSearchController.client.execute(createIndex);
+            }
+        }
+
+        catch (IOException e) {
+            Log.i("Error", "Could not make index.");
+        }
+    }
+
     /** Set up client if it is null. */
-    public static void setClientIfNull() {
+    public static void setClient() {
 
         if (ElasticSearchController.client == null) {
 
