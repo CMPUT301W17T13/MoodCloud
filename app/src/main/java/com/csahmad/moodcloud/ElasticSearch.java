@@ -17,6 +17,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     private SearchFilter filter;
 
     private AsyncTask lastExecute;
+    private Integer timeout;
 
     public ElasticSearch(Class type, String typeName) {
 
@@ -25,6 +26,16 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
         this.type = type;
         this.typeName = typeName;
+    }
+
+    public int getTimeout() {
+
+        return this.timeout;
+    }
+
+    public void setTimeout(int timeout) {
+
+        this.timeout = timeout;
     }
 
     public Class getType() {
@@ -47,25 +58,23 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.filter = filter;
     }
 
-    public boolean itemExists(T object) {
+    public boolean itemExists(T object) throws TimeoutException {
 
         return this.getById(object.getId()) != null;
     }
 
     /** Wait for the last AsyncTask execution to finish. */
-    public void waitForTask() throws ExecutionException, InterruptedException {
-
-        this.lastExecute.get();
-    }
-
-    /** Wait for the last AsyncTask execution to finish for the given amount of time. */
-    public void waitForTask(int milliseconds)
+    public void waitForTask()
             throws ExecutionException, InterruptedException, TimeoutException {
 
-        this.lastExecute.get(milliseconds, TimeUnit.MILLISECONDS);
+        if (this.timeout == null)
+            this.lastExecute.get();
+
+        else
+            this.lastExecute.get(this.timeout, TimeUnit.MILLISECONDS);
     }
 
-    public T getById(String id) {
+    public T getById(String id) throws TimeoutException {
 
         ElasticSearchController.GetById<T> controller = new ElasticSearchController.GetById<T>();
 
@@ -75,7 +84,12 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.lastExecute = controller.execute(id);
 
         try {
-            return controller.get();
+
+            if (this.timeout == null)
+                return controller.get();
+
+            else
+                return controller.get(this.timeout, TimeUnit.MILLISECONDS);
         }
 
         catch (InterruptedException e) {
@@ -89,7 +103,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
-    public ArrayList<T> getNext(int from) {
+    public ArrayList<T> getNext(int from) throws TimeoutException {
 
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
 
@@ -100,7 +114,12 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.lastExecute = controller.execute(this.filter);
 
         try {
-            return controller.get();
+
+            if (this.timeout == null)
+                return controller.get();
+
+            else
+                return controller.get(this.timeout, TimeUnit.MILLISECONDS);
         }
 
         catch (InterruptedException e) {
