@@ -9,30 +9,40 @@ import java.util.concurrent.TimeoutException;
 
 public class ProfileController {
 
-    private static ElasticSearch<Profile> elasticSearch =
+    private ElasticSearch<Profile> elasticSearch =
             new ElasticSearch<Profile>(ProfileController.class, Profile.typeName);
+
+    public Integer getTimeout() {
+
+        return this.elasticSearch.getTimeout();
+    }
+
+    public void setTimeout(Integer timeout) {
+
+        this.elasticSearch.setTimeout(timeout);
+    }
 
     public Profile getProfileFromID(String id) throws TimeoutException {
 
-        return ProfileController.elasticSearch.getById(id);
+        return this.elasticSearch.getById(id);
     }
 
     public ArrayList<Profile> getProfiles(SearchFilter filter, int from) throws TimeoutException {
 
-        ProfileController.elasticSearch.setFilter(filter);
-        ArrayList<Profile> result = ProfileController.elasticSearch.getNext(from);
-        ProfileController.elasticSearch.setFilter(null);
+        this.elasticSearch.setFilter(filter);
+        ArrayList<Profile> result = this.elasticSearch.getNext(from);
+        this.elasticSearch.setFilter(null);
         return null;
     }
 
     public void addOrUpdateProfiles(Profile... profiles) {
 
-        ProfileController.elasticSearch.addOrUpdate(profiles);
+        this.elasticSearch.addOrUpdate(profiles);
 
     }
 
     public void deleteProfiles(Profile... profiles) {
 
-        ProfileController.elasticSearch.delete(profiles);
+        this.elasticSearch.delete(profiles);
     }
 }

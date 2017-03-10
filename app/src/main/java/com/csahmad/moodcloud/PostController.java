@@ -9,30 +9,40 @@ import java.util.concurrent.TimeoutException;
 
 public class PostController {
 
-    private static ElasticSearch<Post> elasticSearch =
+    private ElasticSearch<Post> elasticSearch =
             new ElasticSearch<Post>(Post.class, Post.typeName);
+
+    public Integer getTimeout() {
+
+        return this.elasticSearch.getTimeout();
+    }
+
+    public void setTimeout(Integer timeout) {
+
+        this.elasticSearch.setTimeout(timeout);
+    }
 
     // Note: stores post in LocoalData.homeProfile AND sends the post to the internets
     public void addOrUpdatePosts(Post... posts) {
 
-        PostController.elasticSearch.addOrUpdate(posts);
+        this.elasticSearch.addOrUpdate(posts);
     }
 
     public Post getPostFromId(String id) throws TimeoutException {
 
-        return PostController.elasticSearch.getById(id);
+        return this.elasticSearch.getById(id);
     }
 
     public ArrayList<Post> getPosts(SearchFilter filter, int from) throws TimeoutException {
 
-        PostController.elasticSearch.setFilter(filter);
-        ArrayList<Post> result = PostController.elasticSearch.getNext(from);
-        PostController.elasticSearch.setFilter(null);
+        this.elasticSearch.setFilter(filter);
+        ArrayList<Post> result = this.elasticSearch.getNext(from);
+        this.elasticSearch.setFilter(null);
         return result;
     }
 
     public void deletePosts(Post... posts) {
 
-        PostController.elasticSearch.delete(posts);
+        this.elasticSearch.delete(posts);
     }
 }

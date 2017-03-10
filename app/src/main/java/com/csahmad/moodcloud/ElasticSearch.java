@@ -28,12 +28,12 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.typeName = typeName;
     }
 
-    public int getTimeout() {
+    public Integer getTimeout() {
 
         return this.timeout;
     }
 
-    public void setTimeout(int timeout) {
+    public void setTimeout(Integer timeout) {
 
         this.timeout = timeout;
     }

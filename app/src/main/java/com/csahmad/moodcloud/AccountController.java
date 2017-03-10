@@ -9,49 +9,59 @@ import java.util.concurrent.TimeoutException;
 
 public class AccountController {
 
-    private static ElasticSearch<Account> elasticSearch =
+    private ElasticSearch<Account> elasticSearch =
             new ElasticSearch<Account>(Account.class, Account.typeName);
 
-    public static boolean isUsernameUnique(String username) throws TimeoutException {
+    public boolean isUsernameUnique(String username) throws TimeoutException {
 
-        return AccountController.getAccountFromUsername(username) == null;
+        return this.getAccountFromUsername(username) == null;
     }
 
-    public static Account getAccountFromId(String id) throws TimeoutException {
+    public Integer getTimeout() {
 
-        return AccountController.elasticSearch.getById(id);
+        return this.elasticSearch.getTimeout();
     }
 
-    public static Account getAccountFromUsername(String username) throws TimeoutException {
+    public void setTimeout(Integer timeout) {
+
+        this.elasticSearch.setTimeout(timeout);
+    }
+
+    public Account getAccountFromId(String id) throws TimeoutException {
+
+        return this.elasticSearch.getById(id);
+    }
+
+    public Account getAccountFromUsername(String username) throws TimeoutException {
 
         SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("username",
                 username));
 
-        AccountController.elasticSearch.setFilter(filter);
+        this.elasticSearch.setFilter(filter);
 
-        ArrayList<Account> result = AccountController.elasticSearch.getNext(0);
-        AccountController.elasticSearch.setFilter(null);
+        ArrayList<Account> result = this.elasticSearch.getNext(0);
+        this.elasticSearch.setFilter(null);
 
         if (result.size() == 0) return null;
         return result.get(0);
     }
 
-    public static ArrayList<Account> getAccounts(SearchFilter filter, int from)
+    public ArrayList<Account> getAccounts(SearchFilter filter, int from)
         throws TimeoutException{
 
-        AccountController.elasticSearch.setFilter(filter);
+        this.elasticSearch.setFilter(filter);
         ArrayList<Account> result = elasticSearch.getNext(from);
-        AccountController.elasticSearch.setFilter(null);
+        this.elasticSearch.setFilter(null);
         return result;
     }
 
-    public static void addOrUpdateAccounts(Account... accounts) {
+    public void addOrUpdateAccounts(Account... accounts) {
 
-        AccountController.elasticSearch.addOrUpdate(accounts);
+        this.elasticSearch.addOrUpdate(accounts);
     }
 
-    public static void deleteAccounts(Account... accounts) {
+    public void deleteAccounts(Account... accounts) {
 
-        AccountController.elasticSearch.delete(accounts);
+        this.elasticSearch.delete(accounts);
     }
 }
