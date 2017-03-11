@@ -72,7 +72,7 @@ public class ProfileController {
         this.elasticSearch.setFilter(filter);
         ArrayList<Profile> result = this.elasticSearch.getNext(from);
         this.elasticSearch.setFilter(null);
-        return null;
+        return result;
     }
 
     public void addOrUpdateProfiles(Profile... profiles) {
