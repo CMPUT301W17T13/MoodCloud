@@ -12,12 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a552cf-d114-42e1-8669-e5e687bc13d0" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/EqualTools.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/SearchFilter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/SearchFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/TestElasticSearchObject.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/TestElasticSearchObject.java" />
     </list>
     <ignored path="MoodCloud.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,7 +60,7 @@
       <file leaf-file-name="SearchFilter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/SearchFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="390">
               <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
               <folding />
             </state>
@@ -72,8 +70,8 @@
       <file leaf-file-name="CompareTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+            <state relative-caret-position="450">
+              <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -82,7 +80,7 @@
       <file leaf-file-name="ElasticSearchTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
+            <state relative-caret-position="5115">
               <caret line="341" column="9" selection-start-line="341" selection-start-column="9" selection-end-line="341" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -94,7 +92,7 @@
       <file leaf-file-name="ElasticSearch.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
+            <state relative-caret-position="1860">
               <caret line="129" column="33" selection-start-line="129" selection-start-column="33" selection-end-line="129" selection-end-column="33" />
               <folding />
             </state>
@@ -104,8 +102,8 @@
       <file leaf-file-name="ElasticSearchController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="312" column="60" selection-start-line="312" selection-start-column="60" selection-end-line="312" selection-end-column="60" />
+            <state relative-caret-position="525">
+              <caret line="314" column="48" selection-start-line="314" selection-start-column="48" selection-end-line="314" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1935,9 +1933,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/PostController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java" />
         <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/SearchFilter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" />
       </list>
     </option>
   </component>
@@ -1972,9 +1970,6 @@
     </navigator>
     <panes>
       <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1983,50 +1978,11 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MoodCloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="moodcloud" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2689,7 +2645,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="0" />
+    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2705,7 +2661,7 @@
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3085622" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31340873" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -3066,7 +3022,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
+        <state relative-caret-position="1860">
           <caret line="129" column="33" selection-start-line="129" selection-start-column="33" selection-end-line="129" selection-end-column="33" />
           <folding />
         </state>
@@ -3082,18 +3038,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
+        <state relative-caret-position="5115">
           <caret line="341" column="9" selection-start-line="341" selection-start-column="9" selection-end-line="341" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="312" column="60" selection-start-line="312" selection-start-column="60" selection-end-line="312" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -3102,15 +3048,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/CompareTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+        <state relative-caret-position="450">
+          <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="314" column="48" selection-start-line="314" selection-start-column="48" selection-end-line="314" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/SearchFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="390">
           <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
           <folding />
         </state>

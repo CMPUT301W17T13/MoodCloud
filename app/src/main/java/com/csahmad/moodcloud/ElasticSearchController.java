@@ -296,9 +296,11 @@ public class ElasticSearchController {
             String query;
 
             // I
-            if (searchFilters.length == 0 || searchFilters[0] == null) {
+            if (searchFilters.length == 0 || searchFilters[0] == null ||
+                    !searchFilters[0].hasRestrictions()) {
+
                 query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
-                Log.i("Heyo", "I am in the right place!");
+                Log.i("Conditional", "If I'm here, should be NO searchFilter.");
             }
 
             // If keyword passed, make the query string (otherwise leave query as an empty string)
@@ -310,7 +312,7 @@ public class ElasticSearchController {
                 query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize,
                         this.from);
 
-                Log.i("Heyo", "I am in the WRONG place!!!");
+                Log.i("Conditional", "If I'm here, should be a searchFilter.");
             }
 
             Search search = new Search.Builder(query)

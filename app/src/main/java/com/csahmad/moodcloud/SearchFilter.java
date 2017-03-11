@@ -24,7 +24,7 @@ public class SearchFilter {
 
     public boolean hasRestrictions() {
 
-        return !CompareTools.allNull(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
+        return !CompareTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance);
     }
 
