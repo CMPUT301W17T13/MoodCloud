@@ -178,4 +178,33 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.lastTask = controller;
         controller.execute(objects);
     }
+
+    /** Delete all objects of the type this.type. */
+    public void deleteAll() throws TimeoutException, ExecutionException, InterruptedException {
+
+        SearchFilter oldFilter = this.filter;
+        this.filter = null;
+        ArrayList<T> results = new ArrayList<T>();
+
+        do {
+
+            results.clear();
+            results.addAll(this.getNext(0));
+
+            for (T result: results) {
+
+                if (result.getId() == null)
+                    throw new RuntimeException("id should not be null.");
+
+                this.delete(result);
+                this.waitForTask();
+
+                if (result.getId() != null)
+                    throw new RuntimeException("Did not delete properly");
+            }
+
+        } while (results.size() > 0);
+
+        this.filter = oldFilter;
+    }
 }

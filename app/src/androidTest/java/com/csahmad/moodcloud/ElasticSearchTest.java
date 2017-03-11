@@ -1,6 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
@@ -14,6 +16,33 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public ElasticSearchTest() {
 
         super(MainActivity.class);
+    }
+
+    public void testDeleteAll() throws Exception {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+
+        TestElasticSearchObject object1 = new TestElasticSearchObject();
+        TestElasticSearchObject object2 = new TestElasticSearchObject();
+        TestElasticSearchObject object3 = new TestElasticSearchObject();
+
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+        elasticSearch.addOrUpdate(object2);
+        elasticSearch.waitForTask();
+        elasticSearch.addOrUpdate(object3);
+        elasticSearch.waitForTask();
+
+        ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
+        assertTrue("Actual size: " + results.size(), results.size() >= 3);
+
+        elasticSearch.deleteAll();
+        results = elasticSearch.getNext(0);
+        assertEquals("Actual size: " + results.size(), results.size(), 0);
+
+        assertNull(object1.getId());
+        assertNull(object2.getId());
+        assertNull(object3.getId());
     }
 
     public void testConstructor() {
@@ -62,7 +91,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public void testAddOrUpdate() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
-        ElasticSearchTest.deleteAll(elasticSearch);
+        elasticSearch.deleteAll();
 
         elasticSearch.addOrUpdate();
         elasticSearch.waitForTask();
@@ -146,7 +175,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public void testGetById() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
-        ElasticSearchTest.deleteAll(elasticSearch);
+        elasticSearch.deleteAll();
 
         TestElasticSearchObject returned = elasticSearch.getById("ThisIdDoesNotExist");
         assertNull(returned);
@@ -203,7 +232,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public void testDelete() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
-        ElasticSearchTest.deleteAll(elasticSearch);
+        elasticSearch.deleteAll();
 
         elasticSearch.delete();
 
@@ -304,7 +333,18 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    private static void deleteAll(ElasticSearch<TestElasticSearchObject> elasticSearch) {
+    public void testGetNext() throws Exception {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+        elasticSearch.deleteAll();
+
+        TestElasticSearchObject object1 = new TestElasticSearchObject();
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+
+        ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
+        assertTrue(results.size() >= 1);
+        assertTrue(results.contains(object1));
 
         ;
     }
