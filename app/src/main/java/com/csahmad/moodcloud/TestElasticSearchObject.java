@@ -1,7 +1,6 @@
 package com.csahmad.moodcloud;
 
 import java.util.Calendar;
-import java.util.Objects;
 
 import io.searchbox.annotations.JestId;
 
@@ -38,11 +37,11 @@ public class TestElasticSearchObject implements ElasticSearchObject {
         if (!(other instanceof TestElasticSearchObject)) return false;
         TestElasticSearchObject otherTest = (TestElasticSearchObject) other;
 
-        return EqualTools.equals(this.id, otherTest.getId()) &&
-                EqualTools.equals(this.message, otherTest.getMessage()) &&
-                EqualTools.equals(this.mood, otherTest.getMood()) &&
-                EqualTools.equals(this.date, otherTest.getDate()) &&
-                EqualTools.equals(this.location, otherTest.getLocation());
+        return CompareTools.equals(this.id, otherTest.getId()) &&
+                CompareTools.equals(this.message, otherTest.getMessage()) &&
+                CompareTools.equals(this.mood, otherTest.getMood()) &&
+                CompareTools.equals(this.date, otherTest.getDate()) &&
+                CompareTools.equals(this.location, otherTest.getLocation());
     }
 
     @Override
