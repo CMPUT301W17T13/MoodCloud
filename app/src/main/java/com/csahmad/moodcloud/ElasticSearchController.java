@@ -55,10 +55,15 @@ public class ElasticSearchController {
 
             for (T item: items) {
 
+                if (item.getId() == null)
+                    throw new IllegalArgumentException("Given item has no ID.");
+
                 Delete delete = new Delete.Builder(item.getId())
                         .index(ElasticSearchController.index)
                         .type(item.getTypeName())
                         .build();
+
+                item.setId(null);
 
                 try {
                     ElasticSearchController.client.execute(delete);
@@ -99,6 +104,9 @@ public class ElasticSearchController {
             for (T item: items) {
 
                 Index index;
+
+                if (item == null)
+                    throw new IllegalArgumentException("Cannot pass null argument.");
 
                 if (item.getId() == null)
                     isNew = true;

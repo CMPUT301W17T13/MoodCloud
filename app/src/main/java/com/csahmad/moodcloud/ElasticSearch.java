@@ -79,6 +79,9 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
     public T getById(String id) throws TimeoutException {
 
+        if (id == null)
+            throw new IllegalArgumentException("id is null.");
+
         ElasticSearchController.GetById<T> controller = new ElasticSearchController.GetById<T>();
         this.lastTask = controller;
 
@@ -141,12 +144,33 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     // Update if .id not null (otherwise add)
     public void addOrUpdate(T... objects) {
 
+        if (objects == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        for (T object: objects) {
+
+            if (object == null)
+                throw new IllegalArgumentException("Cannot pass null object.");
+        }
+
         ElasticSearchController.AddItems<T> controller = new ElasticSearchController.AddItems<T>();
         this.lastTask = controller;
         controller.execute(objects);
     }
 
     public void delete(T... objects) {
+
+        if (objects == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        for (T object: objects) {
+
+            if (object == null)
+                throw new IllegalArgumentException("Cannot pass null object.");
+
+            if (object.getId() == null)
+                throw new IllegalArgumentException("Given object has no id.");
+        }
 
         ElasticSearchController.DeleteItems<T> controller =
                 new ElasticSearchController.DeleteItems<T>();

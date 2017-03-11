@@ -62,6 +62,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public void testAddOrUpdate() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+        ElasticSearchTest.deleteAll(elasticSearch);
 
         elasticSearch.addOrUpdate();
         elasticSearch.waitForTask();
@@ -117,11 +118,35 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
         assertEquals(object1.getId(), id1);
         assertEquals(object2.getId(), id2);
+
+        boolean exceptionThrown = false;
+
+        try {
+            elasticSearch.addOrUpdate(null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+
+        try {
+            elasticSearch.addOrUpdate(null, null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
     }
 
     public void testGetById() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+        ElasticSearchTest.deleteAll(elasticSearch);
 
         TestElasticSearchObject returned = elasticSearch.getById("ThisIdDoesNotExist");
         assertNull(returned);
@@ -161,6 +186,127 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         returned = elasticSearch.getById(id);
         assertNotNull(returned);
         assertEquals(object3, returned);
+
+        boolean exceptionThrown = false;
+
+        try {
+            elasticSearch.getById(null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+    }
+
+    public void testDelete() throws Exception {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+        ElasticSearchTest.deleteAll(elasticSearch);
+
+        elasticSearch.delete();
+
+        TestElasticSearchObject object1 = new TestElasticSearchObject();
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+
+        String id = object1.getId();
+        elasticSearch.delete(object1);
+        elasticSearch.waitForTask();
+        assertNull(elasticSearch.getById(id));
+        assertNull(object1.getId());
+
+        TestElasticSearchObject object2 = new TestElasticSearchObject();
+        object2.setMessage("Have you ever seen a unicorn in the dawn / Shining creature of light");
+        elasticSearch.addOrUpdate(object2);
+        elasticSearch.waitForTask();
+
+        id = object2.getId();
+        elasticSearch.delete(object2);
+        elasticSearch.waitForTask();
+        assertNull(elasticSearch.getById(id));
+        assertNull(object2.getId());
+
+        TestElasticSearchObject object3 = new TestElasticSearchObject();
+        object3.setMessage("Have you ever seen a unicorn in the dawn / Shining creature of light");
+        object3.setMood("Sad");
+        object3.setDate(new GregorianCalendar(2017, 3, 10));
+        object3.setLocation(new SimpleLocation(54.4d, 76.3d, 4.8d));
+        elasticSearch.addOrUpdate(object3);
+        elasticSearch.waitForTask();
+
+        id = object3.getId();
+        elasticSearch.delete(object3);
+        elasticSearch.waitForTask();
+        assertNull(elasticSearch.getById(id));
+        assertNull(object3.getId());
+
+        elasticSearch.addOrUpdate(object1, object2, object3);
+        elasticSearch.waitForTask();
+
+        String id1 = object1.getId();
+        String id2 = object2.getId();
+        String id3 = object3.getId();
+        elasticSearch.delete(object1, object2, object3);
+        elasticSearch.waitForTask();
+
+        assertNull(elasticSearch.getById(id1));
+        assertNull(object1.getId());
+        assertNull(elasticSearch.getById(id2));
+        assertNull(object2.getId());
+        assertNull(elasticSearch.getById(id3));
+        assertNull(object3.getId());
+
+        boolean exceptionThrown = false;
+
+        try {
+            elasticSearch.delete(object1);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+
+        try {
+            elasticSearch.delete(object2, object3);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+
+        try {
+            elasticSearch.delete(null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+
+        try {
+            elasticSearch.delete(null, null);
+        }
+
+        catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+    }
+
+    private static void deleteAll(ElasticSearch<TestElasticSearchObject> elasticSearch) {
+
+        ;
     }
 
     private static ElasticSearch<TestElasticSearchObject> getElasticSearch() {
