@@ -339,11 +339,14 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
         elasticSearch.deleteAll();
 
+        ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
+        assertEquals(results.size(), 0);
+
         TestElasticSearchObject object1 = new TestElasticSearchObject();
         elasticSearch.addOrUpdate(object1);
         elasticSearch.waitForTask();
 
-        ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
+        results = elasticSearch.getNext(0);
         assertEquals(results.size(), 1);  // gives 0
         //assertTrue(results.contains(object1));
 

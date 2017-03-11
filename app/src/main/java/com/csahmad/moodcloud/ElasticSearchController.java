@@ -328,6 +328,7 @@ public class ElasticSearchController {
 
                 if (result.isSucceeded()) {
                     List<T> foundObjects = result.getSourceAsObjectList(this.type);
+                    Log.i("ListSize", Integer.toString(foundObjects.size()));
                     results.addAll(foundObjects);
                 }
 
