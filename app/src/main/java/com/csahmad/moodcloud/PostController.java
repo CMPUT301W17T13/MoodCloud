@@ -47,6 +47,16 @@ public class PostController {
         return result;
     }
 
+    public ArrayList<Post> getFolloweePosts(Profile follower, SearchFilter filter, int from) {
+
+        return new ArrayList<Post>();
+    }
+
+    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
+
+        return new ArrayList<Post>();
+    }
+
     public void deletePosts(Post... posts) {
 
         this.elasticSearch.delete(posts);

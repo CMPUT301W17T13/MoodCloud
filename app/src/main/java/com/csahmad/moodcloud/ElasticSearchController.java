@@ -198,7 +198,14 @@ public class ElasticSearchController {
                     .type(this.typeName).build();
 
             try {
-                return (T) ElasticSearchController.client.execute(get).getSourceAsObject(this.type);
+
+                DocumentResult result = ElasticSearchController.client.execute(get);
+
+                if (result.isSucceeded())
+                    return (T) result.getSourceAsObject(this.type);
+
+                else
+                    Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
             }
 
             catch (IOException e) {

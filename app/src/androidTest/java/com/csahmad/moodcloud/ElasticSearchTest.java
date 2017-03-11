@@ -72,6 +72,69 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
         assertNotNull(object1.getId());
 
+        String id1 = object1.getId();
+
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+
+        TestElasticSearchObject object2 = new TestElasticSearchObject();
+        assertNull(object2.getId());
+
+        elasticSearch.addOrUpdate(object1, object2);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+        assertNotNull(object2.getId());
+
+        String id2 = object2.getId();
+
+        elasticSearch.addOrUpdate(object1, object2);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+        assertEquals(object2.getId(), id2);
+
+        String message = "Don't break my heart, Mickey";
+        object1.setMessage(message);
+
+        elasticSearch.addOrUpdate(object1, object2);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+        assertEquals(object2.getId(), id2);
+
+        SimpleLocation location = new SimpleLocation(1.2d, -0.8d, 0.0d);
+        object2.setLocation(location);
+
+        elasticSearch.addOrUpdate(object1, object2);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+        assertEquals(object2.getId(), id2);
+
+        message = "We like to party";
+        object2.setMessage(message);
+
+        elasticSearch.addOrUpdate(object1, object2);
+        elasticSearch.waitForTask();
+        assertEquals(object1.getId(), id1);
+        assertEquals(object2.getId(), id2);
+    }
+
+    public void testGetById() throws Exception {
+
+        ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
+
+        TestElasticSearchObject returned = elasticSearch.getById("ThisIdDoesNotExist");
+        assertNull(returned);
+
+        TestElasticSearchObject object1 = new TestElasticSearchObject();
+
+        elasticSearch.addOrUpdate(object1);
+        elasticSearch.waitForTask();
+
+        String id = object1.getId();
+        returned = elasticSearch.getById(id);
+        assertNotNull(returned);
+        assertEquals(object1, returned);
+
         ;
     }
 
