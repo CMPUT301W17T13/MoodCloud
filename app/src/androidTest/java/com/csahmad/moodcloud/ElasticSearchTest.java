@@ -334,7 +334,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     }
 
     // FIXME: 2017-03-10 Failing
-    public void testGetNext() throws Exception {
+    public void testGetNextNoFilter() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
         elasticSearch.deleteAll();
@@ -371,6 +371,12 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         ;
     }
 
+    // TODO: 2017-03-11 Fill
+    public void testGetNextWithFilter() throws Exception {
+
+        ;
+    }
+
     private static ElasticSearch<TestElasticSearchObject> getElasticSearch() {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch =
@@ -382,3 +388,19 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         return elasticSearch;
     }
 }
+
+/*
+Curl:
+
+Get all test objects:
+curl -XGET \
+'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject/_search?pretty=1'
+
+Delete all test objects:
+curl -XDELETE \
+'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject/_query' -d '{
+    "query" : {
+        "match_all" : {}
+    }
+}'
+ */
