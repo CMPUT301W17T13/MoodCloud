@@ -15,15 +15,13 @@ then
         \"message\": \"${message}\"
     }"
 
-# If message empty, make object with null message
+# If message empty, make empty object
 else
 
     curl -XPOST \
     'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject' \
     -d \
-    "{
-        \"message\": null
-    }"
+    "{}"
 
 fi
 
