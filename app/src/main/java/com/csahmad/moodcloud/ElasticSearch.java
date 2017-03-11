@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -112,6 +113,20 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
     public ArrayList<T> getNext(int from) throws TimeoutException {
 
+        this.refreshIndex();
+
+        try {
+            this.waitForTask();
+        }
+
+        catch (ExecutionException e) {
+            Log.i("Error", "ExecutionException");
+        }
+
+        catch (InterruptedException e) {
+            Log.i("Error", "InterruptedException");
+        }
+
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
         this.lastTask = controller;
 
@@ -206,5 +221,14 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         } while (results.size() > 0);
 
         this.filter = oldFilter;
+    }
+
+    public void refreshIndex() {
+
+        ElasticSearchController.RefreshIndex controller =
+                new ElasticSearchController.RefreshIndex();
+
+        this.lastTask = controller;
+        controller.execute();
     }
 }

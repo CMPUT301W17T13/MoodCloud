@@ -8,6 +8,8 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -16,6 +18,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
+import io.searchbox.indices.Refresh;
 
 // TODO: 2017-03-08 Handle exceptions better
 
@@ -32,6 +35,41 @@ public class ElasticSearchController {
     public static int getResultSize() {
 
         return ElasticSearchController.resultSize;
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For refreshing an elasticsearch index to ensure changes are visible everywhere.
+     */
+    public static class RefreshIndex extends AsyncTask<Void, Void, Void> {
+
+        /**
+         * Deletes the given object(s) using elasticsearch.
+         *
+         * @return null
+         */
+        @Override
+        protected Void doInBackground(Void... nothing) {
+
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
+            Refresh refresh = new Refresh.Builder().addIndex(ElasticSearchController.index).build();
+
+            try {
+
+                JestResult result = ElasticSearchController.client.execute(refresh);
+
+                if (!result.isSucceeded())
+                    Log.i("Error", "Could not refresh");
+            }
+
+            catch (IOException e) {
+                Log.i("Error", "Elasticsearch died (could not refresh)");
+            }
+
+            return null;
+        }
     }
 
     // AsyncTask<Params, Progress, Result>
@@ -300,6 +338,7 @@ public class ElasticSearchController {
                     !searchFilters[0].hasRestrictions()) {
 
                 query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
+                //query = "";
                 Log.i("Conditional", "If I'm here, should be NO searchFilter.");
             }
 

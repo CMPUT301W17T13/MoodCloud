@@ -18,6 +18,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
+    // FIXME: 2017-03-11 Failing
     public void testDeleteAll() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
@@ -333,11 +334,13 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    // FIXME: 2017-03-10 Failing
+    // TODO: 2017-03-11 Run more times to make sure
+    // TODO: 2017-03-11 Fix deleteAll so this test passes without having to use curl first
+    // TODO: 2017-03-11 Finish
     public void testGetNextNoFilter() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
-        //elasticSearch.deleteAll();
+        elasticSearch.deleteAll();
 
         ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
         assertEquals(results.size(), 0);
@@ -348,8 +351,8 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertEquals(elasticSearch.getById(object1.getId()), object1);
 
         results = elasticSearch.getNext(0);
-        assertEquals(results.size(), 1);  // gives 0
-        //assertTrue(results.contains(object1));
+        assertEquals(results.size(), 1);
+        assertTrue(results.contains(object1));
 
         TestElasticSearchObject object2 = new TestElasticSearchObject();
         object2.setMessage("Should you ever see a unicorn in the dawn you will never forget ");
@@ -359,9 +362,9 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertEquals(elasticSearch.getById(object2.getId()), object2);
 
         results = elasticSearch.getNext(0);
-        assertEquals(results.size(), 2);  // gives 1 sometimes, works sometimes, 0 sometimes
-        //assertTrue(results.contains(object1));
-        //assertTrue(results.contains(object2));
+        assertEquals(results.size(), 2);
+        assertTrue(results.contains(object1));
+        assertTrue(results.contains(object2));
 
         TestElasticSearchObject object3 = new TestElasticSearchObject();
         object3.setMessage("the vision of liiiiiiiiight!");
@@ -372,10 +375,10 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertEquals(elasticSearch.getById(object3.getId()), object3);
 
         results = elasticSearch.getNext(0);
-        assertEquals(results.size(), 3);  // gives 2
-        //assertTrue(results.contains(object1));
-        //assertTrue(results.contains(object2));
-        //assertTrue(results.contains(object3));
+        assertEquals(results.size(), 3);
+        assertTrue(results.contains(object1));
+        assertTrue(results.contains(object2));
+        assertTrue(results.contains(object3));
 
         TestElasticSearchObject object4 = new TestElasticSearchObject();
         object4.setMessage("Thor / Giants hide in fear / As they feel thy hammer near");
@@ -390,11 +393,11 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertEquals(elasticSearch.getById(object4.getId()), object4);
 
         results = elasticSearch.getNext(0);
-        assertEquals(results.size(), 4);  // gives 3
-        //assertTrue(results.contains(object1));
-        //assertTrue(results.contains(object2));
-        //assertTrue(results.contains(object3));
-        //assertTrue(results.contains(object4));
+        assertEquals(results.size(), 4);
+        assertTrue(results.contains(object1));
+        assertTrue(results.contains(object2));
+        assertTrue(results.contains(object3));
+        assertTrue(results.contains(object4));
 
         ;
     }
