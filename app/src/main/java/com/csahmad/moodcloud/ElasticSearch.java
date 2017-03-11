@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -79,6 +80,9 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
     public T getById(String id) throws TimeoutException {
 
+        if (id == null)
+            throw new IllegalArgumentException("id is null.");
+
         ElasticSearchController.GetById<T> controller = new ElasticSearchController.GetById<T>();
         this.lastTask = controller;
 
@@ -108,6 +112,20 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     public ArrayList<T> getNext(int from) throws TimeoutException {
+
+        this.refreshIndex();
+
+        try {
+            this.waitForTask();
+        }
+
+        catch (ExecutionException e) {
+            Log.i("Error", "ExecutionException");
+        }
+
+        catch (InterruptedException e) {
+            Log.i("Error", "InterruptedException");
+        }
 
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
         this.lastTask = controller;
@@ -141,6 +159,15 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     // Update if .id not null (otherwise add)
     public void addOrUpdate(T... objects) {
 
+        if (objects == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        for (T object: objects) {
+
+            if (object == null)
+                throw new IllegalArgumentException("Cannot pass null object.");
+        }
+
         ElasticSearchController.AddItems<T> controller = new ElasticSearchController.AddItems<T>();
         this.lastTask = controller;
         controller.execute(objects);
@@ -148,10 +175,60 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
     public void delete(T... objects) {
 
+        if (objects == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        for (T object: objects) {
+
+            if (object == null)
+                throw new IllegalArgumentException("Cannot pass null object.");
+
+            if (object.getId() == null)
+                throw new IllegalArgumentException("Given object has no id.");
+        }
+
         ElasticSearchController.DeleteItems<T> controller =
                 new ElasticSearchController.DeleteItems<T>();
 
         this.lastTask = controller;
         controller.execute(objects);
+    }
+
+    /** Delete all objects of the type this.type. */
+    public void deleteAll() throws TimeoutException, ExecutionException, InterruptedException {
+
+        SearchFilter oldFilter = this.filter;
+        this.filter = null;
+        ArrayList<T> results = new ArrayList<T>();
+
+        do {
+
+            results.clear();
+            results.addAll(this.getNext(0));
+
+            for (T result: results) {
+
+                if (result.getId() == null)
+                    throw new RuntimeException("id should not be null.");
+
+                this.delete(result);
+                this.waitForTask();
+
+                if (result.getId() != null)
+                    throw new RuntimeException("Did not delete properly");
+            }
+
+        } while (results.size() > 0);
+
+        this.filter = oldFilter;
+    }
+
+    public void refreshIndex() {
+
+        ElasticSearchController.RefreshIndex controller =
+                new ElasticSearchController.RefreshIndex();
+
+        this.lastTask = controller;
+        controller.execute();
     }
 }

@@ -50,6 +50,16 @@ public class Profile implements ElasticSearchObject {
         this.id = id;
     }
 
+    public ArrayList<Profile> getFollowers() {
+
+        return this.followers;
+    }
+
+    public ArrayList<Post> getPosts() {
+
+        return this.posts;
+    }
+
     public String getName() {
 
         return this.name;

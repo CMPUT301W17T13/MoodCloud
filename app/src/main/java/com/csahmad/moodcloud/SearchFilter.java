@@ -22,6 +22,12 @@ public class SearchFilter {
     private String distanceUnits = "km";
     private String locationField = "location";
 
+    public boolean hasRestrictions() {
+
+        return !CompareTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
+                this.maxDistance);
+    }
+
     public boolean hasKeywords() {
 
         return this.keywords != null;

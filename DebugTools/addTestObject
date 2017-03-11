@@ -1,0 +1,28 @@
+printf "\n\n\n"
+
+printf "Message:"
+read message
+printf "\n\n\n"
+
+# If message not empty, make object with given message
+if [ -n "$message" ]
+then
+
+    curl -XPOST \
+    'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject' \
+    -d \
+    "{
+        \"message\": \"${message}\"
+    }"
+
+# If message empty, make empty object
+else
+
+    curl -XPOST \
+    'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject' \
+    -d \
+    "{}"
+
+fi
+
+printf "\n\n\n\n"

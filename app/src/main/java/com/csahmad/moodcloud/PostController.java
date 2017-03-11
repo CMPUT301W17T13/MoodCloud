@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -45,6 +46,61 @@ public class PostController {
         ArrayList<Post> result = this.elasticSearch.getNext(from);
         this.elasticSearch.setFilter(null);
         return result;
+    }
+
+    // Note: latest posts only
+    // TODO: 2017-03-11 Remove from?
+    public ArrayList<Post> getFolloweePosts(Profile follower,
+                                            SearchFilter filter, int from) throws TimeoutException {
+
+        ProfileController profileController = new ProfileController();
+        ArrayList<Profile> followees = profileController.getFollowees(follower, from);
+        return PostController.getLatestPosts(followees, filter);
+    }
+
+    // Note: latest posts only
+    // TODO: 2017-03-11 Remove from?
+    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
+
+        return PostController.getLatestPosts(followee.getFollowers(), filter);
+    }
+
+    public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
+
+        ArrayList<Post> latestPosts = new ArrayList<Post>();
+
+        for (Profile profile: profiles)
+            latestPosts.add(PostController.getLatestPost(profile.getPosts(), filter));
+
+        return latestPosts;
+    }
+
+    // TODO: 2017-03-11 Ignores filter
+    public static Post getLatestPost(ArrayList<Post> posts, SearchFilter filter) {
+
+        if (posts == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        if (posts.size() == 0)
+            return null;
+
+        Post post;
+        Calendar postDate;
+
+        Post latestPost = posts.get(0);
+        Calendar latestPostDate;
+
+        for (int i = 0; i < posts.size(); i++) {
+
+            post = posts.get(i);
+            postDate = post.getDate();
+            latestPostDate = latestPost.getDate();
+
+            if (postDate.compareTo(latestPostDate) < 0)
+                latestPost = post;
+        }
+
+        return latestPost;
     }
 
     public void deletePosts(Post... posts) {
