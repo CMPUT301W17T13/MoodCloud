@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -56,7 +57,41 @@ public class PostController {
     // Note: latest posts only
     public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
 
-        return new ArrayList<Post>();
+        ArrayList<Profile> followers = followee.getFollowers();
+        ArrayList<Post> posts = new ArrayList<Post>();
+
+        for (Profile follower: followers)
+            posts.add(PostController.getLatestPost(posts, filter));
+
+        return posts;
+    }
+
+    // TODO: 2017-03-11 Ignores filter
+    public static Post getLatestPost(ArrayList<Post> posts, SearchFilter filter) {
+
+        if (posts == null)
+            throw new IllegalArgumentException("Cannot pass null.");
+
+        if (posts.size() == 0)
+            return null;
+
+        Post post;
+        Calendar postDate;
+
+        Post latestPost = posts.get(0);
+        Calendar latestPostDate;
+
+        for (int i = 0; i < posts.size(); i++) {
+
+            post = posts.get(i);
+            postDate = post.getDate();
+            latestPostDate = latestPost.getDate();
+
+            if (postDate.compareTo(latestPostDate) < 0)
+                latestPost = post;
+        }
+
+        return latestPost;
     }
 
     public void deletePosts(Post... posts) {

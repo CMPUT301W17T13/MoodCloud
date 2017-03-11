@@ -315,6 +315,8 @@ public class ElasticSearchController {
                 Log.i("Conditional", "If I'm here, should be a searchFilter.");
             }
 
+            Log.i("Query", "Query: " + query);
+
             Search search = new Search.Builder(query)
                     .addIndex(ElasticSearchController.index)
                     .addType(this.typeName)
