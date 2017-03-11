@@ -333,6 +333,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
+    // FIXME: 2017-03-10 Failing
     public void testGetNext() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
@@ -343,8 +344,29 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
 
         ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
-        assertTrue(results.size() >= 1);
+        assertTrue("Actual size: " + results.size(), results.size() >= 1);
         assertTrue(results.contains(object1));
+
+        TestElasticSearchObject object2 = new TestElasticSearchObject();
+        object2.setMessage("Should you ever see a unicorn in the dawn you will never forget ");
+        elasticSearch.addOrUpdate(object2);
+        elasticSearch.waitForTask();
+
+        results = elasticSearch.getNext(0);
+        assertTrue("Actual size: " + results.size(), results.size() >= 2);
+        assertTrue(results.contains(object1));
+        assertTrue(results.contains(object2));
+
+        TestElasticSearchObject object3 = new TestElasticSearchObject();
+        object3.setMessage("the vision of liiiiiiiiight!");
+        elasticSearch.addOrUpdate(object3);
+        elasticSearch.waitForTask();
+
+        results = elasticSearch.getNext(0);
+        assertTrue("Actual size: " + results.size(), results.size() >= 3);
+        assertTrue(results.contains(object1));
+        assertTrue(results.contains(object2));
+        assertTrue(results.contains(object3));
 
         ;
     }
