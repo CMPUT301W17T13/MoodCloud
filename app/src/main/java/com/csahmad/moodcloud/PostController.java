@@ -49,21 +49,30 @@ public class PostController {
     }
 
     // Note: latest posts only
-    public ArrayList<Post> getFolloweePosts(Profile follower, SearchFilter filter, int from) {
+    // TODO: 2017-03-11 Remove from?
+    public ArrayList<Post> getFolloweePosts(Profile follower,
+                                            SearchFilter filter, int from) throws TimeoutException {
 
-        return new ArrayList<Post>();
+        ProfileController profileController = new ProfileController();
+        ArrayList<Profile> followees = profileController.getFollowees(follower, from);
+        return PostController.getLatestPosts(followees, filter);
     }
 
     // Note: latest posts only
+    // TODO: 2017-03-11 Remove from?
     public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
 
-        ArrayList<Profile> followers = followee.getFollowers();
-        ArrayList<Post> posts = new ArrayList<Post>();
+        return PostController.getLatestPosts(followee.getFollowers(), filter);
+    }
 
-        for (Profile follower: followers)
-            posts.add(PostController.getLatestPost(posts, filter));
+    public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
 
-        return posts;
+        ArrayList<Post> latestPosts = new ArrayList<Post>();
+
+        for (Profile profile: profiles)
+            latestPosts.add(PostController.getLatestPost(profile.getPosts(), filter));
+
+        return latestPosts;
     }
 
     // TODO: 2017-03-11 Ignores filter
