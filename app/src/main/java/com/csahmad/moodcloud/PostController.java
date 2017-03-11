@@ -47,11 +47,13 @@ public class PostController {
         return result;
     }
 
+    // Note: latest posts only
     public ArrayList<Post> getFolloweePosts(Profile follower, SearchFilter filter, int from) {
 
         return new ArrayList<Post>();
     }
 
+    // Note: latest posts only
     public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
 
         return new ArrayList<Post>();

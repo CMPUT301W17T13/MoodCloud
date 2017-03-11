@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
+import java.util.GregorianCalendar;
 
 /**
  * Created by oahmad on 2017-03-09.
@@ -135,7 +136,31 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertNotNull(returned);
         assertEquals(object1, returned);
 
-        ;
+        TestElasticSearchObject object2 = new TestElasticSearchObject();
+        object2.setMessage(
+                "He's my best friend / Best of all best friends / Will you be my best friend too?");
+
+        elasticSearch.addOrUpdate(object2);
+        elasticSearch.waitForTask();
+
+        id = object2.getId();
+        returned = elasticSearch.getById(id);
+        assertNotNull(returned);
+        assertEquals(object2, returned);
+
+        TestElasticSearchObject object3 = new TestElasticSearchObject();
+        object3.setMessage("Change Leopardon! Yeah yeah yeeeaah, WOW!");
+        object3.setMood("Happy");
+        object3.setDate(new GregorianCalendar(1994, 8, 26));
+        object3.setLocation(new SimpleLocation(2.8d, 32.5d, 0.0d));
+
+        elasticSearch.addOrUpdate(object3);
+        elasticSearch.waitForTask();
+
+        id = object3.getId();
+        returned = elasticSearch.getById(id);
+        assertNotNull(returned);
+        assertEquals(object3, returned);
     }
 
     private static ElasticSearch<TestElasticSearchObject> getElasticSearch() {

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MoodCloud.iml" filepath="$PROJECT_DIR$/MoodCloud.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MoodCloudMaster.iml" filepath="$PROJECT_DIR$/MoodCloudMaster.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
