@@ -344,7 +344,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
 
         ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
-        assertTrue("Actual size: " + results.size(), results.size() >= 1);
+        assertEquals(results.size(), 1);
         assertTrue(results.contains(object1));
 
         TestElasticSearchObject object2 = new TestElasticSearchObject();
@@ -353,7 +353,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
 
         results = elasticSearch.getNext(0);
-        assertTrue("Actual size: " + results.size(), results.size() >= 2);
+        assertEquals(results.size(), 2);
         assertTrue(results.contains(object1));
         assertTrue(results.contains(object2));
 
@@ -363,7 +363,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         elasticSearch.waitForTask();
 
         results = elasticSearch.getNext(0);
-        assertTrue("Actual size: " + results.size(), results.size() >= 3);
+        assertEquals(results.size(), 3);
         assertTrue(results.contains(object1));
         assertTrue(results.contains(object2));
         assertTrue(results.contains(object3));
