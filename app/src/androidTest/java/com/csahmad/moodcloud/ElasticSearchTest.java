@@ -337,7 +337,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
     public void testGetNextNoFilter() throws Exception {
 
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
-        elasticSearch.deleteAll();
+        //elasticSearch.deleteAll();
 
         ArrayList<TestElasticSearchObject> results = elasticSearch.getNext(0);
         assertEquals(results.size(), 0);
@@ -345,6 +345,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         TestElasticSearchObject object1 = new TestElasticSearchObject();
         elasticSearch.addOrUpdate(object1);
         elasticSearch.waitForTask();
+        assertEquals(elasticSearch.getById(object1.getId()), object1);
 
         results = elasticSearch.getNext(0);
         assertEquals(results.size(), 1);  // gives 0
@@ -354,6 +355,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         object2.setMessage("Should you ever see a unicorn in the dawn you will never forget ");
         elasticSearch.addOrUpdate(object2);
         elasticSearch.waitForTask();
+        assertEquals(elasticSearch.getById(object2.getId()), object2);
 
         results = elasticSearch.getNext(0);
         //assertEquals(results.size(), 2);  // gives 1 sometimes, works sometimes, 0 sometimes
@@ -364,6 +366,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         object3.setMessage("the vision of liiiiiiiiight!");
         elasticSearch.addOrUpdate(object3);
         elasticSearch.waitForTask();
+        assertEquals(elasticSearch.getById(object3.getId()), object3);
 
         results = elasticSearch.getNext(0);
         assertEquals(results.size(), 3);  // gives 2
@@ -378,9 +381,10 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         object4.setLocation(new SimpleLocation(0.0d, 0.0d, 0.0d));
         elasticSearch.addOrUpdate(object4);
         elasticSearch.waitForTask();
+        assertEquals(elasticSearch.getById(object4.getId()), object4);
 
         results = elasticSearch.getNext(0);
-        assertEquals(results.size(), 4);
+        assertEquals(results.size(), 4);  // gives 3
         //assertTrue(results.contains(object1));
         //assertTrue(results.contains(object2));
         //assertTrue(results.contains(object3));

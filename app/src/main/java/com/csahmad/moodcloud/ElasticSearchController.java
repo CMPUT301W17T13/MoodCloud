@@ -327,9 +327,16 @@ public class ElasticSearchController {
                 SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
-                    List<T> foundObjects = result.getSourceAsObjectList(this.type);
-                    Log.i("ListSize", Integer.toString(foundObjects.size()));
-                    results.addAll(foundObjects);
+                    //List<T> foundObjects = result.getSourceAsObjectList(this.type);
+
+                    List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
+                    Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
+
+                    for (SearchResult.Hit<T, Void> hit: hits)
+                        results.add(hit.source);
+
+                    //Log.i("ListSize", "Result size: " + Integer.toString(foundObjects.size()));
+                    //results.addAll(foundObjects);
                 }
 
                 else
