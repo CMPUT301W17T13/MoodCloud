@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 public class ProfileController {
 
     private ElasticSearch<Profile> elasticSearch =
-            new ElasticSearch<Profile>(ProfileController.class, Profile.typeName);
+            new ElasticSearch<Profile>(Profile.class, Profile.typeName);
 
     public Integer getTimeout() {
 
@@ -53,11 +53,15 @@ public class ProfileController {
 
         ArrayList<Profile> followees = new ArrayList<Profile>();
 
+        /*
+
         for (Profile profile: profiles) {
 
             if (profile.getFollowers().contains(follower))
                 followees.add(profile);
         }
+
+        */
 
         return followees;
     }
@@ -78,7 +82,6 @@ public class ProfileController {
     public void addOrUpdateProfiles(Profile... profiles) {
 
         this.elasticSearch.addOrUpdate(profiles);
-
     }
 
     public void deleteProfiles(Profile... profiles) {

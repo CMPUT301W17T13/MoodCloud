@@ -63,7 +63,8 @@ public class PostController {
     public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
                                                    int from) {
 
-        return PostController.getLatestPosts(followee.getFollowers(), filter);
+        //return PostController.getLatestPosts(followee.getFollowers(), filter);
+        return new ArrayList<Post>();
     }
 
     public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
