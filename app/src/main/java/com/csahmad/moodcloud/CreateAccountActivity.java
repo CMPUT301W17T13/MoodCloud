@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeoutException;
 
@@ -63,8 +64,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 }
                 if (unique == FALSE){
-                    final TextView notUnique = (TextView) findViewById(R.id.notUnique);
-                    notUnique.setText("Username already exists");
+                    Toast.makeText(getApplicationContext(), "Username already exists", Toast.LENGTH_LONG).show();
                 }
                 } catch (TimeoutException e){
                     System.err.println("TimeoutException: " + e.getMessage());
