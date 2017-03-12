@@ -13,8 +13,9 @@
     <list default="true" id="68a552cf-d114-42e1-8669-e5e687bc13d0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/QueryBuilderTest.java" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/QueryBuilderTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java" />
     </list>
     <ignored path="MoodCloud.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +50,8 @@
       <file leaf-file-name="ElasticSearch.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1800">
-              <caret line="126" column="39" selection-start-line="126" selection-start-column="39" selection-end-line="126" selection-end-column="39" />
+            <state relative-caret-position="185">
+              <caret line="206" column="44" selection-start-line="206" selection-start-column="44" selection-end-line="206" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -59,10 +60,11 @@
       <file leaf-file-name="ElasticSearchTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="336" column="51" selection-start-line="336" selection-start-column="51" selection-end-line="336" selection-end-column="51" />
+            <state relative-caret-position="80">
+              <caret line="339" column="30" selection-start-line="339" selection-start-column="30" selection-end-line="339" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#13433#13458#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -71,7 +73,7 @@
       <file leaf-file-name="AccountController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/AccountController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
+            <state relative-caret-position="575">
               <caret line="47" column="62" selection-start-line="47" selection-start-column="62" selection-end-line="47" selection-end-column="62" />
               <folding />
             </state>
@@ -81,8 +83,8 @@
       <file leaf-file-name="ElasticSearchController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="54" column="83" selection-start-line="54" selection-start-column="83" selection-end-line="54" selection-end-column="83" />
+            <state relative-caret-position="185">
+              <caret line="338" column="0" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -93,8 +95,8 @@
       <file leaf-file-name="QueryBuilder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+            <state relative-caret-position="120">
+              <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -1903,7 +1905,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/PostController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ProfileController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/QueryBuilderTest.java" />
         <option value="$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java" />
       </list>
     </option>
@@ -1938,7 +1942,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
@@ -1950,8 +1953,9 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2503,10 +2507,10 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Android Instrumented Tests.testGetNextNoFilter()" />
-        <item index="1" class="java.lang.String" itemvalue="Android Instrumented Tests.testDeleteAll()" />
-        <item index="2" class="java.lang.String" itemvalue="Android App.MainActivity" />
-        <item index="3" class="java.lang.String" itemvalue="Android Instrumented Tests.ElasticSearchTest" />
-        <item index="4" class="java.lang.String" itemvalue="Android Instrumented Tests.testDelete()" />
+        <item index="1" class="java.lang.String" itemvalue="Android Instrumented Tests.testDelete()" />
+        <item index="2" class="java.lang.String" itemvalue="Android Instrumented Tests.ElasticSearchTest" />
+        <item index="3" class="java.lang.String" itemvalue="Android Instrumented Tests.testDeleteAll()" />
+        <item index="4" class="java.lang.String" itemvalue="Android App.MainActivity" />
       </list>
     </recent_temporary>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
@@ -2583,39 +2587,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 14h 49m 19s.xml">
+    <history-entry file="ElasticSearchTest - 2017.03.11 at 17h 38m 58s.xml">
+      <configuration name="ElasticSearchTest" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testDelete() - 2017.03.11 at 17h 33m 33s.xml">
+      <configuration name="testDelete()" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testDelete() - 2017.03.11 at 17h 34m 22s.xml">
+      <configuration name="testDelete()" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testDelete() - 2017.03.11 at 17h 42m 06s.xml">
+      <configuration name="testDelete()" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testDeleteAll() - 2017.03.11 at 17h 20m 58s.xml">
+      <configuration name="testDeleteAll()" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testDeleteAll() - 2017.03.11 at 17h 36m 16s.xml">
+      <configuration name="testDeleteAll()" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 17h 35m 18s.xml">
       <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 14m 19s.xml">
+    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 17h 44m 25s.xml">
       <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 17m 00s.xml">
+    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 17h 45m 33s.xml">
       <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 17m 47s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 18m 41s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 23m 48s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 24m 42s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 26m 01s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 27m 19s.xml">
-      <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 15h 29m 48s.xml">
+    <history-entry file="testGetNextNoFilter() - 2017.03.11 at 17h 47m 39s.xml">
       <configuration name="testGetNextNoFilter()" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="773" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2631,7 +2635,7 @@
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2746365" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2786753" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2668,13 +2672,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/LocationToolsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/AccountTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
@@ -2984,14 +2981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -3006,38 +2995,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="206" column="44" selection-start-line="206" selection-start-column="44" selection-end-line="206" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/AccountController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
+        <state relative-caret-position="575">
           <caret line="47" column="62" selection-start-line="47" selection-start-column="62" selection-end-line="47" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/QueryBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearchController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="54" column="83" selection-start-line="54" selection-start-column="83" selection-end-line="54" selection-end-column="83" />
+        <state relative-caret-position="185">
+          <caret line="338" column="0" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/csahmad/moodcloud/ElasticSearch.java">
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/QueryBuilderTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1800">
-          <caret line="126" column="39" selection-start-line="126" selection-start-column="39" selection-end-line="126" selection-end-column="39" />
+        <state relative-caret-position="215">
+          <caret line="311" column="5" selection-start-line="311" selection-start-column="5" selection-end-line="311" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/csahmad/moodcloud/ElasticSearchTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="336" column="51" selection-start-line="336" selection-start-column="51" selection-end-line="336" selection-end-column="51" />
+        <state relative-caret-position="80">
+          <caret line="339" column="30" selection-start-line="339" selection-start-column="30" selection-end-line="339" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#13433#13458#0" expanded="true" />
           </folding>
         </state>
       </provider>

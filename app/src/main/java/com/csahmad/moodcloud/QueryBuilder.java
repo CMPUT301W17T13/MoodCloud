@@ -9,19 +9,6 @@ import java.util.ArrayList;
 
 public class QueryBuilder {
 
-    public static String buildGetAll(int resultSize) {
-
-        if (resultSize < 0)
-            throw new IllegalArgumentException("resultSize cannot be negative.");
-
-        return "{\n" +
-                "\"size\": " + resultSize + ",\n" +
-                "\"query\": {\n" +
-                "\"match_all\": {}\n" +
-                "}\n" +
-                "}";
-    }
-
     public static String build(SearchFilter filter, int resultSize, int from) {
 
         String query = "{\n\"from\": " + Integer.toString(from) + ",\n";

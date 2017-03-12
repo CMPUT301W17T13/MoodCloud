@@ -39,8 +39,9 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
 
         elasticSearch.deleteAll();
         results = elasticSearch.getNext(0);
-        assertEquals("Actual size: " + results.size(), results.size(), 0);
+        assertEquals(results.size(), 0);
 
+        // Passes up to here, but these null checks fail (but testDelete() works fine)
         assertNull(object1.getId());
         assertNull(object2.getId());
         assertNull(object3.getId());
@@ -178,6 +179,7 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         ElasticSearch<TestElasticSearchObject> elasticSearch = ElasticSearchTest.getElasticSearch();
         elasticSearch.deleteAll();
 
+        // Should be no chance of this ID existing if above call to deleteAll works properly
         TestElasticSearchObject returned = elasticSearch.getById("ThisIdDoesNotExist");
         assertNull(returned);
 
@@ -334,7 +336,6 @@ public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    // TODO: 2017-03-11 Run more times to make sure
     // TODO: 2017-03-11 Fix deleteAll so this test passes without having to use curl first
     // TODO: 2017-03-11 Finish
     public void testGetNextNoFilter() throws Exception {
