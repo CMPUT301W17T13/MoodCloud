@@ -18,6 +18,12 @@ public class Account implements ElasticSearchObject {
     @JestId
     private String id;
 
+    public Account(String username, String password) {
+
+        this.username = username;
+        this.password = password;
+    }
+
     public Account(String username, String password, Profile profile) {
 
         this.username = username;
