@@ -11,11 +11,35 @@ import java.util.GregorianCalendar;
 
 public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
-    private static final int timeout = 5_000;
+    private static final int timeout = 10_000;
 
     public PostControllerTest() {
 
         super(MainActivity.class);
+    }
+
+    public void testGetPosts() throws Exception {
+
+        PostController controller = PostControllerTest.getController();
+
+        double[] location = {0.0d, 0.0d, 0.0d};
+
+        for (int i = 0; i < 30; i++) {
+
+            controller.addOrUpdatePosts(new Post(    // 0
+                    "Asgard's always been my home, but I'm of different blood.",
+                    "Angry",                                // Mood
+                    "Thor",                                 // Trigger text
+                    null,                                   // Trigger image
+                    "Alone",                                // Social context
+                    new Profile("Loki"),                    // Poster
+                    location,                               // Location
+                    new GregorianCalendar(900, 2, 14)));
+        }
+
+        ArrayList<Post> posts = controller.getPosts(null, 0);
+
+        ;
     }
 
     public void testGetLatestPostNoFilter() {

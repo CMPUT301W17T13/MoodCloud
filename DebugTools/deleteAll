@@ -42,6 +42,24 @@ then
         }
     }'
 
+    printf "\n\n"
+
+    curl -XDELETE \
+    'http://cmput301.softwareprocess.es:8080/cmput301w17t13/follow/_query' -d '{
+        "query" : {
+            "match_all" : {}
+        }
+    }'
+
+    printf "\n\n"
+
+    curl -XDELETE \
+    'http://cmput301.softwareprocess.es:8080/cmput301w17t13/followRequest/_query' -d '{
+        "query" : {
+            "match_all" : {}
+        }
+    }'
+
     printf "\n\n\n"
 
     echo "All objects deleted"

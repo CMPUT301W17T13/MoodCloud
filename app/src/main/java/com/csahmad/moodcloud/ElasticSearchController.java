@@ -27,7 +27,7 @@ public class ElasticSearchController {
     private static final String url = "http://cmput301.softwareprocess.es:8080";
     private static final String index = "cmput301w17t13";
 
-    private static final int resultSize = 25;
+    private static final int resultSize = 1;//25;
 
     /** For building and executing save commands and search queries. */
     private static JestDroidClient client;

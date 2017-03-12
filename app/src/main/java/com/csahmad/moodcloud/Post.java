@@ -58,11 +58,13 @@ public class Post implements ElasticSearchObject {
         return Post.typeName;
     }
 
+    @Override
     public String getId() {
 
         return this.id;
     }
 
+    @Override
     public void setId(String id) {
 
         this.id = id;
