@@ -68,9 +68,12 @@ public class PostController {
     public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
 
         ArrayList<Post> latestPosts = new ArrayList<Post>();
+        Post post;
 
-        for (Profile profile: profiles)
-            latestPosts.add(PostController.getLatestPost(profile.getPosts(), filter));
+        for (Profile profile: profiles) {
+            post = PostController.getLatestPost(profile.getPosts(), filter);
+            if (post != null) latestPosts.add(post);
+        }
 
         return latestPosts;
     }
