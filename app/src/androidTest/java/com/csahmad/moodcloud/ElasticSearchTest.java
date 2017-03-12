@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
  * Created by oahmad on 2017-03-09.
  */
 
-public class ElasticSearchTest  extends ActivityInstrumentationTestCase2 {
+public class ElasticSearchTest extends ActivityInstrumentationTestCase2 {
 
     private static final int timeout = 5_000;
 
