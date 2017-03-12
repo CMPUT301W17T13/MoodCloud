@@ -37,7 +37,7 @@ public class Profile implements ElasticSearchObject {
 
         if (!(other instanceof Profile)) return false;
         Profile otherProfile = (Profile) other;
-        if (this.id == null) return false;
+        if (this.id == null) return this == otherProfile;
         return this.id == otherProfile.id;
     }
 

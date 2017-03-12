@@ -60,7 +60,8 @@ public class PostController {
 
     // Note: latest posts only
     // TODO: 2017-03-11 Remove from?
-    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
+    public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
+                                                   int from) {
 
         return PostController.getLatestPosts(followee.getFollowers(), filter);
     }
@@ -99,7 +100,8 @@ public class PostController {
             postDate = post.getDate();
             latestPostDate = latestPost.getDate();
 
-            if (postDate.compareTo(latestPostDate) > 0)
+            // If any posts at same time, assume post that appears later in list is newer
+            if (postDate.compareTo(latestPostDate) >= 0)
                 latestPost = post;
         }
 

@@ -36,6 +36,7 @@ public class Account implements ElasticSearchObject {
 
         if (!(other instanceof Account)) return false;
         Account otherAccount = (Account) other;
+        if (this.username == null) return this == otherAccount;
         return this.username == otherAccount.username;
     }
 

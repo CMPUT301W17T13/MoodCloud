@@ -133,6 +133,73 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         latest = PostController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
+        Post profile1Post3 = new Post(
+                "Far away, in a bygone age, when the stories all were true",
+                "Confused",                             // Mood
+                "Power Quest",                          // Trigger text
+                null,                                   // Trigger image
+                "Alone",                                // Social context
+                profile1,                               // Poster
+                location,                               // Location
+                new GregorianCalendar(2018, 4, 10));    // Date
+
+        profile1Post3.setId("13");
+
+        profile1.addPost(profile1Post3);
+        expected.clear();
+        expected.add(profile1Post3);
+
+        latest = PostController.getLatestPosts(profiles, null);
+        assertEquals(latest, expected);
+
+        Profile profile2 = new Profile("Sub-Zero");
+        profiles.add(profile2);
+
+        Post profile2Post1 = new Post(
+                "\"Get over here!\"",
+                "Scared",                               // Mood
+                "Nightmare",                            // Trigger text
+                null,                                   // Trigger image
+                "Alone",                                // Social context
+                profile2,                               // Poster
+                location,                               // Location
+                new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
+
+        profile2Post1.setId("21");
+
+        profile2.addPost(profile2Post1);
+        expected.add(profile2Post1);
+
+        latest = PostController.getLatestPosts(profiles, null);
+        assertEquals(latest, expected);
+
+        Post profile2Post2 = new Post(
+                "Then he just pulled me by a freaking chain",
+                "Scared",                               // Mood
+                null,                                   // Trigger text
+                "images/scorpijerk.jpg",                // Trigger image
+                "With a Group",                         // Social context
+                profile2,                               // Poster
+                location,                               // Location
+                new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
+
+        profile2Post2.setId("22");
+
+        profile2.addPost(profile2Post2);
+        expected.clear();
+        expected.add(profile1Post3);
+        expected.add(profile2Post2);
+
+        latest = PostController.getLatestPosts(profiles, null);
+        assertEquals(latest, expected);
+
+        ;
+    }
+
+    public void testGetFollowerPosts() {
+
+        Profile followee = new Profile("I");
+
         ;
     }
 

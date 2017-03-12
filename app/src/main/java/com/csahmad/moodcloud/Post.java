@@ -42,7 +42,7 @@ public class Post implements ElasticSearchObject {
 
         if (!(other instanceof Post)) return false;
         Post otherPost = (Post) other;
-        if (this.id == null) return false;
+        if (this.id == null) return this == otherPost;
         return this.id == otherPost.id;
     }
 
