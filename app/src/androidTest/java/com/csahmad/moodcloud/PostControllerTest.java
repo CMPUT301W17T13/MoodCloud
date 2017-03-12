@@ -198,7 +198,94 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetFollowerPosts() {
 
-        Profile followee = new Profile("I");
+        Profile followee = new Profile("John Jane");
+
+        ArrayList<Post> followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        ArrayList<Post> expected = new ArrayList<Post>();
+        assertEquals(followerPosts, expected);
+
+        double[] location = {8.2d, 54.3d, 3.4d};
+
+        Post followeePost1 = new Post(
+                "The unicorns used to be good. Now they are forced to serve hell.",
+                "Scared",                               // Mood
+                null,                                   // Trigger text
+                "images/dundeeInvasion.png",            // Trigger image
+                "With a Crowd",                         // Social context
+                followee,                               // Poster
+                location,                               // Location
+                new GregorianCalendar(1991, 4, 11));    // Date
+
+        followee.addPost(followeePost1);
+
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        Profile follower1 = new Profile("Jane John");
+        followee.addFollower(follower1);
+
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        Post follower1Post1 = new Post(
+                "Marveller! Change Leopardon!",
+                "Happy",                                // Mood
+                null,                                   // Trigger text
+                "images/img38.png",                     // Trigger image
+                "With a Crowd",                         // Social context
+                follower1,                              // Poster
+                location,                               // Location
+                new GregorianCalendar(1991, 4, 11));    // Date
+
+        follower1.addPost(follower1Post1);
+
+        expected.add(follower1Post1);
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        Post follower1Post2 = new Post(
+                "I don't know what this is.",
+                "Scared",                               // Mood
+                null,                                   // Trigger text
+                "images/spiderProtector.png",           // Trigger image
+                "Alone",                                // Social context
+                follower1,                              // Poster
+                location,                               // Location
+                new GregorianCalendar(1993, 4, 11));    // Date
+
+        follower1.addPost(follower1Post2);
+
+        expected.clear();
+        expected.add(follower1Post2);
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        Profile follower2 = new Profile("Doe Roe");
+        followee.addFollower(follower2);
+
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        Post follower2Post1 = new Post(
+                "Puppyzord ready",
+                "Angry",                                // Mood
+                null,                                   // Trigger text
+                "images/021.png",                       // Trigger image
+                "With a Group",                         // Social context
+                follower2,                              // Poster
+                location,                               // Location
+                new GregorianCalendar(2021, 4, 11));    // Date
+
+        follower2.addPost(follower2Post1);
+
+        expected.add(follower2Post1);
+        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        assertEquals(followerPosts, expected);
+
+        ;
+    }
+
+    public void testGetFolloweePostsNoFilter() {
 
         ;
     }
