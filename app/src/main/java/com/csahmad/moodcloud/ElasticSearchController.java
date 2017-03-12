@@ -337,8 +337,7 @@ public class ElasticSearchController {
             if (searchFilters.length == 0 || searchFilters[0] == null ||
                     !searchFilters[0].hasRestrictions()) {
 
-                query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
-                //query = "";
+                query = "";
                 Log.i("Conditional", "If I'm here, should be NO searchFilter.");
             }
 

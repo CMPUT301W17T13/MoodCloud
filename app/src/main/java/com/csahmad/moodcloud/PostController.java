@@ -96,7 +96,7 @@ public class PostController {
             postDate = post.getDate();
             latestPostDate = latestPost.getDate();
 
-            if (postDate.compareTo(latestPostDate) < 0)
+            if (postDate.compareTo(latestPostDate) > 0)
                 latestPost = post;
         }
 

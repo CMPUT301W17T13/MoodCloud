@@ -199,12 +199,11 @@ public class ElasticSearch<T extends ElasticSearchObject> {
 
         SearchFilter oldFilter = this.filter;
         this.filter = null;
-        ArrayList<T> results = new ArrayList<T>();
+        ArrayList<T> results;
 
         do {
 
-            results.clear();
-            results.addAll(this.getNext(0));
+            results = this.getNext(0);
 
             for (T result: results) {
 
