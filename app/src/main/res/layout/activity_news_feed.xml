@@ -82,14 +82,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/linearLayout">
 
-        <TextView
-            android:id="@+id/postName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:id="@+id/postMood"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
