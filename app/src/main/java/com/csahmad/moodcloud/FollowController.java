@@ -28,6 +28,32 @@ public class FollowController {
         this.elasticSearch.waitForTask();
     }
 
+    public ArrayList<Follow> getFollowers(Profile followee, int from) throws TimeoutException {
+
+        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("followee._id",
+                followee.getId()));
+
+        this.elasticSearch.setFilter(filter);
+
+        ArrayList<Follow> results = this.elasticSearch.getNext(0);
+        this.elasticSearch.setFilter(null);
+
+        return results;
+    }
+
+    public ArrayList<Follow> getFollowees(Profile follower, int from) throws TimeoutException {
+
+        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("follower._id",
+                follower.getId()));
+
+        this.elasticSearch.setFilter(filter);
+
+        ArrayList<Follow> results = this.elasticSearch.getNext(0);
+        this.elasticSearch.setFilter(null);
+
+        return results;
+    }
+
     public Follow getFollowFromID(String id) throws TimeoutException {
 
         return this.elasticSearch.getById(id);
