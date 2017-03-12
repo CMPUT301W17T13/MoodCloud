@@ -108,6 +108,8 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 location,                               // Location
                 new GregorianCalendar(2017, 3, 11));    // Date
 
+        profile1Post1.setId("11");
+
         profile1.addPost(profile1Post1);
         expected.add(profile1Post1);
 
@@ -123,6 +125,8 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 profile1,                               // Poster
                 location,                               // Location
                 new GregorianCalendar(1888, 4, 10));    // Date
+
+        profile1Post2.setId("12");
 
         profile1.addPost(profile1Post2);
 
