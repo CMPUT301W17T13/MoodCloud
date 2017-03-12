@@ -1,0 +1,13 @@
+printf "\n\n\n"
+
+curl -XGET \
+'http://cmput301.softwareprocess.es:8080/cmput301w17t13/testElasticSearchObject/_search?pretty=1' \
+-d \
+'{
+"size": 25,
+"query": {
+"match_all": {}
+}
+}'
+
+printf "\n\n\n"
