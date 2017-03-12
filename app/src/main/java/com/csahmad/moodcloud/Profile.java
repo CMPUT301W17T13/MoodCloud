@@ -27,6 +27,12 @@ public class Profile implements ElasticSearchObject {
     }
 
     @Override
+    public String toString() {
+
+        return "[" + NullTools.toString(this.id) + "] " + NullTools.toString(this.name);
+    }
+
+    @Override
     public boolean equals(Object other) {
 
         if (!(other instanceof Profile)) return false;
