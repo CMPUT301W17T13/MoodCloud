@@ -28,8 +28,8 @@ public class Follow implements ElasticSearchObject {
     @Override
     public String toString() {
 
-        return "[" + NullTools.toString(this.id) + "] " + follower.toString() + " -> " +
-                followee.toString();
+        return "[" + NullTools.toString(this.id) + "] " + follower.getName() + " -> " +
+                followee.getName();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Follow implements ElasticSearchObject {
         if (!(other instanceof Follow)) return false;
         Follow otherFollow = (Follow) other;
         if (this.id == null) return this == otherFollow;
-        return this.id == otherFollow.id;
+        return this.id.equals(otherFollow.id);
     }
 
     @Override

@@ -246,7 +246,7 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         assertEquals(followerPosts, expected);
 
         Profile follower1 = new Profile("Jane John");
-        followee.addFollower(follower1);
+        //followee.addFollower(follower1);
 
         followerPosts = PostController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
@@ -285,7 +285,7 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         assertEquals(followerPosts, expected);
 
         Profile follower2 = new Profile("Doe Roe");
-        followee.addFollower(follower2);
+        //followee.addFollower(follower2);
 
         followerPosts = PostController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
