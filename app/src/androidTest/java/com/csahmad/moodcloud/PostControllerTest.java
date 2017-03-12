@@ -104,7 +104,7 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Debugging",                            // Trigger text
                 null,                                   // Trigger image
                 "Alone",                                // Social context
-                new Profile("Anonymous"),               // Poster
+                profile1,                               // Poster
                 location,                               // Location
                 new GregorianCalendar(2017, 3, 11));    // Date
 
@@ -120,11 +120,11 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Time travel worked",                   // Trigger text
                 null,                                   // Trigger image
                 "With a Crowd",                         // Social context
-                new Profile("Anonymous"),               // Poster
+                profile1,                               // Poster
                 location,                               // Location
                 new GregorianCalendar(1888, 4, 10));    // Date
 
-        profile1.addPost(profile1Post1);
+        profile1.addPost(profile1Post2);
 
         latest = PostController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);

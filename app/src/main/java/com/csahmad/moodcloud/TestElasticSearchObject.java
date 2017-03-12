@@ -37,11 +37,11 @@ public class TestElasticSearchObject implements ElasticSearchObject {
         if (!(other instanceof TestElasticSearchObject)) return false;
         TestElasticSearchObject otherTest = (TestElasticSearchObject) other;
 
-        return CompareTools.equals(this.id, otherTest.getId()) &&
-                CompareTools.equals(this.message, otherTest.getMessage()) &&
-                CompareTools.equals(this.mood, otherTest.getMood()) &&
-                CompareTools.equals(this.date, otherTest.getDate()) &&
-                CompareTools.equals(this.location, otherTest.getLocation());
+        return NullTools.equals(this.id, otherTest.getId()) &&
+                NullTools.equals(this.message, otherTest.getMessage()) &&
+                NullTools.equals(this.mood, otherTest.getMood()) &&
+                NullTools.equals(this.date, otherTest.getDate()) &&
+                NullTools.equals(this.location, otherTest.getLocation());
     }
 
     @Override
