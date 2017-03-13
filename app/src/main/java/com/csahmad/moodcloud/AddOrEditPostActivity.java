@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -14,16 +15,24 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Post post;
-
-        final PostController postController = new PostController();
-        final EditText textExplanation = (EditText) findViewById(R.id.body);
-        final EditText testTrigger = (EditText) findViewById(R.id.trigger);
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
+
+        final Post post;
+        final PostController postController = new PostController();
+
+        final EditText textExplanation = (EditText) findViewById(R.id.body);
+        final EditText testTrigger = (EditText) findViewById(R.id.trigger);
+        Button buttonAngry = (Button) findViewById(R.id.angry_selected);
+        Button buttonConfused = (Button) findViewById(R.id.confused_selected);
+        Button buttonDisgusted = (Button) findViewById(R.id.disgusted_selected);
+        Button buttonScared = (Button) findViewById(R.id.scared_selected);
+        Button buttonHappy = (Button) findViewById(R.id.happy_selected);
+        Button buttonSad = (Button) findViewById(R.id.sad_selected);
+        Button buttonAshamed = (Button) findViewById(R.id.ashamed_selected);
+        Button buttonSuprised = (Button) findViewById(R.id.surprised_selected);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
