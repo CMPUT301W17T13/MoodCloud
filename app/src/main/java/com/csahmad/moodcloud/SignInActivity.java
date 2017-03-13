@@ -12,7 +12,21 @@ import android.widget.Toast;
 
 import java.util.concurrent.TimeoutException;
 
-/** The activity for signing in. */
+/**
+ * SignInActivity allows the user to sign in, or navigate to the account creation activity
+ *
+ * has only two functions implemented with buttons: Sign in, and Create Account
+ *
+ * Sign In button checks the entered username and password textfields using elasticsearch
+ * Upon finding a match, corresponding profile is stored in LocalDatare
+ * and user is directed to the newsfeed activity
+ *
+ * Create Account button redirects the user to CreateAccountActivity
+ *
+ * @see ProfileController
+ * @see AccountController
+ * @see Account
+ */
 public class SignInActivity extends AppCompatActivity {
 
     @Override
@@ -30,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
         final EditText passwordText = (EditText) findViewById(R.id.password);
 
 
+        System.out.println("test");
         //when user presses the Sign In button
         Button button = (Button) findViewById(R.id.signIn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +56,7 @@ public class SignInActivity extends AppCompatActivity {
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
                     if(account.getPassword().equals(passwordText.getText().toString())){
-                        localData.store(account.getProfile().getId());
+                        localData.store(account.getProfile());
                         Context context = view.getContext();
                         Intent intent = new Intent(context, NewsFeedActivity.class);
                         startActivity(intent);
@@ -57,6 +72,17 @@ public class SignInActivity extends AppCompatActivity {
                 catch (TimeoutException e){
                     System.err.println("TimeoutException: " + e.getMessage());
                 }
+            }
+        });
+
+        //when user presses the Create Account button
+        Button button1 = (Button) findViewById(R.id.createAccount);
+        button1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Context context = view.getContext();
+                Intent intent = new Intent(context, CreateAccountActivity.class);
+                startActivity(intent);
             }
         });
 

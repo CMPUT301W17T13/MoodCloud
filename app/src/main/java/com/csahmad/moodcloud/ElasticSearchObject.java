@@ -20,10 +20,7 @@ public abstract class ElasticSearchObject {
         ElasticSearchObject otherElasticSearch = (ElasticSearchObject) other;
         if (!this.getTypeName().equals(otherElasticSearch.getTypeName())) return false;
         if (this.id == null) return this == otherElasticSearch;
-<<<<<<< HEAD
-=======
         if (otherElasticSearch.getId() == null) return this == otherElasticSearch;
->>>>>>> 070edfcf40c8da247ecec4c147fca63197e10006
         return this.id.equals(otherElasticSearch.id);
     }
 

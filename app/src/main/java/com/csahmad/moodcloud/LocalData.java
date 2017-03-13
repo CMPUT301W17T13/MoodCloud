@@ -18,9 +18,9 @@ public class LocalData {
     }
 
     // Call getProfile and store result in file system and signedInProfile
-    public static void store(String profileId) {
+    public static void store(Profile profile) {
 
-        ;
+        LocalData.signedInProfile = profile;
     }
 
     // Try getting from file system and storing in signedInProfile
