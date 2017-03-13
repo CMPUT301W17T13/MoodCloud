@@ -15,6 +15,9 @@ public class Follow implements ElasticSearchObject {
     private final Profile follower;
     private final Profile followee;
 
+    private String followerId;
+    private String followeeId;
+
     /** This Follow's unique ID (creating IDs handled by Jest). */
     @JestId
     private String id;
@@ -23,6 +26,9 @@ public class Follow implements ElasticSearchObject {
 
         this.follower = follower;
         this.followee = followee;
+
+        this.followerId = follower.getId();
+        this.followeeId = followee.getId();
     }
 
     @Override
@@ -57,6 +63,16 @@ public class Follow implements ElasticSearchObject {
     public void setId(String id) {
 
         this.id = id;
+    }
+
+    public String getFollowerId() {
+
+        return this.followerId;
+    }
+
+    public String getFolloweeId() {
+
+        return this.followeeId;
     }
 
     public Profile getFollower() {

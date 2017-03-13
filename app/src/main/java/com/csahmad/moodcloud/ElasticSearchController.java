@@ -19,6 +19,7 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.Refresh;
+import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
 
@@ -27,7 +28,7 @@ public class ElasticSearchController {
     private static final String url = "http://cmput301.softwareprocess.es:8080";
     private static final String index = "cmput301w17t13";
 
-    private static final int resultSize = 1;//25;
+    private static final int resultSize = 25;
 
     /** For building and executing save commands and search queries. */
     private static JestDroidClient client;
@@ -415,11 +416,43 @@ public class ElasticSearchController {
                         .build();
 
                 ElasticSearchController.client.execute(createIndex);
+
+                ElasticSearchController.makeMappings();
             }
         }
 
         catch (IOException e) {
             Log.i("Error", "Could not make index.");
+        }
+    }
+
+    /** Make mappings. */
+    public static void makeMappings() {
+
+        ElasticSearchController.makeMapping("account",
+                MappingBuilder.buildNotAnalyzed("username"));
+
+        ElasticSearchController.makeMapping("follow",
+                MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+    }
+
+    public static void makeMapping(String type, String mapping) {
+
+        PutMapping putMapping = new PutMapping.Builder(ElasticSearchController.index, type,
+                mapping).build();
+
+        Log.i("Mapping", mapping);
+
+        try {
+
+            JestResult result = ElasticSearchController.client.execute(putMapping);
+
+            if (!result.isSucceeded())
+                Log.i("Error", "Not succeeded (create mapping): " + result.getErrorMessage());
+        }
+
+        catch (IOException e) {
+            Log.i("Error", "Could not create mapping.");
         }
     }
 

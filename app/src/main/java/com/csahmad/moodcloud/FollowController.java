@@ -43,7 +43,7 @@ public class FollowController {
 
     public ArrayList<Follow> getFollowees(Profile follower, int from) throws TimeoutException {
 
-        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("follower._id",
+        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("followerId",
                 follower.getId()));
 
         this.elasticSearch.setFilter(filter);

@@ -220,7 +220,7 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         ;
     }
 
-    public void testGetFollowerPosts() {
+    public void testGetFollowerPosts() throws Exception {
 
         Profile followee = new Profile("John Jane");
 
