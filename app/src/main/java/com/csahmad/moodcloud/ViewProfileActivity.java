@@ -34,6 +34,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         String id = intent.getStringExtra("ID");
         try {
             profile = profileController.getProfileFromID(id);
+
+            if (profile.getId() == null)
+                throw new RuntimeException("Oh noes ID is null");
+
         } catch (TimeoutException e){}
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
