@@ -49,21 +49,23 @@ public class PostController {
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-12 Find better way
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
         ProfileController controller = new ProfileController();
-        return PostController.getLatestPosts(controller.getFollowees(follower, from), filter);
+
+        return PostController.getLatestPosts(
+                controller.getFolloweesWithPosts(follower, from), filter);
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-12 Find better way
     public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
                                                    int from) throws TimeoutException {
 
         ProfileController controller = new ProfileController();
-        return PostController.getLatestPosts(controller.getFollowers(followee, from), filter);
+
+        return PostController.getLatestPosts(
+                controller.getFollowersWithPosts(followee, from), filter);
     }
 
     public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {

@@ -17,30 +17,55 @@ public class QueryBuilder {
         query += "\"size\": " + Integer.toString(resultSize) + ",\n";
         query += "\"query\": {\n";
 
-        if (filter.hasKeywords()) {
-            query += QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields());
-            query += "\n";
+        ArrayList<String> components = new ArrayList<String>();
+
+        if (filter.hasKeywords())
+            components.add(
+                    QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields()));
+
+        if (filter.hasFieldValues())
+            components.add(QueryBuilder.buildExactFieldValues(filter.getFieldValues()));
+
+        if (filter.hasTimeUnitsAgo())
+            components.add(
+                    QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
+                            filter.getDateField()));
+
+        if (filter.hasMaxDistance())
+            components.add(
+                    QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+                            filter.getLocationField(), filter.getDistanceUnits()));
+
+        query += TextUtils.join(",\n", components);
+
+        query += "\n}";
+
+        if (filter.hasNonEmptyFields()) {
+            query += ",\n";
+            query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
         }
 
-        if (filter.hasFieldValues()) {
-            query += QueryBuilder.buildExactFieldValues(filter.getFieldValues());
-            query += "\n";
-        }
+        query += "\n}";
+        Log.i("Query", query);
+        return query;
+    }
 
-        if (filter.hasTimeUnitsAgo()) {
-            query += QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
-                    filter.getDateField());
-            query += "\n";
-        }
+    public static String buildNonEmptyFields(ArrayList<String> fields) {
 
-        if (filter.hasMaxDistance()) {
-            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
-                    filter.getLocationField(), filter.getDistanceUnits());
-            query += "\n";
+        if (fields == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "\"filter\": {" +
+                "\"exists\": {";
+
+        int lastIndex = fields.size() - 1;
+
+        for (int i = 0; i < fields.size(); i++) {
+            query += "\"field\": \"" + fields.get(i) + "\"";
+            if (i < lastIndex) query += ", ";
         }
 
         query += "}\n}";
-        Log.i("Query", query);
         return query;
     }
 

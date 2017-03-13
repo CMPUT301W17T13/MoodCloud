@@ -4,7 +4,7 @@ import java.util.Calendar;
 import io.searchbox.annotations.JestId;
 
 /** A mood event. */
-public class Post implements ElasticSearchObject {
+public class Post extends ElasticSearchObject {
 
     public static final Class type = Post.class;
     public static final String typeName = "post";
@@ -20,10 +20,6 @@ public class Post implements ElasticSearchObject {
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
-    /** This Post's unique ID (creating IDs handled by Jest). */
-    @JestId
-    private String id;
-
     public Post(String text, String mood, String triggerText, String triggerImage, String context,
                 Profile poster, double[] location, Calendar date) {
 
@@ -38,15 +34,6 @@ public class Post implements ElasticSearchObject {
     }
 
     @Override
-    public boolean equals(Object other) {
-
-        if (!(other instanceof Post)) return false;
-        Post otherPost = (Post) other;
-        if (this.id == null) return this == otherPost;
-        return this.id.equals(otherPost.id);
-    }
-
-    @Override
     public String toString() {
 
         return "[" + NullTools.toString(this.id) + "] " + NullTools.toString(this.text);
@@ -56,18 +43,6 @@ public class Post implements ElasticSearchObject {
     public String getTypeName() {
 
         return Post.typeName;
-    }
-
-    @Override
-    public String getId() {
-
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-
-        this.id = id;
     }
 
     public String getText() {

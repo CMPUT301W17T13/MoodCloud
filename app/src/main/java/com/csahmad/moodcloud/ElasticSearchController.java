@@ -8,6 +8,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -176,8 +177,10 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
 
-                        if (isNew)
+                        if (isNew) {
                             item.setId(result.getId());
+                            Log.i("ID", "New id: " + item.getId());
+                        }
 
                         else if (item.getId() != result.getId())
                             throw new RuntimeException("Them IDs should be equal.");
@@ -248,8 +251,11 @@ public class ElasticSearchController {
 
                 DocumentResult result = ElasticSearchController.client.execute(get);
 
-                if (result.isSucceeded())
-                    return (T) result.getSourceAsObject(this.type);
+                if (result.isSucceeded()) {
+                    T resultObject = (T) result.getSourceAsObject(this.type);
+                    resultObject.setId(result.getId());
+                    return resultObject;
+                }
 
                 else
                     Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
@@ -368,21 +374,24 @@ public class ElasticSearchController {
                 SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
-                    //List<T> foundObjects = result.getSourceAsObjectList(this.type);
 
                     List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
                     Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
 
-                    for (SearchResult.Hit<T, Void> hit: hits)
-                        results.add(hit.source);
+                    for (SearchResult.Hit<T, Void> hit: hits) {
 
-                    //Log.i("ListSize", "Result size: " + Integer.toString(foundObjects.size()));
-                    //results.addAll(foundObjects);
+                        T object = hit.source;
+                        object.setId(hit.id);
+
+                        if (object.getId() == null)
+                            Log.i("Error", "ID should not be null!");
+
+                        results.add(object);
+                    }
                 }
 
                 else
-                    Log.i("Error", "The search query failed to find any objects that matched " +
-                            query);
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
             }
 
             catch (Exception e) {
