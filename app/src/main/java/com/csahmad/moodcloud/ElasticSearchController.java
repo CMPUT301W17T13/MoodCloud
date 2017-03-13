@@ -24,6 +24,12 @@ import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
 
+/**
+ * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
+ * using elasticsearch.
+ *
+ * @see ElasticSearch
+ */
 public class ElasticSearchController {
 
     private static final String url = "http://cmput301.softwareprocess.es:8080";

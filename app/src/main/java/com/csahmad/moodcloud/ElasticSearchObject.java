@@ -3,9 +3,10 @@ package com.csahmad.moodcloud;
 import io.searchbox.annotations.JestId;
 
 /**
- * Created by oahmad on 2017-03-06.
+ * An object that works with elasticsearch methods in the controller classes.
+ *
+ * @see ElasticSearch
  */
-
 public abstract class ElasticSearchObject {
 
     public abstract String getTypeName();

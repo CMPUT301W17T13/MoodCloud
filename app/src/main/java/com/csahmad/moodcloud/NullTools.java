@@ -3,9 +3,8 @@ package com.csahmad.moodcloud;
 import java.util.ArrayList;
 
 /**
- * Created by oahmad on 2017-03-10.
+ * Static methods for dealing with comparisons and other checks with potentially null objects.
  */
-
 public class NullTools {
 
     /** Returns "null" if object null, otherwise object.toString(). */

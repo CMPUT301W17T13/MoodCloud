@@ -6,9 +6,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by oahmad on 2017-03-01.
+ * Get {@link Post}s from elastic search or add/update {@link Post}s using elasticsearch.
+ *
+ * @see ElasticSearch
  */
-
 public class PostController {
 
     private ElasticSearch<Post> elasticSearch =

@@ -1,9 +1,14 @@
 package com.csahmad.moodcloud;
 
 /**
- * Created by oahmad on 2017-03-09.
+ * Represents an elasticsearch object field and it's (expected) value.
+ *
+ * <p>
+ * Used as a restriction in {@link SearchFilter} (the returned results must have the specified
+ * value for the specified field).
+ *
+ * @see SearchFilter
  */
-
 public class FieldValue {
 
     private String fieldName;
