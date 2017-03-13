@@ -62,6 +62,7 @@ public class FollowControllerTest extends ActivityInstrumentationTestCase2 {
         String id = expected.getId();
 
         Follow follow = controller.getFollowFromID(id);
+        assertNotNull(follow.getId());
         assertEquals(follow, expected);
 
         ;

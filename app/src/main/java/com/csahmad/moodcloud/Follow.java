@@ -6,7 +6,7 @@ import io.searchbox.annotations.JestId;
  * Created by oahmad on 2017-03-12.
  */
 
-public class Follow implements ElasticSearchObject {
+public class Follow extends ElasticSearchObject {
 
     // follower follows followee
 
@@ -17,10 +17,6 @@ public class Follow implements ElasticSearchObject {
 
     private String followerId;
     private String followeeId;
-
-    /** This Follow's unique ID (creating IDs handled by Jest). */
-    @JestId
-    private String id;
 
     public Follow(Profile follower, Profile followee) {
 
@@ -42,30 +38,9 @@ public class Follow implements ElasticSearchObject {
     }
 
     @Override
-    public boolean equals(Object other) {
-
-        if (!(other instanceof Follow)) return false;
-        Follow otherFollow = (Follow) other;
-        if (this.id == null) return this == otherFollow;
-        return this.id.equals(otherFollow.id);
-    }
-
-    @Override
     public String getTypeName() {
 
         return Follow.typeName;
-    }
-
-    @Override
-    public String getId() {
-
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-
-        this.id = id;
     }
 
     public String getFollowerId() {

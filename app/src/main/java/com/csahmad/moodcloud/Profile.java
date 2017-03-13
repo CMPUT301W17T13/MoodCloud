@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import io.searchbox.annotations.JestId;
 
 /** A user profile. */
-public class Profile implements ElasticSearchObject {
+public class Profile extends ElasticSearchObject {
 
     public static final String typeName = "profile";
 
@@ -14,10 +14,6 @@ public class Profile implements ElasticSearchObject {
     private boolean homeProfile = false;
 
     private ArrayList<Post> posts = new ArrayList<Post>();
-
-    /** This Profile's unique ID (creating IDs handled by Jest). */
-    @JestId
-    private String id;
 
     public Profile(String name) {
 
@@ -31,30 +27,9 @@ public class Profile implements ElasticSearchObject {
     }
 
     @Override
-    public boolean equals(Object other) {
-
-        if (!(other instanceof Profile)) return false;
-        Profile otherProfile = (Profile) other;
-        if (this.id == null) return this == otherProfile;
-        return this.id.equals(otherProfile.id);
-    }
-
-    @Override
     public String getTypeName() {
 
         return Profile.typeName;
-    }
-
-    @Override
-    public String getId() {
-
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-
-        this.id = id;
     }
 
     public ArrayList<Post> getPosts() {
