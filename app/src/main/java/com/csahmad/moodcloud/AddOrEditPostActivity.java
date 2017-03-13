@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.Calendar;
+
 import static com.csahmad.moodcloud.R.id.angry_selected;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
@@ -23,42 +25,39 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
 
-        final Post post;
+
         final PostController postController = new PostController();
 
         final EditText textExplanation = (EditText) findViewById(R.id.body);
-        final EditText testTrigger = (EditText) findViewById(R.id.trigger);
+        final EditText textTrigger = (EditText) findViewById(R.id.trigger);
 
         final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
         final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
 
 
-        //public void onRadioButtonClicked(View view) {
-            // Is the button now checked?
-            //boolean checked = ((RadioButton) view).isChecked();
-
-            // Check which radio button was clicked
-            //switch(view.getId()) {
-             //   case R.id.angry_selected:
-              //      if (checked)
-
-                  //      break;
-               //// case R.id.confused_selected:
-                 //
-                    //    break;
-           // }
-        //}
 
 
 
-        //Button postButton = (Button) findViewById(R.id.postButton);
-        //postButton.OnClickListener(new View.OnClickListener(){
-            //@Override
-            //public void onClick(View v) {
+        Button postButton = (Button) findViewById(R.id.postButton);
+        postButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Profile profile = LocalData.getSignedInProfile();
+                Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
+                        textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
+                        profile ,null, Calendar.getInstance());
+                PostController postController = new PostController();
+                postController.addOrUpdatePosts(post);
+                profile.addPost(post);
+                ProfileController profileController = new ProfileController();
+                profileController.addOrUpdateProfiles(profile);
 
-           // }
+                Context context = v.getContext();
+                Intent intent = new Intent(context, NewsFeedActivity.class);
+                startActivity(intent);
+            }
 
-       // });
+        });
 
 
 
@@ -67,10 +66,69 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Context context = view.getContext();
-                Intent intent = new Intent(context, NewsFeedActivity.class);
+                Intent intent = new Intent(AddOrEditPostActivity.this, NewsFeedActivity.class);
                 startActivity(intent);
             }}
         );
 
+
+    }
+    //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
+    public String onRadioButtonClicked(View view) {
+
+        boolean checked = ((RadioButton) view).isChecked();
+        String mood = null;
+
+        switch(view.getId()) {
+            case R.id.angry_selected:
+                if (checked)
+
+                    mood = "Angry";
+            case R.id.confused_selected:
+                if (checked)
+                    mood = "Confused";
+            case R.id.scared_selected:
+                if (checked)
+                    mood = "Scared";
+
+            case R.id.happy_selected:
+                if (checked)
+                    mood = "Happy";
+            case R.id.sad_selected:
+                if (checked)
+                    mood = "Sad";
+            case R.id.surprised_selected:
+                if (checked)
+                    mood = "Suprised";
+            case R.id.ashamed_selected:
+                if (checked)
+                    mood = "Ashamed";
+            case R.id.disgusted_selected:
+                if (checked)
+                    mood = "Disgusted";
+        }
+        return mood;
+    }
+
+    public String onStatusButtonClicked(View view) {
+
+        boolean checked = ((RadioButton) view).isChecked();
+        String status = null;
+
+        switch (view.getId()) {
+            case R.id.alone_selected:
+                if (checked)
+
+                    status = "Alone";
+            case R.id.crowd_selected:
+                if (checked)
+
+                    status = "Crowd";
+            case R.id.group_selected:
+                if (checked)
+
+                    status = "Group";
+        }
+        return status;
     }
 }
