@@ -22,25 +22,27 @@ public class SearchFilter {
     private String distanceUnits = "km";
     private String locationField = "location";
 
+    private ArrayList<String> nonEmptyLists;
+
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance);
+                this.maxDistance, nonEmptyLists);
     }
 
     public boolean hasKeywords() {
 
-        return this.keywords != null;
+        return !NullTools.allNullOrEmpty(this.keywords);
     }
 
     public boolean hasTimeUnitsAgo() {
 
-        return this.maxTimeUnitsAgo != null;
+        return !NullTools.allNullOrEmpty(this.maxTimeUnitsAgo);
     }
 
     public boolean hasMaxDistance() {
 
-        return this.maxDistance != null;
+        return !NullTools.allNullOrEmpty(this.maxDistance);
     }
 
     public ArrayList<String> getKeywords() {

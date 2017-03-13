@@ -50,6 +50,7 @@ public class PostController {
 
     // Note: latest posts only
     // TODO: 2017-03-12 Find better way
+    // - Maybe make ProfileController.getFolloweesWithPosts()
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
@@ -59,6 +60,7 @@ public class PostController {
 
     // Note: latest posts only
     // TODO: 2017-03-12 Find better way
+    // - Maybe make ProfileController.getFollowersWithPosts()
     public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
                                                    int from) throws TimeoutException {
 
