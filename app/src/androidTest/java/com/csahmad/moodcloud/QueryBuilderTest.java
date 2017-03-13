@@ -311,43 +311,6 @@ public class QueryBuilderTest extends ActivityInstrumentationTestCase2 {
         assertTrue(exceptionThrown);
     }
 
-    public void testBuildGetAll() {
-
-        String query = QueryBuilder.buildGetAll(0);
-
-        String expected = "{\n" +
-                "\"size\": 0,\n" +
-                "\"query\": {\n" +
-                "\"match_all\": {}\n" +
-                "}\n" +
-                "}";
-
-        assertEquals(query, expected);
-
-        query = QueryBuilder.buildGetAll(100);
-
-        expected = "{\n" +
-                "\"size\": 100,\n" +
-                "\"query\": {\n" +
-                "\"match_all\": {}\n" +
-                "}\n" +
-                "}";
-
-        assertEquals(query, expected);
-
-        boolean exceptionThrown = false;
-
-        try {
-            QueryBuilder.buildGetAll(-1);
-        }
-
-        catch (IllegalArgumentException e) {
-            exceptionThrown = true;
-        }
-
-        assertTrue(exceptionThrown);
-    }
-
     // TODO: 2017-03-08 More! More!
     public void testBuild() {
 

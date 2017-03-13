@@ -1,7 +1,6 @@
 package com.csahmad.moodcloud;
 
 import java.util.Calendar;
-
 import io.searchbox.annotations.JestId;
 
 /** A mood event. */
@@ -43,7 +42,14 @@ public class Post implements ElasticSearchObject {
 
         if (!(other instanceof Post)) return false;
         Post otherPost = (Post) other;
-        return this.id == otherPost.id;
+        if (this.id == null) return this == otherPost;
+        return this.id.equals(otherPost.id);
+    }
+
+    @Override
+    public String toString() {
+
+        return "[" + NullTools.toString(this.id) + "] " + NullTools.toString(this.text);
     }
 
     @Override
@@ -52,11 +58,13 @@ public class Post implements ElasticSearchObject {
         return Post.typeName;
     }
 
+    @Override
     public String getId() {
 
         return this.id;
     }
 
+    @Override
     public void setId(String id) {
 
         this.id = id;

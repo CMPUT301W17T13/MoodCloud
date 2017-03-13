@@ -49,28 +49,32 @@ public class PostController {
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-11 Remove from?
+    // TODO: 2017-03-12 Find better way
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
-        ProfileController profileController = new ProfileController();
-        ArrayList<Profile> followees = profileController.getFollowees(follower, from);
-        return PostController.getLatestPosts(followees, filter);
+        ProfileController controller = new ProfileController();
+        return PostController.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-11 Remove from?
-    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter, int from) {
+    // TODO: 2017-03-12 Find better way
+    public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
+                                                   int from) throws TimeoutException {
 
-        return PostController.getLatestPosts(followee.getFollowers(), filter);
+        ProfileController controller = new ProfileController();
+        return PostController.getLatestPosts(controller.getFollowers(followee, from), filter);
     }
 
     public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
 
         ArrayList<Post> latestPosts = new ArrayList<Post>();
+        Post post;
 
-        for (Profile profile: profiles)
-            latestPosts.add(PostController.getLatestPost(profile.getPosts(), filter));
+        for (Profile profile: profiles) {
+            post = PostController.getLatestPost(profile.getPosts(), filter);
+            if (post != null) latestPosts.add(post);
+        }
 
         return latestPosts;
     }
@@ -96,7 +100,8 @@ public class PostController {
             postDate = post.getDate();
             latestPostDate = latestPost.getDate();
 
-            if (postDate.compareTo(latestPostDate) < 0)
+            // If any posts at same time, assume post that appears later in list is newer
+            if (postDate.compareTo(latestPostDate) >= 0)
                 latestPost = post;
         }
 

@@ -18,6 +18,12 @@ public class Account implements ElasticSearchObject {
     @JestId
     private String id;
 
+    public Account(String username, String password) {
+
+        this.username = username;
+        this.password = password;
+    }
+
     public Account(String username, String password, Profile profile) {
 
         this.username = username;
@@ -30,7 +36,8 @@ public class Account implements ElasticSearchObject {
 
         if (!(other instanceof Account)) return false;
         Account otherAccount = (Account) other;
-        return this.username == otherAccount.username;
+        if (this.username == null) return this == otherAccount;
+        return this.username.equals(otherAccount.username);
     }
 
     @Override
@@ -39,11 +46,13 @@ public class Account implements ElasticSearchObject {
         return Account.typeName;
     }
 
+    @Override
     public String getId() {
 
         return this.id;
     }
 
+    @Override
     public void setId(String id) {
 
         this.id = id;

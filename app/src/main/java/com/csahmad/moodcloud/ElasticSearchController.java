@@ -19,6 +19,7 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.Refresh;
+import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
 
@@ -337,8 +338,7 @@ public class ElasticSearchController {
             if (searchFilters.length == 0 || searchFilters[0] == null ||
                     !searchFilters[0].hasRestrictions()) {
 
-                query = QueryBuilder.buildGetAll(ElasticSearchController.resultSize);
-                //query = "";
+                query = "";
                 Log.i("Conditional", "If I'm here, should be NO searchFilter.");
             }
 
@@ -416,11 +416,43 @@ public class ElasticSearchController {
                         .build();
 
                 ElasticSearchController.client.execute(createIndex);
+
+                ElasticSearchController.makeMappings();
             }
         }
 
         catch (IOException e) {
             Log.i("Error", "Could not make index.");
+        }
+    }
+
+    /** Make mappings. */
+    public static void makeMappings() {
+
+        ElasticSearchController.makeMapping("account",
+                MappingBuilder.buildNotAnalyzed("username"));
+
+        ElasticSearchController.makeMapping("follow",
+                MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+    }
+
+    public static void makeMapping(String type, String mapping) {
+
+        PutMapping putMapping = new PutMapping.Builder(ElasticSearchController.index, type,
+                mapping).build();
+
+        Log.i("Mapping", mapping);
+
+        try {
+
+            JestResult result = ElasticSearchController.client.execute(putMapping);
+
+            if (!result.isSucceeded())
+                Log.i("Error", "Not succeeded (create mapping): " + result.getErrorMessage());
+        }
+
+        catch (IOException e) {
+            Log.i("Error", "Could not create mapping.");
         }
     }
 

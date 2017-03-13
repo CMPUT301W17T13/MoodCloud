@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 public class ProfileController {
 
     private ElasticSearch<Profile> elasticSearch =
-            new ElasticSearch<Profile>(ProfileController.class, Profile.typeName);
+            new ElasticSearch<Profile>(Profile.class, Profile.typeName);
 
     public Integer getTimeout() {
 
@@ -28,37 +28,21 @@ public class ProfileController {
         this.elasticSearch.waitForTask();
     }
 
-    // TODO: 2017-03-11 Find a better way?
-    // TODO: 2017-03-11 Remove from?
+    public ArrayList<Profile> getFollowers(Profile followee, int from) throws TimeoutException {
+
+        ArrayList<Profile> followers = new ArrayList<Profile>();
+        FollowController controller = new FollowController();
+        ArrayList<Follow> follows = controller.getFollowers(followee, from);
+        for (Follow follow: follows) followers.add(follow.getFollower());
+        return followers;
+    }
+
     public ArrayList<Profile> getFollowees(Profile follower, int from) throws TimeoutException {
 
         ArrayList<Profile> followees = new ArrayList<Profile>();
-        ArrayList<Profile> results;
-
-        from = 0;
-
-        do {
-
-            results = this.elasticSearch.getNext(from);
-            followees.addAll(ProfileController.getFolloweesFrom(follower, results));
-            from += ElasticSearchController.getResultSize();
-
-        } while (results.size() > 0);
-
-        return followees;
-    }
-
-    private static ArrayList<Profile> getFolloweesFrom(Profile follower,
-                                                       ArrayList<Profile> profiles) {
-
-        ArrayList<Profile> followees = new ArrayList<Profile>();
-
-        for (Profile profile: profiles) {
-
-            if (profile.getFollowers().contains(follower))
-                followees.add(profile);
-        }
-
+        FollowController controller = new FollowController();
+        ArrayList<Follow> follows = controller.getFollowees(follower, from);
+        for (Follow follow: follows) followees.add(follow.getFollower());
         return followees;
     }
 
@@ -78,7 +62,6 @@ public class ProfileController {
     public void addOrUpdateProfiles(Profile... profiles) {
 
         this.elasticSearch.addOrUpdate(profiles);
-
     }
 
     public void deleteProfiles(Profile... profiles) {

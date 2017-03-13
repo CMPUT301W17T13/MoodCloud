@@ -1,6 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -8,19 +10,6 @@ import java.util.ArrayList;
  */
 
 public class QueryBuilder {
-
-    public static String buildGetAll(int resultSize) {
-
-        if (resultSize < 0)
-            throw new IllegalArgumentException("resultSize cannot be negative.");
-
-        return "{\n" +
-                "\"size\": " + resultSize + ",\n" +
-                "\"query\": {\n" +
-                "\"match_all\": {}\n" +
-                "}\n" +
-                "}";
-    }
 
     public static String build(SearchFilter filter, int resultSize, int from) {
 
@@ -51,6 +40,7 @@ public class QueryBuilder {
         }
 
         query += "}\n}";
+        Log.i("Query", query);
         return query;
     }
 
@@ -59,7 +49,7 @@ public class QueryBuilder {
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "{\n" +
+        String query = "\"constant_score\": {\n" +
                 "\"filter\": {\n" +
                 "\"term\": {\n";
 

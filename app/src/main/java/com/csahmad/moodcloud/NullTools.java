@@ -6,7 +6,14 @@ import java.util.ArrayList;
  * Created by oahmad on 2017-03-10.
  */
 
-public class CompareTools {
+public class NullTools {
+
+    /** Returns "null" if object null, otherwise object.toString(). */
+    public static String toString(Object object) {
+
+        if (object == null) return "null";
+        return object.toString();
+    }
 
     /** Returns true if both objects null or equal. */
     public static boolean equals(Object object1, Object object2) {
