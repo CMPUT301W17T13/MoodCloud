@@ -43,7 +43,7 @@ public class Post implements ElasticSearchObject {
         if (!(other instanceof Post)) return false;
         Post otherPost = (Post) other;
         if (this.id == null) return this == otherPost;
-        return this.id == otherPost.id;
+        return this.id.equals(otherPost.id);
     }
 
     @Override
@@ -58,11 +58,13 @@ public class Post implements ElasticSearchObject {
         return Post.typeName;
     }
 
+    @Override
     public String getId() {
 
         return this.id;
     }
 
+    @Override
     public void setId(String id) {
 
         this.id = id;
