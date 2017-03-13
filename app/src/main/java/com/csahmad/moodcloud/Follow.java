@@ -24,6 +24,9 @@ public class Follow implements ElasticSearchObject {
 
     public Follow(Profile follower, Profile followee) {
 
+        if (follower.getId() == null || followee.getId() == null)
+            throw new IllegalArgumentException("Cannot pass profiles with null ids to Follow.");
+
         this.follower = follower;
         this.followee = followee;
 
