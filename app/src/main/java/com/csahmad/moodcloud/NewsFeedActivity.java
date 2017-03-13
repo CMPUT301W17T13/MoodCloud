@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,6 +56,16 @@ public class NewsFeedActivity extends AppCompatActivity {
                 startActivity(intent);
             }}
         );
+
+        FloatingActionButton addPost = (FloatingActionButton) findViewById(R.id.addPost);
+        addPost.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button followingButton = (Button) findViewById(R.id.followingButton);
         followingButton.setOnClickListener(new View.OnClickListener(){
