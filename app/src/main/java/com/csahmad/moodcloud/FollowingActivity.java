@@ -28,7 +28,7 @@ public class FollowingActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
-        mRecyclerView = (RecyclerView) findViewById(R.id.postList);
+        mRecyclerView = (RecyclerView) findViewById(R.id.followerList);
 
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
