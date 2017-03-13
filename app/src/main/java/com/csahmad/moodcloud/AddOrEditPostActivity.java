@@ -14,9 +14,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Post post;
+
         final PostController postController = new PostController();
         final EditText textExplanation = (EditText) findViewById(R.id.body);
         final EditText testTrigger = (EditText) findViewById(R.id.trigger);
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
@@ -29,7 +33,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Context context = view.getContext();
-                Intent intent = new Intent(context, SignInActivity.class);
+                Intent intent = new Intent(context, NewsFeedActivity.class);
                 startActivity(intent);
             }}
         );
