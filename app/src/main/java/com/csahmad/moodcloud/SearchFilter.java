@@ -22,12 +22,18 @@ public class SearchFilter {
     private String distanceUnits = "km";
     private String locationField = "location";
 
-    private ArrayList<String> nonEmptyLists;
+    // Results must not have an empty list for any of these fields
+    private ArrayList<String> nonEmptyFields;
 
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, nonEmptyLists);
+                this.maxDistance, nonEmptyFields);
+    }
+
+    public boolean hasNonEmptyFields() {
+
+        return !NullTools.allNullOrEmpty(this.nonEmptyFields);
     }
 
     public boolean hasKeywords() {
@@ -43,6 +49,17 @@ public class SearchFilter {
     public boolean hasMaxDistance() {
 
         return !NullTools.allNullOrEmpty(this.maxDistance);
+    }
+
+    public ArrayList<String> getNonEmptyFields() {
+
+        return this.nonEmptyFields;
+    }
+
+    public SearchFilter setNonEmptyFields(ArrayList<String> fields) {
+
+        this.nonEmptyFields = fields;
+        return this;
     }
 
     public ArrayList<String> getKeywords() {
@@ -63,6 +80,16 @@ public class SearchFilter {
         }
 
         this.fieldValues.add(fieldValue);
+        return this;
+    }
+
+    public SearchFilter addNonEmptyField(String field) {
+
+        if (this.nonEmptyFields == null) {
+            this.nonEmptyFields = new ArrayList<String>();
+        }
+
+        this.nonEmptyFields.add(field);
         return this;
     }
 

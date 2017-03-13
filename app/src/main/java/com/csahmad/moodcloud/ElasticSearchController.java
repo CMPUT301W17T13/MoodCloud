@@ -381,8 +381,7 @@ public class ElasticSearchController {
                 }
 
                 else
-                    Log.i("Error", "The search query failed to find any objects that matched " +
-                            query);
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
             }
 
             catch (Exception e) {
