@@ -16,7 +16,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-/** The activity for viewing people the signed in user is following. */
+/** The activity for viewing people the signed in user is following.
+ * @author Taylor
+ */
 public class FollowingActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -73,6 +75,12 @@ public class FollowingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * MyAdapter controls the list of profiles the signed in user is following by extending RecyclerView <br>
+     *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
+     *         2017-03-7
+     * @author Taylor
+     */
     public class MyAdapter extends RecyclerView.Adapter<FollowingActivity.MyAdapter.ViewHolder> {
         private ArrayList<Profile> mDataset;
 

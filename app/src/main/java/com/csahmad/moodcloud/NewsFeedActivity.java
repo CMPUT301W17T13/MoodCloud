@@ -19,7 +19,9 @@ import java.util.concurrent.TimeoutException;
 
 import static java.lang.Boolean.TRUE;
 
-/** The activity for viewing the latest mood events from people the signed in user follows. */
+/** The activity for viewing the latest mood events from people the signed in user follows.
+ * @author Taylor
+ */
 public class NewsFeedActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -76,6 +78,12 @@ public class NewsFeedActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * MyAdapter controls the list of newsfeed posts by extending RecyclerView <br>
+     *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
+     *         2017-03-7
+     * @author Taylor
+     */
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 

@@ -16,7 +16,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-/** The activity for viewing the {@link Profile} of a user and the mood history of that user. */
+/** The activity for viewing the {@link Profile} of a user and the mood history of that user.
+ * @author Taylor
+ */
 public class ViewProfileActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -79,6 +81,12 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * MyAdapter controls the list of the profile's posts by extending RecyclerView <br>
+     *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
+     *         2017-03-7
+     * @author Taylor
+     */
     public class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 

@@ -17,7 +17,9 @@ import java.util.concurrent.TimeoutException;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-/** The activity for creating an {@link Account}. */
+/** The activity for creating an {@link Account}.
+ * @author Taylor
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
