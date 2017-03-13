@@ -53,10 +53,19 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (unique) {
                     Profile profile = new Profile(usernameText.getText().toString());
                     profileController.addOrUpdateProfiles(profile);
+
+                    try {
+                        profileController.waitForTask();
+                    }
+
+                    catch (Exception e) {
+                        throw new RuntimeException("Crash on adding login profile.");
+                    }
+
                     Account account = new Account(usernameText.getText().toString(), passwordText.getText().toString(), profile);
                     accountController.addOrUpdateAccounts(account);
                     profile.setHomeProfile(TRUE);
-                    LocalData.store(profile.getId());
+                    LocalData.store(profile);
                     //probably something to sign in the user
                     Context context = view.getContext();
                     Intent intent = new Intent(context, NewsFeedActivity.class);
