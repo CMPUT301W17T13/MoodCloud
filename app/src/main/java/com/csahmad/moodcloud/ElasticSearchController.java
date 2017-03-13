@@ -176,8 +176,10 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
 
-                        if (isNew)
+                        if (isNew) {
                             item.setId(result.getId());
+                            Log.i("ID", "New id: " + item.getId());
+                        }
 
                         else if (item.getId() != result.getId())
                             throw new RuntimeException("Them IDs should be equal.");
@@ -248,8 +250,11 @@ public class ElasticSearchController {
 
                 DocumentResult result = ElasticSearchController.client.execute(get);
 
-                if (result.isSucceeded())
-                    return (T) result.getSourceAsObject(this.type);
+                if (result.isSucceeded()) {
+                    T resultObject = (T) result.getSourceAsObject(this.type);
+                    resultObject.setId(result.getId());
+                    return resultObject;
+                }
 
                 else
                     Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
@@ -381,8 +386,7 @@ public class ElasticSearchController {
                 }
 
                 else
-                    Log.i("Error", "The search query failed to find any objects that matched " +
-                            query);
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
             }
 
             catch (Exception e) {
