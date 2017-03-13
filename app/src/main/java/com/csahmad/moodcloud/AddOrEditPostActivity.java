@@ -32,6 +32,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         Button buttonAshamed = (Button) findViewById(R.id.ashamed_selected);
         Button buttonSuprised = (Button) findViewById(R.id.surprised_selected);
 
+        
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
