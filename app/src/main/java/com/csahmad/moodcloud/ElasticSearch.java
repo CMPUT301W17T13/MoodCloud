@@ -10,6 +10,12 @@ import java.util.concurrent.TimeoutException;
 
 // TODO: 2017-03-08 Handle exceptions better
 
+/**
+ * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
+ * using elasticsearch.
+ *
+ * @see ElasticSearchController
+ */
 public class ElasticSearch<T extends ElasticSearchObject> {
 
     private Class type;

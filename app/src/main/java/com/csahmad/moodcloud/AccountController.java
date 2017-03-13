@@ -5,9 +5,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by oahmad on 2017-03-07.
+ * Get {@link Account}s using elasticsearch or add/update accounts using elasticsearch.
+ *
+ * @see ElasticSearchController
  */
-
 public class AccountController {
 
     private ElasticSearch<Account> elasticSearch =

@@ -3,9 +3,10 @@ package com.csahmad.moodcloud;
 import java.util.ArrayList;
 
 /**
- * Created by oahmad on 2017-03-06.
+ * Defines restrictions on elasticsearch queries.
+ *
+ * @see ElasticSearch
  */
-
 public class SearchFilter {
 
     private ArrayList<String> keywords;
