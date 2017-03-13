@@ -41,7 +41,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         } catch (TimeoutException e){}
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
-
+        TextView nameText = (TextView) findViewById(R.id.profileName);
+        nameText.setText("Name: " + profile.getName());
         ArrayList<Post> mDataset = profile.getPosts();
         mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
