@@ -29,7 +29,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-        mRecyclerView = (RecyclerView) findViewById(R.id.postList);
+        mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
         String id = intent.getStringExtra("ID");
         try {
