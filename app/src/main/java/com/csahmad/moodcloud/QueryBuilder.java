@@ -1,6 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -38,6 +40,7 @@ public class QueryBuilder {
         }
 
         query += "}\n}";
+        Log.i("Query", query);
         return query;
     }
 
@@ -46,7 +49,7 @@ public class QueryBuilder {
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "{\n" +
+        String query = "\"constant_score\": {\n" +
                 "\"filter\": {\n" +
                 "\"term\": {\n";
 
