@@ -8,6 +8,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -373,16 +374,20 @@ public class ElasticSearchController {
                 SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
-                    //List<T> foundObjects = result.getSourceAsObjectList(this.type);
 
                     List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
                     Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
 
-                    for (SearchResult.Hit<T, Void> hit: hits)
-                        results.add(hit.source);
+                    for (SearchResult.Hit<T, Void> hit: hits) {
 
-                    //Log.i("ListSize", "Result size: " + Integer.toString(foundObjects.size()));
-                    //results.addAll(foundObjects);
+                        T object = hit.source;
+                        object.setId(hit.id);
+
+                        if (object.getId() == null)
+                            Log.i("Error", "ID should not be null!");
+
+                        results.add(object);
+                    }
                 }
 
                 else
