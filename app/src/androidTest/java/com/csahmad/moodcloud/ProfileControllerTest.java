@@ -17,7 +17,6 @@ public class ProfileControllerTest extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
-    // FIXME: 2017-03-12 Crashing
     public void testGetProfiles() throws Exception {
 
         ProfileController controller = ProfileControllerTest.getController();
