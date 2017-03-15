@@ -112,8 +112,10 @@ public class ViewProfileActivity extends AppCompatActivity {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.profile_post_item, parent, false);
 
-            ViewProfileActivity.MyAdapter.ViewHolder vh = new ViewProfileActivity.MyAdapter.ViewHolder(v);
-            return vh;
+//            ViewProfileActivity.MyAdapter.ViewHolder vh = new ViewProfileActivity.MyAdapter.ViewHolder(v);
+//            return vh;
+//            mwschafe fixing redudant variable from code above to code below
+            return new ViewProfileActivity.MyAdapter.ViewHolder(v);
         }
 
         @Override

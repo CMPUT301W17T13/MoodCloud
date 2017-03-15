@@ -2,7 +2,8 @@ package com.csahmad.moodcloud;
 
 import java.util.Calendar;
 
-import io.searchbox.annotations.JestId;
+//import io.searchbox.annotations.JestId;
+//mwschafe commented out unused import statements
 
 /**
  * Created by oahmad on 2017-03-09.

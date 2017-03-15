@@ -1,7 +1,8 @@
 package com.csahmad.moodcloud;
 
 import java.util.ArrayList;
-import io.searchbox.annotations.JestId;
+//import io.searchbox.annotations.JestId;
+//mwschafe commented out unused import statements
 
 /** A user profile. */
 public class Profile extends ElasticSearchObject {

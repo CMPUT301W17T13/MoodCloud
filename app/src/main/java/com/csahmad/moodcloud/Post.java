@@ -1,7 +1,8 @@
 package com.csahmad.moodcloud;
 
 import java.util.Calendar;
-import io.searchbox.annotations.JestId;
+//mwschafe commented unused import statement
+//import io.searchbox.annotations.JestId;
 
 /** A mood event. */
 public class Post extends ElasticSearchObject {

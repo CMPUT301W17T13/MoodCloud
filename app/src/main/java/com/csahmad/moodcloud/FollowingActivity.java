@@ -23,7 +23,8 @@ public class FollowingActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutMananger;
-    ProfileController profileController = new ProfileController();
+    private ProfileController profileController = new ProfileController();
+    //mwschafe made ProfileController private
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +103,10 @@ public class FollowingActivity extends AppCompatActivity {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.following_item, parent, false);
 
-            FollowingActivity.MyAdapter.ViewHolder vh = new FollowingActivity.MyAdapter.ViewHolder(v);
-            return vh;
+//            FollowingActivity.MyAdapter.ViewHolder vh = new FollowingActivity.MyAdapter.ViewHolder(v);
+//            return vh;
+//            mwschafe fixing redudant variable from code above to code below
+                    return new FollowingActivity.MyAdapter.ViewHolder(v);
         }
 
         @Override

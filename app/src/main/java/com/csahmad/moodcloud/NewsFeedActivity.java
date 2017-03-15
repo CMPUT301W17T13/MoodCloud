@@ -2,7 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
+//import android.database.DataSetObserver;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +18,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-import static java.lang.Boolean.TRUE;
+//import static java.lang.Boolean.TRUE;
+//mwschafe commented out unused import statements
 
 /** The activity for viewing the latest mood events from people the signed in user follows.
  * @author Taylor
@@ -120,8 +121,10 @@ public class NewsFeedActivity extends AppCompatActivity {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.news_feed_item, parent, false);
 
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+//                  ViewHolder vh = new ViewHolder(v);
+//                  return vh;
+//                  mwschafe fixing redudant variable from code above to code below
+            return new ViewHolder(v);
         }
 
         @Override
