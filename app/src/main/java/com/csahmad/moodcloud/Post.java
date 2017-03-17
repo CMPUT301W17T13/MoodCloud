@@ -15,21 +15,21 @@ public class Post extends ElasticSearchObject {
     private String triggerText;
     private String triggerImage;
     private String context;
-    private Profile poster;
+    private String posterId;
     private Calendar date;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
     public Post(String text, String mood, String triggerText, String triggerImage, String context,
-                Profile poster, double[] location, Calendar date) {
+                String posterId, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
         this.triggerText = triggerText;
         this.triggerImage = triggerImage;
         this.context = context;
-        this.poster = poster;
+        this.posterId = posterId;
         this.location = location;
         this.date = date;
     }
@@ -96,14 +96,14 @@ public class Post extends ElasticSearchObject {
         this.context = context;
     }
 
-    public Profile getPoster() {
+    public String getPosterId() {
 
-        return this.poster;
+        return this.posterId;
     }
 
-    public void setPoster(Profile poster) {
+    public void setPosterId(String posterId) {
 
-        this.poster = poster;
+        this.posterId = posterId;
     }
 
     public double[] getLocation() {

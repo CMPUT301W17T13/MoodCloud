@@ -46,7 +46,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 Profile profile = LocalData.getSignedInProfile();
                 Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
                         textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                        profile ,null, Calendar.getInstance());
+                        profile.getId() ,null, Calendar.getInstance());
                 PostController postController = new PostController();
                 postController.addOrUpdatePosts(post);
                 profile.addPost(post);
@@ -77,7 +77,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
     public String onRadioButtonClicked(View view) {
 
-        boolean checked = ((RadioButton) view).isChecked();
+        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
         String mood = null;
 
         switch(view.getId()) {
@@ -113,7 +113,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     public String onStatusButtonClicked(View view) {
 
-        boolean checked = ((RadioButton) view).isChecked();
+        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
         String status = null;
 
         switch (view.getId()) {

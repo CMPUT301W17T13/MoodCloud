@@ -128,9 +128,15 @@ public class NewsFeedActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position){
+
             Post post = mDataset.get(position);
-            Profile profile = post.getPoster();
+            Profile profile = null;
+            try {
+                profile = new ProfileController().getProfileFromID(post.getPosterId());
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             holder.mMoodView.setText(post.getMood());
