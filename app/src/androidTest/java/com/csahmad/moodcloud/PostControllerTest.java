@@ -5,6 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+// TODO: 2017-03-18 Fix profile IDs
+
 /**
  * Created by oahmad on 2017-03-11.
  */
@@ -13,12 +15,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
     private static final int timeout = 10_000;
 
-    public PostControllerTest() {
+    public PostControllerTest() throws Exception {
 
         super(MainActivity.class);
     }
-
-    /*
 
     public void testGetPosts() throws Exception {
 
@@ -34,7 +34,7 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                     "Thor",                                 // Trigger text
                     null,                                   // Trigger image
                     "Alone",                                // Social context
-                    new Profile("Loki"),                    // Poster
+                    "fdsfsdf",                    // Poster ID
                     location,                               // Location
                     new GregorianCalendar(900, 2, 14)));
         }
@@ -44,11 +44,15 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         ;
     }
 
-    public void testGetLatestPostNoFilter() {
+    /*
+
+    public void testGetLatestPostNoFilter() throws Exception {
+        
+        PostController postController = PostControllerTest.getController();
 
         ArrayList<Post> posts = new ArrayList<Post>();
 
-        Post latest = PostController.getLatestPost(posts, null);
+        Post latest = postController.getLatestPost(posts, null);
         assertNull(latest);
 
         double[] location = {0.0d, 0.0d, 100_000.0d};
@@ -59,11 +63,11 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Thor",                                 // Trigger text
                 null,                                   // Trigger image
                 "Alone",                                // Social context
-                new Profile("Loki"),                    // Poster
+                "fdsfsdf",                    // Poster ID
                 location,                               // Location
                 new GregorianCalendar(900, 2, 14)));    // Date
 
-        latest = PostController.getLatestPost(posts, null);
+        latest = postController.getLatestPost(posts, null);
         assertEquals(posts.get(0), latest);
 
         posts.add(new Post(    // 1
@@ -72,11 +76,11 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/my_ship.jpg",                   // Trigger image
                 "With a Group",                         // Social context
-                new Profile("Ola Nordmann"),            // Poster
+                "fdsfsdf",            // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1050, 2, 14)));   // Date
 
-        latest = PostController.getLatestPost(posts, null);
+        latest = postController.getLatestPost(posts, null);
         assertEquals(posts.get(1), latest);
 
         posts.add(new Post(    // 2
@@ -85,11 +89,11 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/undead_army.jpg",               // Trigger image
                 "Alone",                                // Social context
-                new Profile("Heimdall"),                // Poster
+                "fdsfsdf",                // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2050, 3, 18)));   // Date
 
-        latest = PostController.getLatestPost(posts, null);
+        latest = postController.getLatestPost(posts, null);
         assertEquals(posts.get(2), latest);
 
         posts.add(new Post(    // 3
@@ -98,28 +102,32 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Shaggy dun it",                        // Trigger text
                 null,                                   // Trigger image
                 "With a Crowd",                         // Social context
-                new Profile("John Doe"),                // Poster
+                "fdsfsdf",                // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2015, 3, 18)));   // Date
 
-        latest = PostController.getLatestPost(posts, null);
+        latest = postController.getLatestPost(posts, null);
         assertEquals(posts.get(2), latest);
 
         ;
     }
 
-    public void testGetLatestPostsNoFilter() {
+    */
+
+    public void testGetLatestPostsNoFilter() throws Exception {
+
+        PostController postController = PostControllerTest.getController();
 
         ArrayList<Profile> profiles = new ArrayList<Profile>();
         ArrayList<Post> expected = new ArrayList<Post>();
 
-        ArrayList<Post> latest = PostController.getLatestPosts(profiles, null);
+        ArrayList<Post> latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         Profile profile1 = new Profile("Jane Doe");
         profiles.add(profile1);
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         double[] location = {10.0d, 82.4d, 32.0d};
@@ -130,16 +138,16 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Debugging",                            // Trigger text
                 null,                                   // Trigger image
                 "Alone",                                // Social context
-                profile1,                               // Poster
+                profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2017, 3, 11));    // Date
 
         profile1Post1.setId("11");
 
-        profile1.addPost(profile1Post1);
+        
         expected.add(profile1Post1);
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         Post profile1Post2 = new Post(
@@ -148,15 +156,15 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Time travel worked",                   // Trigger text
                 null,                                   // Trigger image
                 "With a Crowd",                         // Social context
-                profile1,                               // Poster
+                profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1888, 4, 10));    // Date
 
         profile1Post2.setId("12");
 
-        profile1.addPost(profile1Post2);
+        
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         Post profile1Post3 = new Post(
@@ -165,17 +173,17 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Power Quest",                          // Trigger text
                 null,                                   // Trigger image
                 "Alone",                                // Social context
-                profile1,                               // Poster
+                profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2018, 4, 10));    // Date
 
         profile1Post3.setId("13");
 
-        profile1.addPost(profile1Post3);
+        
         expected.clear();
         expected.add(profile1Post3);
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         Profile profile2 = new Profile("Sub-Zero");
@@ -187,16 +195,16 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Nightmare",                            // Trigger text
                 null,                                   // Trigger image
                 "Alone",                                // Social context
-                profile2,                               // Poster
+                profile2.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
 
         profile2Post1.setId("21");
 
-        profile2.addPost(profile2Post1);
+        
         expected.add(profile2Post1);
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         Post profile2Post2 = new Post(
@@ -205,18 +213,18 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/scorpijerk.jpg",                // Trigger image
                 "With a Group",                         // Social context
-                profile2,                               // Poster
+                profile2.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
 
         profile2Post2.setId("22");
 
-        profile2.addPost(profile2Post2);
+        
         expected.clear();
         expected.add(profile1Post3);
         expected.add(profile2Post2);
 
-        latest = PostController.getLatestPosts(profiles, null);
+        latest = postController.getLatestPosts(profiles, null);
         assertEquals(latest, expected);
 
         ;
@@ -224,9 +232,11 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetFollowerPosts() throws Exception {
 
+        PostController postController = PostControllerTest.getController();
+
         Profile followee = new Profile("John Jane");
 
-        ArrayList<Post> followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        ArrayList<Post> followerPosts = postController.getFollowerPosts(followee, null, 0);
         ArrayList<Post> expected = new ArrayList<Post>();
         assertEquals(followerPosts, expected);
 
@@ -238,19 +248,19 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/dundeeInvasion.png",            // Trigger image
                 "With a Crowd",                         // Social context
-                followee,                               // Poster
+                followee.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1991, 4, 11));    // Date
 
-        followee.addPost(followeePost1);
+        
 
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         Profile follower1 = new Profile("Jane John");
         //followee.addFollower(follower1);
 
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         Post follower1Post1 = new Post(
@@ -259,14 +269,14 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/img38.png",                     // Trigger image
                 "With a Crowd",                         // Social context
-                follower1,                              // Poster
+                follower1.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1991, 4, 11));    // Date
 
-        follower1.addPost(follower1Post1);
+        
 
         expected.add(follower1Post1);
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         Post follower1Post2 = new Post(
@@ -275,21 +285,21 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/spiderProtector.png",           // Trigger image
                 "Alone",                                // Social context
-                follower1,                              // Poster
+                follower1.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1993, 4, 11));    // Date
 
-        follower1.addPost(follower1Post2);
+        
 
         expected.clear();
         expected.add(follower1Post2);
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         Profile follower2 = new Profile("Doe Roe");
         //followee.addFollower(follower2);
 
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         Post follower2Post1 = new Post(
@@ -298,32 +308,30 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 null,                                   // Trigger text
                 "images/021.png",                       // Trigger image
                 "With a Group",                         // Social context
-                follower2,                              // Poster
+                follower2.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2021, 4, 11));    // Date
 
-        follower2.addPost(follower2Post1);
+        
 
         expected.add(follower2Post1);
-        followerPosts = PostController.getFollowerPosts(followee, null, 0);
+        followerPosts = postController.getFollowerPosts(followee, null, 0);
         assertEquals(followerPosts, expected);
 
         ;
     }
 
-    public void testGetFolloweePostsNoFilter() {
+    public void testGetFolloweePostsNoFilter() throws Exception {
 
         ;
     }
 
     ;
 
-    private static PostController getController() {
+    private static PostController getController() throws Exception {
 
         PostController controller = new PostController();
         controller.setTimeout(PostControllerTest.timeout);
         return controller;
     }
-
-    */
 }

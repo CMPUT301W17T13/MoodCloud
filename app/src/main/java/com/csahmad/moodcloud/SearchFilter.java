@@ -23,6 +23,9 @@ public class SearchFilter {
     private String distanceUnits = "km";
     private String locationField = "location";
 
+    private String sortByField;
+    private SortOrder sortOrder = SortOrder.Ascending;
+
     // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
 
@@ -30,6 +33,33 @@ public class SearchFilter {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance, nonEmptyFields);
+    }
+
+    public boolean hasSortByField() {
+
+        return this.sortByField != null;
+    }
+
+    public String getSortByField() {
+
+        return this.sortByField;
+    }
+
+    public SearchFilter setSortByField(String field) {
+
+        this.sortByField = field;
+        return this;
+    }
+
+    public SortOrder getSortOrder() {
+
+        return this.sortOrder;
+    }
+
+    public SearchFilter setSortOrder(SortOrder order) {
+
+        this.sortOrder = order;
+        return this;
     }
 
     public boolean hasNonEmptyFields() {

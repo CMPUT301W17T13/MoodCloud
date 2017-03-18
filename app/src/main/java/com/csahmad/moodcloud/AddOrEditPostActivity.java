@@ -49,7 +49,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         profile.getId() ,null, Calendar.getInstance());
                 PostController postController = new PostController();
                 postController.addOrUpdatePosts(post);
-                profile.addPost(post);
                 ProfileController profileController = new ProfileController();
                 profileController.addOrUpdateProfiles(profile);
 

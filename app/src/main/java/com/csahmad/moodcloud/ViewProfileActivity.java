@@ -25,6 +25,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutMananger;
     private Profile profile;
     private ProfileController profileController = new ProfileController();
+    private PostController postController = new PostController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,12 @@ public class ViewProfileActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
         TextView nameText = (TextView) findViewById(R.id.profileName);
         nameText.setText("Name: " + profile.getName());
-        ArrayList<Post> mDataset = profile.getPosts();
+        ArrayList<Post> mDataset = null;
+        try {
+            mDataset = postController.getPosts(profile, null, 0);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
 

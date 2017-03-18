@@ -45,8 +45,35 @@ public class QueryBuilder {
             query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
         }
 
+        if (filter.hasSortByField()) {
+            query += ",\n";
+            query += QueryBuilder.buildSortBy(filter.getSortByField(), filter.getSortOrder());
+        }
+
         query += "\n}";
         Log.i("Query", query);
+        return query;
+    }
+
+    public static String buildSortBy(String field, SortOrder order) {
+
+        if (field == null || order == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "\"sort\": [ { \"" + field + "\": { \"order\": \"";
+
+        switch (order) {
+
+            case Ascending:
+                query += "asc";
+                break;
+
+            case Descending:
+                query += "desc";
+                break;
+        }
+
+        query += "\" } } ]";
         return query;
     }
 
