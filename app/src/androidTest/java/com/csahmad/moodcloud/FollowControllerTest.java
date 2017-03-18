@@ -68,6 +68,8 @@ public class FollowControllerTest extends ActivityInstrumentationTestCase2 {
         ;
     }
 
+    /*
+
     public void testGetFolloweesWithPosts() throws Exception {
 
         FollowController controller = FollowControllerTest.getController();
@@ -128,6 +130,8 @@ public class FollowControllerTest extends ActivityInstrumentationTestCase2 {
 
         ;
     }
+
+    */
 
     public void testGetFollowees() throws Exception {
 

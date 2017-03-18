@@ -8,7 +8,8 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
+//mwschafe commented out unused import statements
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -24,6 +25,12 @@ import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
 
+/**
+ * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
+ * using elasticsearch.
+ *
+ * @see ElasticSearch
+ */
 public class ElasticSearchController {
 
     private static final String url = "http://cmput301.softwareprocess.es:8080";
@@ -443,6 +450,9 @@ public class ElasticSearchController {
 
         ElasticSearchController.makeMapping("follow",
                 MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+
+        ElasticSearchController.makeMapping("post",
+                MappingBuilder.buildNotAnalyzed("posterId"));
     }
 
     public static void makeMapping(String type, String mapping) {

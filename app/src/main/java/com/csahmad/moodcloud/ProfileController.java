@@ -5,9 +5,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by oahmad on 2017-03-01.
+ * Get {@link Profile}s from elastic search or add/update {@link Profile}s using elasticsearch.
+ *
+ * @see ElasticSearch
  */
-
 public class ProfileController {
 
     private ElasticSearch<Profile> elasticSearch =

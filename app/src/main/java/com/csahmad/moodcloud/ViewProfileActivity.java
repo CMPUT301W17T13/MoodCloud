@@ -16,13 +16,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-/** The activity for viewing the {@link Profile} of a user and the mood history of that user. */
+/** The activity for viewing the {@link Profile} of a user and the mood history of that user.
+ * @author Taylor
+ */
 public class ViewProfileActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutMananger;
     private Profile profile;
     private ProfileController profileController = new ProfileController();
+    private PostController postController = new PostController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,21 @@ public class ViewProfileActivity extends AppCompatActivity {
         String id = intent.getStringExtra("ID");
         try {
             profile = profileController.getProfileFromID(id);
+
+            if (profile.getId() == null)
+                throw new RuntimeException("Oh noes ID is null");
+
         } catch (TimeoutException e){}
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
-
-        ArrayList<Post> mDataset = profile.getPosts();
+        TextView nameText = (TextView) findViewById(R.id.profileName);
+        nameText.setText("Name: " + profile.getName());
+        ArrayList<Post> mDataset = null;
+        try {
+            mDataset = postController.getPosts(profile, null, 0);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -74,6 +87,12 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * MyAdapter controls the list of the profile's posts by extending RecyclerView <br>
+     *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
+     *         2017-03-7
+     * @author Taylor
+     */
     public class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
@@ -99,14 +118,21 @@ public class ViewProfileActivity extends AppCompatActivity {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.profile_post_item, parent, false);
 
-            ViewProfileActivity.MyAdapter.ViewHolder vh = new ViewProfileActivity.MyAdapter.ViewHolder(v);
-            return vh;
+//            ViewProfileActivity.MyAdapter.ViewHolder vh = new ViewProfileActivity.MyAdapter.ViewHolder(v);
+//            return vh;
+//            mwschafe fixing redudant variable from code above to code below
+            return new ViewProfileActivity.MyAdapter.ViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(final ViewProfileActivity.MyAdapter.ViewHolder holder, int position) {
             Post post = mDataset.get(position);
-            Profile profile = post.getPoster();
+            Profile profile = null;
+            try {
+                profile = new ProfileController().getProfileFromID(post.getPosterId());
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             holder.mMoodView.setText(post.getMood());

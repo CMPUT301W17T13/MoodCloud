@@ -5,9 +5,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by oahmad on 2017-03-12.
+ * Get {@link Follow} objects from elastic search or add/update {@link Follow} objects using
+ * elasticsearch.
+ *
+ * @see ElasticSearch
  */
-
 public class FollowController {
 
     private ElasticSearch<Follow> elasticSearch =

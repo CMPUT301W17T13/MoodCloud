@@ -2,7 +2,8 @@ package com.csahmad.moodcloud;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
+//import android.database.DataSetObserver;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-import static java.lang.Boolean.TRUE;
+//import static java.lang.Boolean.TRUE;
+//mwschafe commented out unused import statements
 
-/** The activity for viewing the latest mood events from people the signed in user follows. */
+/** The activity for viewing the latest mood events from people the signed in user follows.
+ * @author Taylor
+ */
 public class NewsFeedActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -54,6 +58,16 @@ public class NewsFeedActivity extends AppCompatActivity {
             }}
         );
 
+        FloatingActionButton addPost = (FloatingActionButton) findViewById(R.id.addPost);
+        addPost.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button followingButton = (Button) findViewById(R.id.followingButton);
         followingButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -76,6 +90,12 @@ public class NewsFeedActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * MyAdapter controls the list of newsfeed posts by extending RecyclerView <br>
+     *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
+     *         2017-03-7
+     * @author Taylor
+     */
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
@@ -101,14 +121,22 @@ public class NewsFeedActivity extends AppCompatActivity {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.news_feed_item, parent, false);
 
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+//                  ViewHolder vh = new ViewHolder(v);
+//                  return vh;
+//                  mwschafe fixing redudant variable from code above to code below
+            return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position){
+
             Post post = mDataset.get(position);
-            Profile profile = post.getPoster();
+            Profile profile = null;
+            try {
+                profile = new ProfileController().getProfileFromID(post.getPosterId());
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             holder.mMoodView.setText(post.getMood());
