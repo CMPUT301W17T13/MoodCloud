@@ -20,11 +20,12 @@
     <ImageButton
         android:id="@+id/backButton"
         style="@android:style/Widget.Holo.Light.ImageButton"
-        android:layout_width="?attr/actionBarSize"
+        android:layout_width="48dp"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
+        android:scaleType="fitCenter"
         android:tint="@android:color/background_light"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
@@ -73,6 +74,16 @@
             android:background="@color/colorTabs"
             android:text="Profile"
             android:textAppearance="@android:style/TextAppearance.Medium.Inverse" />
+
+        <Button
+            android:id="@+id/mapButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorTabs"
+            android:text="Map"
+            android:textAppearance="@android:style/TextAppearance.Medium.Inverse" />
     </LinearLayout>
 
     <TextView
@@ -92,5 +103,29 @@
         android:layout_below="@+id/profileName">
 
     </android.support.v7.widget.RecyclerView>
+
+    <ImageButton
+        android:id="@+id/addPost"
+        style="@android:style/Widget.Holo.Light.ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:scaleType="centerInside"
+        android:tint="@android:color/background_light"
+        app:srcCompat="@android:drawable/ic_search_category_default" />
+
+    <ImageButton
+        android:id="@+id/search"
+        style="@android:style/Widget.Holo.Light.ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/addPost"
+        android:background="@color/colorPrimary"
+        android:scaleType="fitCenter"
+        android:tint="@android:color/background_light"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </RelativeLayout>

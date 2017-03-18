@@ -8,4 +8,5 @@
     <color name="primary_dark_material_dark">#2a6328</color>
     <color name="background_material_dark">#378e40</color>
     <color name="colorTabs">#6b9f37</color>
+    <color name="colorChosen">#de6ca038</color>
 </resources>
