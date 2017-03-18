@@ -3,7 +3,7 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 //import android.database.DataSetObserver;
-import android.support.design.widget.FloatingActionButton;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,7 +58,7 @@ public class NewsFeedActivity extends AppCompatActivity {
             }}
         );
 
-        FloatingActionButton addPost = (FloatingActionButton) findViewById(R.id.addPost);
+        ImageButton addPost = (ImageButton) findViewById(R.id.addPost);
         addPost.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

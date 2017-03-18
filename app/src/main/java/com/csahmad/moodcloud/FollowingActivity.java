@@ -54,6 +54,16 @@ public class FollowingActivity extends AppCompatActivity {
             }}
         );
 
+        ImageButton addPost = (ImageButton) findViewById(R.id.addPost);
+        addPost.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button followingButton = (Button) findViewById(R.id.newsfeedButton);
         followingButton.setOnClickListener(new View.OnClickListener(){
             @Override
