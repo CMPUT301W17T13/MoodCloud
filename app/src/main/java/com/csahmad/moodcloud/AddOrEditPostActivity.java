@@ -74,60 +74,60 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     }
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
-    public String onRadioButtonClicked(View view) {
+    public Mood onRadioButtonClicked(View view) {
 
         boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        String mood = null;
+        Mood mood = null;
 
         switch(view.getId()) {
             case R.id.angry_selected:
                 if (checked)
 
-                    mood = "Angry";
+                    mood = Mood.Angry;
             case R.id.confused_selected:
                 if (checked)
-                    mood = "Confused";
+                    mood = Mood.Confused;
             case R.id.scared_selected:
                 if (checked)
-                    mood = "Scared";
+                    mood = Mood.Scared;
 
             case R.id.happy_selected:
                 if (checked)
-                    mood = "Happy";
+                    mood = Mood.Happy;
             case R.id.sad_selected:
                 if (checked)
-                    mood = "Sad";
+                    mood = Mood.Sad;
             case R.id.surprised_selected:
                 if (checked)
-                    mood = "Suprised";
+                    mood = Mood.Surprised;
             case R.id.ashamed_selected:
                 if (checked)
-                    mood = "Ashamed";
+                    mood = Mood.Ashamed;
             case R.id.disgusted_selected:
                 if (checked)
-                    mood = "Disgusted";
+                    mood = Mood.Disgusted;
         }
         return mood;
     }
 
-    public String onStatusButtonClicked(View view) {
+    public SocialContext onStatusButtonClicked(View view) {
 
         boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        String status = null;
+        SocialContext status = null;
 
         switch (view.getId()) {
             case R.id.alone_selected:
                 if (checked)
 
-                    status = "Alone";
+                    status = SocialContext.Alone;
             case R.id.crowd_selected:
                 if (checked)
 
-                    status = "Crowd";
+                    status = SocialContext.WithCrowd;
             case R.id.group_selected:
                 if (checked)
 
-                    status = "Group";
+                    status = SocialContext.WithGroup;
         }
         return status;
     }

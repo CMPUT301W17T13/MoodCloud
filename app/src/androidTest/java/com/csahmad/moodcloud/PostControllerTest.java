@@ -30,10 +30,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
             controller.addOrUpdatePosts(new Post(    // 0
                     "Asgard's always been my home, but I'm of different blood.",
-                    "Angry",                                // Mood
+                    Mood.Angry,                                // Mood
                     "Thor",                                 // Trigger text
                     null,                                   // Trigger image
-                    "Alone",                                // Social context
+                    SocialContext.Alone,                                // Social context
                     "fdsfsdf",                    // Poster ID
                     location,                               // Location
                     new GregorianCalendar(900, 2, 14)));
@@ -59,10 +59,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         posts.add(new Post(    // 0
                 "Asgard's always been my home, but I'm of different blood.",
-                "Angry",                                // Mood
+                Mood.Angry,                                // Mood
                 "Thor",                                 // Trigger text
                 null,                                   // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 "fdsfsdf",                    // Poster ID
                 location,                               // Location
                 new GregorianCalendar(900, 2, 14)));    // Date
@@ -72,10 +72,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         posts.add(new Post(    // 1
                 "The endless ocean swallows me",
-                "Sad",                                  // Mood
+                Mood.Sad,                                  // Mood
                 null,                                   // Trigger text
                 "images/my_ship.jpg",                   // Trigger image
-                "With a Group",                         // Social context
+                SocialContext.WithGroup,                         // Social context
                 "fdsfsdf",            // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1050, 2, 14)));   // Date
@@ -85,10 +85,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         posts.add(new Post(    // 2
                 "Heimdall gazes east. A sail has caught his eye.",
-                "Scared",                               // Mood
+                Mood.Scared,                               // Mood
                 null,                                   // Trigger text
                 "images/undead_army.jpg",               // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 "fdsfsdf",                // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2050, 3, 18)));   // Date
@@ -98,10 +98,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         posts.add(new Post(    // 3
                 "Those meddling kids.",
-                "Angry",                                // Mood
+                Mood.Angry,                                // Mood
                 "Shaggy dun it",                        // Trigger text
                 null,                                   // Trigger image
-                "With a Crowd",                         // Social context
+                SocialContext.WithCrowd,                         // Social context
                 "fdsfsdf",                // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2015, 3, 18)));   // Date
@@ -134,10 +134,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post profile1Post1 = new Post(
                 "Tired",
-                "Sad",                                  // Mood
+                Mood.Sad,                                  // Mood
                 "Debugging",                            // Trigger text
                 null,                                   // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2017, 3, 11));    // Date
@@ -152,10 +152,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post profile1Post2 = new Post(
                 "I'm in the past.",
-                "Happy",                                // Mood
+                Mood.Happy,                                // Mood
                 "Time travel worked",                   // Trigger text
                 null,                                   // Trigger image
-                "With a Crowd",                         // Social context
+                SocialContext.WithCrowd,                         // Social context
                 profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1888, 4, 10));    // Date
@@ -169,10 +169,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post profile1Post3 = new Post(
                 "Far away, in a bygone age, when the stories all were true",
-                "Confused",                             // Mood
+                Mood.Confused,                             // Mood
                 "Power Quest",                          // Trigger text
                 null,                                   // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 profile1.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2018, 4, 10));    // Date
@@ -191,10 +191,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post profile2Post1 = new Post(
                 "\"Get over here!\"",
-                "Scared",                               // Mood
+                Mood.Scared,                               // Mood
                 "Nightmare",                            // Trigger text
                 null,                                   // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 profile2.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
@@ -209,10 +209,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post profile2Post2 = new Post(
                 "Then he just pulled me by a freaking chain",
-                "Scared",                               // Mood
+                Mood.Scared,                               // Mood
                 null,                                   // Trigger text
                 "images/scorpijerk.jpg",                // Trigger image
-                "With a Group",                         // Social context
+                SocialContext.WithGroup,                         // Social context
                 profile2.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1990, 5, 8, 12, 45, 32));     // Date
@@ -244,10 +244,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post followeePost1 = new Post(
                 "The unicorns used to be good. Now they are forced to serve hell.",
-                "Scared",                               // Mood
+                Mood.Scared,                               // Mood
                 null,                                   // Trigger text
                 "images/dundeeInvasion.png",            // Trigger image
-                "With a Crowd",                         // Social context
+                SocialContext.WithCrowd,                         // Social context
                 followee.getId(),                               // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1991, 4, 11));    // Date
@@ -265,10 +265,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post follower1Post1 = new Post(
                 "Marveller! Change Leopardon!",
-                "Happy",                                // Mood
+                Mood.Happy,                                // Mood
                 null,                                   // Trigger text
                 "images/img38.png",                     // Trigger image
-                "With a Crowd",                         // Social context
+                SocialContext.WithCrowd,                         // Social context
                 follower1.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1991, 4, 11));    // Date
@@ -281,10 +281,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post follower1Post2 = new Post(
                 "I don't know what this is.",
-                "Scared",                               // Mood
+                Mood.Scared,                               // Mood
                 null,                                   // Trigger text
                 "images/spiderProtector.png",           // Trigger image
-                "Alone",                                // Social context
+                SocialContext.Alone,                                // Social context
                 follower1.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(1993, 4, 11));    // Date
@@ -304,10 +304,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
 
         Post follower2Post1 = new Post(
                 "Puppyzord ready",
-                "Angry",                                // Mood
+                Mood.Angry,                                // Mood
                 null,                                   // Trigger text
                 "images/021.png",                       // Trigger image
-                "With a Group",                         // Social context
+                SocialContext.WithGroup,                         // Social context
                 follower2.getId(),                              // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2021, 4, 11));    // Date
