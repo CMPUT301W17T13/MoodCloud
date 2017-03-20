@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.support.v7.widget.Toolbar;
 //mwschafe commented out unused import statements
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,60 +75,72 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     }
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
-    public Mood onRadioButtonClicked(View view) {
+    public Integer onRadioButtonClicked(View view) {
 
-        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        Mood mood = null;
+        int checked = ((RadioGroup) view).getCheckedRadioButtonId();
+        Integer mood = null;
 
-        switch(view.getId()) {
+        Log.i("selected", Integer.toString(view.getId()));
+        Log.i("selected", Integer.toString(R.id.confused_selected));
+
+        switch(checked) {
+
             case R.id.angry_selected:
-                if (checked)
+                mood = Mood.ANGRY;
+                break;
 
-                    mood = Mood.Angry;
             case R.id.confused_selected:
-                if (checked)
-                    mood = Mood.Confused;
+                mood = Mood.CONFUSED;
+                break;
+
             case R.id.scared_selected:
-                if (checked)
-                    mood = Mood.Scared;
+                mood = Mood.SCARED;
+                break;
 
             case R.id.happy_selected:
-                if (checked)
-                    mood = Mood.Happy;
+                mood = Mood.HAPPY;
+                break;
+
             case R.id.sad_selected:
-                if (checked)
-                    mood = Mood.Sad;
+                mood = Mood.SAD;
+                break;
+
             case R.id.surprised_selected:
-                if (checked)
-                    mood = Mood.Surprised;
+                mood = Mood.SURPRISED;
+                break;
+
             case R.id.ashamed_selected:
-                if (checked)
-                    mood = Mood.Ashamed;
+                mood = Mood.ASHAMED;
+                break;
+
             case R.id.disgusted_selected:
-                if (checked)
-                    mood = Mood.Disgusted;
+                mood = Mood.DISGUSTED;
+                break;
+
+            default:
+                throw new RuntimeException("fsdfdssdfsd");
         }
+
         return mood;
     }
 
-    public SocialContext onStatusButtonClicked(View view) {
+    public Integer onStatusButtonClicked(View view) {
 
-        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        SocialContext status = null;
+        int checked = ((RadioGroup) view).getCheckedRadioButtonId();
+        Integer status = null;
 
-        switch (view.getId()) {
+        switch (checked) {
             case R.id.alone_selected:
-                if (checked)
-
-                    status = SocialContext.Alone;
+                status = SocialContext.ALONE;
+                break;
             case R.id.crowd_selected:
-                if (checked)
-
-                    status = SocialContext.WithCrowd;
+                status = SocialContext.WITH_CROWD;
+                break;
             case R.id.group_selected:
-                if (checked)
-
-                    status = SocialContext.WithGroup;
+                status = SocialContext.WITH_GROUP;
+                break;
+            default:
+                throw new RuntimeException("other fsdfdssdfsd");
         }
         return status;
     }

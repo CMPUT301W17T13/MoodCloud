@@ -11,18 +11,18 @@ public class Post extends ElasticSearchObject {
     public static final String typeName = "post";
 
     private String text;
-    private Mood mood;
+    private int mood;
     private String triggerText;
     private String triggerImage;
-    private SocialContext context;
+    private int context;
     private String posterId;
     private Calendar date;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
-    public Post(String text, Mood mood, String triggerText, String triggerImage,
-                SocialContext context, String posterId, double[] location, Calendar date) {
+    public Post(String text, int mood, String triggerText, String triggerImage,
+                int context, String posterId, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
@@ -56,12 +56,12 @@ public class Post extends ElasticSearchObject {
         this.text = text;
     }
 
-    public Mood getMood() {
+    public int getMood() {
 
         return this.mood;
     }
 
-    public void setMood(Mood mood) {
+    public void setMood(int mood) {
 
         this.mood = mood;
     }
@@ -86,12 +86,12 @@ public class Post extends ElasticSearchObject {
         this.triggerImage = triggerImage;
     }
 
-    public SocialContext getContext() {
+    public int getContext() {
 
         return this.context;
     }
 
-    public void setContext(SocialContext context) {
+    public void setContext(int context) {
 
         this.context = context;
     }
