@@ -139,7 +139,7 @@ public class NewsFeedActivity extends AppCompatActivity {
             }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
-            holder.mMoodView.setText(post.getMood());
+            holder.mMoodView.setText(NullTools.toString(post.getMood()));
         }
 
         @Override

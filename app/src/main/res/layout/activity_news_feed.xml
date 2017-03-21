@@ -95,7 +95,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <ImageButton
-        android:id="@+id/addPost"
+        android:id="@+id/search"
         style="@android:style/Widget.Holo.Light.ImageButton"
         android:layout_width="48dp"
         android:layout_height="?attr/actionBarSize"
@@ -107,12 +107,12 @@
         app:srcCompat="@android:drawable/ic_search_category_default" />
 
     <ImageButton
-        android:id="@+id/search"
+        android:id="@+id/addPost"
         style="@android:style/Widget.Holo.Light.ImageButton"
         android:layout_width="48dp"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/addPost"
+        android:layout_toLeftOf="@+id/search"
         android:background="@color/colorPrimary"
         android:scaleType="fitCenter"
         android:tint="@android:color/background_light"
