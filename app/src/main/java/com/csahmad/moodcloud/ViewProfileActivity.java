@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -124,14 +125,14 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView mNameView;
-            public TextView mMoodView;
+            public ImageView mMoodView;
             public TextView mTextView;
 
             public ViewHolder(View v) {
                 super(v);
                 mTextView = (TextView) v.findViewById(R.id.postText);
                 mNameView = (TextView) v.findViewById(R.id.postName);
-                mMoodView = (TextView) v.findViewById(R.id.postMood);
+                mMoodView = (ImageView) v.findViewById(R.id.postMood);
             }
         }
 
@@ -161,7 +162,9 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
-            holder.mMoodView.setText(NullTools.toString(post.getMood()));
+            int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
+                    R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+            holder.mMoodView.setImageResource(draws[post.getMood()]);
         }
 
         @Override
