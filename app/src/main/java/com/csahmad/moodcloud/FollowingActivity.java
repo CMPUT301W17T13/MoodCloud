@@ -39,9 +39,24 @@ public class FollowingActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            ArrayList<Profile> mDataset = profileController.getFollowees(LocalData.getSignedInProfile(getApplicationContext()),0);
+            final ArrayList<Profile> mDataset = profileController.getFollowees(LocalData.getSignedInProfile(getApplicationContext()),0);
             mAdapter = new FollowingActivity.MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    Profile profile = mDataset.get(position);
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, ViewProfileActivity.class);
+                    intent.putExtra("ID",profile.getId());
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onLongClick(View view, int position) {
+
+                }
+            }));
         } catch (TimeoutException e){
             System.err.println("TimeoutException: " + e.getMessage());
         }

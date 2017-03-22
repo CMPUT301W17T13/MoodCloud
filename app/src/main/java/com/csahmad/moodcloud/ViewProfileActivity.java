@@ -15,9 +15,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 /** The activity for viewing the {@link Profile} of a user and the mood history of that user.
  * @author Taylor
@@ -29,6 +34,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private Profile profile;
     private ProfileController profileController = new ProfileController();
     private PostController postController = new PostController();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,59 @@ public class ViewProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        final Button followeditbutton = (Button) findViewById(R.id.followeditbutton);
+        if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
+            //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
+            //Button button = (Button) findViewById(R.id.followeditbutton);
+            followeditbutton.setText("See Follow Requests");
+            followeditbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view){
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, FollowRequestActivity.class);
+                    startActivity(intent);
+                }}
+            );
+        }else {
+            FollowController followController = new FollowController();
+            FollowRequestController followRequestController = new FollowRequestController();
+            if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
+                //Button button = (Button) findViewById(R.id.followeditbutton);
+                followeditbutton.setText("Followed");
+                followeditbutton.setClickable(FALSE);
+            } else {
+                if (followRequestController.requestExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
+                    //Button button = (Button) findViewById(R.id.followeditbutton);
+                    followeditbutton.setText("Request Sent");
+                    followeditbutton.setClickable(FALSE);
+                }else {
+                    //Button button = (Button) findViewById(R.id.followeditbutton);
+                    followeditbutton.setText("Send Follow Request");
+                    followeditbutton.setClickable(TRUE);
+                    followeditbutton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view){
+                            Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
+                            followeditbutton.setText("button clicked");
+                            /**FollowRequest followRequest = new FollowRequest(
+                             LocalData.getSignedInProfile(getApplicationContext()), profile);
+                             FollowRequestController followRequestController = new FollowRequestController();
+                             followRequestController.addOrUpdateFollows(followRequest);
+                             try {
+                             followRequestController.waitForTask();
+                             } catch (InterruptedException e) {}
+                             catch (TimeoutException e) {}
+                             catch (ExecutionException e) {}
+                             if (followRequestController.requestExists(LocalData.getSignedInProfile(getApplicationContext()),profile)) {
+                             Toast.makeText(getApplicationContext(), "made request", Toast.LENGTH_LONG).show();
+                             } else {
+                             Toast.makeText(getApplicationContext(), "at least it toasts", Toast.LENGTH_LONG).show();
+                             }
+                             //button.setText("Request Sent");
+                             //button.setClickable(FALSE);
+                             */}}
+                    );}
+            }}
 
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
