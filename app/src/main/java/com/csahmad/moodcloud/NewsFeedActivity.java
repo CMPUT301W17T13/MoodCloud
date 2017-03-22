@@ -43,7 +43,7 @@ public class NewsFeedActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            final ArrayList<Post> mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(),null,0);
+            final ArrayList<Post> mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
             mAdapter = new MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {
@@ -101,7 +101,7 @@ public class NewsFeedActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ViewProfileActivity.class);
-                intent.putExtra("ID",LocalData.getSignedInProfile().getId());
+                intent.putExtra("ID",LocalData.getSignedInProfile(getApplicationContext()).getId());
                 startActivity(intent);
             }
         });

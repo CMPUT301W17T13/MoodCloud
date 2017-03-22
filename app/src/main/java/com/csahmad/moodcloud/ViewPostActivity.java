@@ -54,7 +54,7 @@ public class ViewPostActivity extends AppCompatActivity {
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
             Button button = (Button) findViewById(R.id.button);
-            if (LocalData.getSignedInProfile().equals(profileController.getProfileFromID(post.getPosterId()))) {
+            if (LocalData.getSignedInProfile(getApplicationContext()).equals(profileController.getProfileFromID(post.getPosterId()))) {
                 //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
 
                 button.setText("Edit Post");
