@@ -2,10 +2,12 @@ package com.csahmad.moodcloud;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,6 +45,10 @@ public class ViewPostActivity extends AppCompatActivity {
             contextText.setText(contexts.get(post.getContext()));
             TextView triggerText = (TextView) findViewById(R.id.triggerText);
             triggerText.setText("Trigger: " + post.getTriggerText());
+            int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
+            R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+            ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
+            moodImage.setImageResource(draws[post.getMood()]);
         } catch (TimeoutException e){}
 
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
