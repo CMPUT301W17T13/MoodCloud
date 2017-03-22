@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
@@ -36,7 +37,8 @@ public class ViewPostActivity extends AppCompatActivity {
             TextView textText = (TextView) findViewById(R.id.textText);
             textText.setText(post.getText());
             TextView dateText = (TextView) findViewById(R.id.dateText);
-            dateText.setText(post.getDate().toString());
+            SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
+            dateText.setText(format1.format(post.getDate().getTime()));
             TextView contextText = (TextView) findViewById(R.id.contextText);
             ArrayList<String> contexts = new ArrayList<>();
             contexts.add("Alone");
