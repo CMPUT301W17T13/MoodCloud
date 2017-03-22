@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
+
+import static java.lang.Boolean.TRUE;
 
 /**
  * Created by Taylor on 2017-03-21.
@@ -31,7 +34,7 @@ public class ViewPostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String id = intent.getStringExtra("POST_ID");
         try {
-            Post post = postController.getPostFromId(id);
+            final Post post = postController.getPostFromId(id);
             TextView nameText = (TextView) findViewById(R.id.nameText);
             nameText.setText("Name: " + profileController.getProfileFromID(post.getPosterId()).getName());
             TextView textText = (TextView) findViewById(R.id.textText);
@@ -50,6 +53,23 @@ public class ViewPostActivity extends AppCompatActivity {
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
+            Button button = (Button) findViewById(R.id.button);
+            if (LocalData.getSignedInProfile().equals(profileController.getProfileFromID(post.getPosterId()))) {
+                //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
+
+                button.setText("Edit Post");
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                        intent.putExtra("POST_ID",post.getId());
+                        startActivity(intent);
+                    }}
+                );
+            } else {
+                button.setText("Follow Poster");
+            }
             moodImage.setImageResource(draws[post.getMood()]);
         } catch (TimeoutException e){}
 
