@@ -1,5 +1,6 @@
 package com.csahmad.moodcloud;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -56,7 +57,7 @@ public class SignInActivity extends AppCompatActivity {
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
                     if(account.getPassword().equals(passwordText.getText().toString())){
-                        localData.store(account.getProfile());
+                        localData.store(account.getProfile(), getApplicationContext());
                         Context context = view.getContext();
                         Intent intent = new Intent(context, NewsFeedActivity.class);
                         startActivity(intent);

@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        if (LocalData.getSignedInProfile() == null) {
+        if (LocalData.getSignedInProfile(getApplicationContext()) == null) {
 
             Intent intent = new Intent(this, SignInActivity.class);
             this.startActivity(intent);

@@ -1,5 +1,7 @@
 package com.csahmad.moodcloud;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -68,7 +70,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     Account account = new Account(usernameText.getText().toString(), passwordText.getText().toString(), profile);
                     accountController.addOrUpdateAccounts(account);
                     profile.setHomeProfile(TRUE);
-                    LocalData.store(profile);
+                    LocalData.store(profile, getApplicationContext());
                     //probably something to sign in the user
                     Context context = view.getContext();
                     Intent intent = new Intent(context, NewsFeedActivity.class);

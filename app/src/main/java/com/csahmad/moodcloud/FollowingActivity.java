@@ -39,7 +39,7 @@ public class FollowingActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            ArrayList<Profile> mDataset = profileController.getFollowees(LocalData.getSignedInProfile(),0);
+            ArrayList<Profile> mDataset = profileController.getFollowees(LocalData.getSignedInProfile(getApplicationContext()),0);
             mAdapter = new FollowingActivity.MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
         } catch (TimeoutException e){
@@ -82,7 +82,7 @@ public class FollowingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ViewProfileActivity.class);
-                intent.putExtra("ID",LocalData.getSignedInProfile().getId());
+                intent.putExtra("ID",LocalData.getSignedInProfile(getApplicationContext()).getId());
                 startActivity(intent);
             }
         });
