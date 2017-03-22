@@ -26,6 +26,7 @@ public class LocalData {
 
     // If null, try to read from filesystem
     private static Profile signedInProfile;
+    private static ArrayList<Post> userPosts;
     private static final String PROFILESAVE = "profile.sav";
     private static final String POSTSAVE = "posts.sav";
 
@@ -37,22 +38,17 @@ public class LocalData {
         return LocalData.signedInProfile;
     }
 
+    public static ArrayList<Post> getUserPosts(Context context){
+        tryReadPosts(context);
+       return userPosts;
+    }
+
     // Call getProfile and store result in file system and signedInProfile
     // update 2017-03-20 store posts of signedInProfile now that they are no longer
     // contained in the profile object
     public static void store(Profile profile, Context context) {
 
         PostController pc = new PostController();
-        ArrayList<Post> userPosts;
-        LocalData.signedInProfile = profile;
-
-        //get posts
-        try{
-            userPosts = pc.getPosts(profile, null, 0);
-        }
-        catch(TimeoutException e){
-            userPosts = new ArrayList<Post>();
-        }
 
         //Store data
         try{
@@ -63,13 +59,7 @@ public class LocalData {
             gson.toJson(profile, out);
             out.flush();
             fos.close();
-            //Store Posts to POSTSAVE file
-            fos = context.openFileOutput(POSTSAVE, Context.MODE_PRIVATE);
-            out = new BufferedWriter(new OutputStreamWriter(fos));
-            gson = new Gson();
-            gson.toJson(userPosts, out);
-            out.flush();
-            fos.close();
+
 
         }
         catch (FileNotFoundException e) {
@@ -104,6 +94,54 @@ public class LocalData {
         }
         return true;
     }
+
+    public static void store(ArrayList<Post> userPosts, Context context){
+        //Store Posts to POSTSAVE file
+
+        try{
+            //Store Profile to PROFILESAVE file
+            FileOutputStream fos = context.openFileOutput(POSTSAVE, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(userPosts, out);
+            out.flush();
+            fos.close();
+
+
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+
+    }
+
+    public static boolean tryReadPosts(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(POSTSAVE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+
+            Type listType = new TypeToken<Profile>() {
+            }.getType();
+            //userPosts.addAll((ArrayList<Post>) gson.fromJson(in, listType));
+            userPosts = gson.fromJson(in, new TypeToken<ArrayList<Post>>(){}.getType());
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            return false;
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        return true;
+    }
+
 
 
 }
