@@ -42,7 +42,7 @@ public class ViewPostActivity extends AppCompatActivity {
             final Profile profile = profileController.getProfileFromID(post.getPosterId());
             TextView nameText = (TextView) findViewById(R.id.nameText);
             nameText.setText("Name: " + profile.getName());
-            TextView textText = (TextView) findViewById(R.id.textText);
+            final TextView textText = (TextView) findViewById(R.id.textText);
             textText.setText(post.getText());
             TextView dateText = (TextView) findViewById(R.id.dateText);
             SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
@@ -90,21 +90,29 @@ public class ViewPostActivity extends AppCompatActivity {
                         button.setClickable(TRUE);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View view){
+                            public void onClick(View view) {
                                 //Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
                                 //button.setText("button clicked");
                                 FollowRequest followRequest = new FollowRequest(
-                                 LocalData.getSignedInProfile(getApplicationContext()), profile);
-                                 FollowRequestController followRequestController = new FollowRequestController();
-                                 followRequestController.addOrUpdateFollows(followRequest);
-                                 try {
-                                 followRequestController.waitForTask();
-                                 } catch (InterruptedException e) {}
-                                 catch (TimeoutException e) {}
-                                 catch (ExecutionException e) {}
-                                 button.setText("Request Sent");
-                                 button.setClickable(FALSE);
-                                 }}
+                                        LocalData.getSignedInProfile(getApplicationContext()), profile);
+                                FollowRequestController followRequestController = new FollowRequestController();
+                                followRequestController.addOrUpdateFollows(followRequest);
+                                //textText.setText(followRequest.getId().toString());
+                                try {
+                                    followRequestController.waitForTask();
+                                    textText.setText(followRequest.getId().toString());
+                                    if (followRequestController.getFollowRequestFromID(followRequest.getId()).equals(followRequest)) {
+                                        button.setText("Request Sent");
+                                    } else {
+                                        button.setText("Request Not Sent");
+                                    }
+                                    button.setClickable(FALSE);
+
+                                } catch (InterruptedException e) {
+                                } catch (TimeoutException e) {
+                                } catch (ExecutionException e) {
+                                }
+                            }}
                         );}}
             }
             moodImage.setImageResource(draws[post.getMood()]);
