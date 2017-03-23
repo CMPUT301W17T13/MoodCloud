@@ -16,10 +16,16 @@ public class FollowRequest extends ElasticSearchObject {
     private final Profile follower;
     private final Profile followee;
 
+    private String followerId;
+    private String followeeId;
+
     public FollowRequest(Profile follower, Profile followee) {
 
         this.follower = follower;
         this.followee = followee;
+
+        this.followerId = follower.getId();
+        this.followeeId = followee.getId();
     }
 
     @Override

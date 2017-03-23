@@ -451,6 +451,9 @@ public class ElasticSearchController {
         ElasticSearchController.makeMapping("follow",
                 MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
 
+        ElasticSearchController.makeMapping("followRequest",
+                MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+
         ElasticSearchController.makeMapping("post",
                 MappingBuilder.buildNotAnalyzed("posterId"));
     }
