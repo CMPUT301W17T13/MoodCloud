@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 // TODO: 2017-03-18 Fix profile IDs
@@ -127,8 +128,49 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         ArrayList<Post> results = controller.getFolloweePosts(follower, filter, 0);
         assertEquals(results, expected);
 
+        Calendar currentDate = GregorianCalendar.getInstance();
+        int currentYear = currentDate.get(Calendar.YEAR);
+        int currentMonth = currentDate.get(Calendar.MONTH);
+        int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
+
+        Calendar twoWeeksAgo = GregorianCalendar.getInstance();
+        twoWeeksAgo.add(Calendar.WEEK_OF_YEAR, -2);
+        int twoWeeksAgoYear = twoWeeksAgo.get(Calendar.YEAR);
+        int twoWeeksAgoMonth = twoWeeksAgo.get(Calendar.MONTH);
+        int twoWeeksAgoDay = twoWeeksAgo.get(Calendar.DAY_OF_MONTH);
+
+        Post followee1post5 = new Post(    // 0
+                "Within week",
+                Mood.CONFUSED,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(currentYear, currentMonth, currentDay));
+
+        Post followee1post6 = new Post(    // 0
+                "Not within week",
+                Mood.CONFUSED,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(twoWeeksAgoYear, twoWeeksAgoMonth, twoWeeksAgoDay));
+
+        filter.setMaxTimeUnitsAgo(1);
+
+        expected.clear();
+        expected.add(followee1post5);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(results, expected);
+
         profileController.deleteProfiles(follower, followee1);
         followController.deleteFollows(follow);
+        controller.deletePosts(followerPost, followee1post1, followee1post2, followee1post3,
+                followee1post4, followee1post5, followee1post6);
     }
 
     /*

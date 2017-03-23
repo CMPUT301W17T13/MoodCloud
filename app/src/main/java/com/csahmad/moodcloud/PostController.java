@@ -116,7 +116,8 @@ public class PostController {
         ArrayList<Post> result = this.elasticSearch.getNext(0);
         this.elasticSearch.setFilter(null);
 
-        return result.get(0);
+        if (result.size() > 0) return result.get(0);
+        return null;
     }
 
     public void deletePosts(Post... posts) {
