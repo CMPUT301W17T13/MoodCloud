@@ -46,6 +46,11 @@ public class PostController {
 
     public ArrayList<Post> getPosts(SearchFilter filter, int from) throws TimeoutException {
 
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.sortByDate();
+
         this.elasticSearch.setFilter(filter);
         ArrayList<Post> result = this.elasticSearch.getNext(from);
         this.elasticSearch.setFilter(null);
@@ -77,7 +82,9 @@ public class PostController {
             filter = new SearchFilter();
 
         this.elasticSearch.setFilter(filter);
-        filter.addFieldValue(new FieldValue("posterId", profile.getId()));
+
+        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
+                .sortByDate();
 
         ArrayList<Post> result = this.elasticSearch.getNext(0);
         this.elasticSearch.setFilter(null);
