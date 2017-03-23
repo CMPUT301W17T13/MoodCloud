@@ -42,10 +42,10 @@ public class LocalDataTest extends ActivityInstrumentationTestCase2<MainActivity
         double[] location = {0.0d, 0.0d, 0.0d};
         Post post = new Post(    // 0
                 "Asgard's always been my home, but I'm of different blood.",
-                Mood.Angry,                                // Mood
+                Mood.ANGRY,                                // Mood
                 "Thor",                                 // Trigger text
                 null,                                   // Trigger image
-                SocialContext.Alone,                                // Social context
+                SocialContext.ALONE,                                // Social context
                 "fdsfsdf",                    // Poster ID
                 location,                               // Location
                 new GregorianCalendar(900, 2, 14));
