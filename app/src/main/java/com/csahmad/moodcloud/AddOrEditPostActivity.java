@@ -27,8 +27,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
 
-
-        final PostController postController = new PostController();
+        //PostController postController = new PostController();
+        //Post oldPost = postController.getPostFromId();
+        //String oldExplannation = oldPost.getText();
+        //String oldTrigger = oldPost.getTriggerText();
+        //
 
         final EditText textExplanation = (EditText) findViewById(R.id.body);
         final EditText textTrigger = (EditText) findViewById(R.id.trigger);
@@ -36,10 +39,14 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
         final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
 
+        //if (id == null) {
+            //setTitle("New Post");
+        //} else{
+            //setTile("Edit Post");
 
 
 
-
+        //}
         Button postButton = (Button) findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -144,4 +151,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         }
         return status;
     }
+
+    //public
+    //covert the mood and status back to button selection.
 }
