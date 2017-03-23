@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 /**
  * Get {@link FollowRequest}s from elastic search or add/update {@link FollowRequest}s using
  * elasticsearch.
@@ -28,6 +31,19 @@ public class FollowRequestController {
     public void waitForTask() throws InterruptedException, ExecutionException, TimeoutException {
 
         this.elasticSearch.waitForTask();
+    }
+
+    public boolean requestExists(Profile follower, Profile followee) {
+        try {
+            ArrayList<FollowRequest> followers = getFollowRequests(followee, 0);
+            for (int i=0; i<followers.size(); i++){
+                if (follower.equals(followers.get(i).getFollower())){
+                    return TRUE;
+                }
+            }
+            return FALSE;
+        } catch (TimeoutException e){}
+        return FALSE;
     }
 
     public ArrayList<FollowRequest> getFollowRequests(Profile followee, int from)

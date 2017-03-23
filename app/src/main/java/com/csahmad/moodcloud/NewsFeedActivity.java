@@ -45,6 +45,7 @@ public class NewsFeedActivity extends AppCompatActivity {
 
         try{
             final ArrayList<Post> mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
+            //final ArrayList<Post> mDataset = postController.getPosts(null,0);
             mAdapter = new MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {

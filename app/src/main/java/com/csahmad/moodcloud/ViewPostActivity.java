@@ -10,11 +10,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 /**
@@ -25,6 +28,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
     PostController postController = new PostController();
     ProfileController profileController = new ProfileController();
+   //FollowRequestController followRequestController = new FollowRequestController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +39,10 @@ public class ViewPostActivity extends AppCompatActivity {
         String id = intent.getStringExtra("POST_ID");
         try {
             final Post post = postController.getPostFromId(id);
+            final Profile profile = profileController.getProfileFromID(post.getPosterId());
             TextView nameText = (TextView) findViewById(R.id.nameText);
-            nameText.setText("Name: " + profileController.getProfileFromID(post.getPosterId()).getName());
-            TextView textText = (TextView) findViewById(R.id.textText);
+            nameText.setText("Name: " + profile.getName());
+            final TextView textText = (TextView) findViewById(R.id.textText);
             textText.setText(post.getText());
             TextView dateText = (TextView) findViewById(R.id.dateText);
             SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
@@ -53,8 +58,8 @@ public class ViewPostActivity extends AppCompatActivity {
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
-            Button button = (Button) findViewById(R.id.button);
-            if (LocalData.getSignedInProfile(getApplicationContext()).equals(profileController.getProfileFromID(post.getPosterId()))) {
+            final Button button = (Button) findViewById(R.id.button);
+            if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
                 //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
 
                 button.setText("Edit Post");
@@ -68,7 +73,47 @@ public class ViewPostActivity extends AppCompatActivity {
                     }}
                 );
             } else {
-                button.setText("Follow Poster");
+                FollowController followController = new FollowController();
+                FollowRequestController followRequestController = new FollowRequestController();
+                if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
+                    //Button button = (Button) findViewById(R.id.followeditbutton);
+                    button.setText("Followed");
+                    button.setClickable(FALSE);
+                } else {
+                    if (followRequestController.requestExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
+                        //Button button = (Button) findViewById(R.id.followeditbutton);
+                        button.setText("Request Sent");
+                        button.setClickable(FALSE);
+                    }else {
+                        //Button button = (Button) findViewById(R.id.followeditbutton);
+                        button.setText("Send Follow Request");
+                        button.setClickable(TRUE);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
+                                //button.setText("button clicked");
+                                FollowRequest followRequest = new FollowRequest(
+                                        LocalData.getSignedInProfile(getApplicationContext()), profile);
+                                FollowRequestController followRequestController = new FollowRequestController();
+                                followRequestController.addOrUpdateFollows(followRequest);
+                                //textText.setText(followRequest.getId().toString());
+                                try {
+                                    followRequestController.waitForTask();
+                                    //textText.setText(followRequest.getId().toString());
+                                    if (followRequestController.getFollowRequestFromID(followRequest.getId()).equals(followRequest)) {
+                                        button.setText("Request Sent");
+                                    } else {
+                                        button.setText("Request Not Sent");
+                                    }
+                                    button.setClickable(FALSE);
+
+                                } catch (InterruptedException e) {
+                                } catch (TimeoutException e) {
+                                } catch (ExecutionException e) {
+                                }
+                            }}
+                        );}}
             }
             moodImage.setImageResource(draws[post.getMood()]);
         } catch (TimeoutException e){}

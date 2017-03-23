@@ -63,7 +63,7 @@ public class ProfileController {
         ArrayList<Profile> followees = new ArrayList<Profile>();
         FollowController controller = new FollowController();
         ArrayList<Follow> follows = controller.getFollowees(follower, from);
-        for (Follow follow: follows) followees.add(follow.getFollower());
+        for (Follow follow: follows) followees.add(follow.getFollowee());
         return followees;
     }
 
