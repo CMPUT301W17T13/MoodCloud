@@ -100,7 +100,7 @@ public class ViewPostActivity extends AppCompatActivity {
                                 //textText.setText(followRequest.getId().toString());
                                 try {
                                     followRequestController.waitForTask();
-                                    textText.setText(followRequest.getId().toString());
+                                    //textText.setText(followRequest.getId().toString());
                                     if (followRequestController.getFollowRequestFromID(followRequest.getId()).equals(followRequest)) {
                                         button.setText("Request Sent");
                                     } else {

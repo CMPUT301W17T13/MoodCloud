@@ -120,6 +120,7 @@
         android:layout_alignEnd="@+id/moodImage"
         android:layout_marginTop="16dp"
         android:layout_below="@+id/moodImage"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:text="Button" />
 
 </RelativeLayout>

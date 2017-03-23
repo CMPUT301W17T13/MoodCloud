@@ -76,11 +76,13 @@ public class FollowRequestActivity extends AppCompatActivity {
             public TextView mNameView;
             public Button accept;
             public Button decline;
+            public TextView result;
             public ViewHolder(View v) {
                 super(v);
                 accept = (Button) v.findViewById(R.id.accept);
                 decline = (Button) v.findViewById(R.id.decline);
                 mNameView = (TextView) v.findViewById(R.id.followerName);
+                result = (TextView) v.findViewById(R.id.result);
             }
         }
 
@@ -111,12 +113,18 @@ public class FollowRequestActivity extends AppCompatActivity {
                     FollowController followController = new FollowController();
                     followController.addOrUpdateFollows(follow);
                     followRequestController.deleteFollowRequests(followRequest);
+                    holder.accept.setVisibility(View.GONE);
+                    holder.decline.setVisibility(View.GONE);
+                    holder.result.setText("Request Accepted");
                 }
             });
             holder.decline.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
                     followRequestController.deleteFollowRequests(followRequest);
+                    holder.accept.setVisibility(View.GONE);
+                    holder.decline.setVisibility(View.GONE);
+                    holder.result.setText("Request Declined");
                 }
             });
         }
