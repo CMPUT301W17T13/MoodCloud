@@ -113,4 +113,14 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/moodImage"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/moodImage"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="Button" />
+
 </RelativeLayout>

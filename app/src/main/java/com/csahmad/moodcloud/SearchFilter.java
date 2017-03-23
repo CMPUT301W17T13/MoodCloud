@@ -23,8 +23,8 @@ public class SearchFilter {
     private String distanceUnits = "km";
     private String locationField = "location";
 
-    private String sortByField;
-    private SortOrder sortOrder = SortOrder.Ascending;
+    private ArrayList<String> sortByFields;
+    private SortOrder sortOrder = SortOrder.Descending;
 
     // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
@@ -35,19 +35,36 @@ public class SearchFilter {
                 this.maxDistance, nonEmptyFields);
     }
 
-    public boolean hasSortByField() {
+    public SearchFilter sortByDate() {
 
-        return this.sortByField != null;
+        ArrayList<String> dateFields = new ArrayList<String>();
+
+        dateFields.add("year");
+        dateFields.add("month");
+        dateFields.add("dayOfMonth");
+        dateFields.add("hourOfDay");
+        dateFields.add("minute");
+        dateFields.add("second");
+
+        this.setSortByFields(dateFields);
+        this.setSortOrder(SortOrder.Descending);
+
+        return this;
     }
 
-    public String getSortByField() {
+    public boolean hasSortByFields() {
 
-        return this.sortByField;
+        return !NullTools.allNullOrEmpty(this.sortByFields);
     }
 
-    public SearchFilter setSortByField(String field) {
+    public ArrayList<String> getSortByFields() {
 
-        this.sortByField = field;
+        return this.sortByFields;
+    }
+
+    public SearchFilter setSortByFields(ArrayList<String> fields) {
+
+        this.sortByFields = fields;
         return this;
     }
 

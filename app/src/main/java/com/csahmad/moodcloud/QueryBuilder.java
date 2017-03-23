@@ -45,9 +45,9 @@ public class QueryBuilder {
             query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
         }
 
-        if (filter.hasSortByField()) {
+        if (filter.hasSortByFields()) {
             query += ",\n";
-            query += QueryBuilder.buildSortBy(filter.getSortByField(), filter.getSortOrder());
+            query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
         }
 
         query += "\n}";
@@ -55,25 +55,39 @@ public class QueryBuilder {
         return query;
     }
 
-    public static String buildSortBy(String field, SortOrder order) {
+    public static String buildSortBy(ArrayList<String> fields, SortOrder order) {
 
-        if (field == null || order == null)
+        if (fields == null || order == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "\"sort\": [ { \"" + field + "\": { \"order\": \"";
+        String query = "\"sort\": [ ";
 
-        switch (order) {
+        ArrayList<String> sortByList = new ArrayList<String>();
+        String sortByItem;
 
-            case Ascending:
-                query += "asc";
-                break;
+        for (String field: fields) {
 
-            case Descending:
-                query += "desc";
-                break;
+            sortByItem = "{ \"" + field + "\": { \"order\": \"";
+
+            switch (order) {
+
+                case Ascending:
+                    sortByItem += "asc";
+                    break;
+
+                case Descending:
+                    sortByItem += "desc";
+                    break;
+            }
+
+            sortByItem += "\", \"ignore_unmapped\": true } }";
+
+            sortByList.add(sortByItem);
         }
 
-        query += "\" } } ]";
+        query += TextUtils.join(",\n", sortByList);
+
+        query += " ]";
         return query;
     }
 

@@ -51,7 +51,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Profile profile = LocalData.getSignedInProfile();
+                Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                 Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
                         textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
                         profile.getId() ,null, Calendar.getInstance());
