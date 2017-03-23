@@ -62,8 +62,7 @@ public class PostController {
                                             SearchFilter filter, int from) throws TimeoutException {
 
         ProfileController controller = new ProfileController();
-
-        return this.getLatestPosts(controller.getFolloweesWithPosts(follower, from), filter);
+        return this.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
     // Note: latest posts only
@@ -71,8 +70,7 @@ public class PostController {
                                                    int from) throws TimeoutException {
 
         ProfileController controller = new ProfileController();
-
-        return this.getLatestPosts(controller.getFollowersWithPosts(followee, from), filter);
+        return this.getLatestPosts(controller.getFollowers(followee, from), filter);
     }
 
     public ArrayList<Post> getPosts(Profile profile, SearchFilter filter, int from)
@@ -112,7 +110,8 @@ public class PostController {
             filter = new SearchFilter();
 
         this.elasticSearch.setFilter(filter);
-        filter.addFieldValue(new FieldValue("posterId", profile.getId()));
+        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
+                .sortByDate();
 
         ArrayList<Post> result = this.elasticSearch.getNext(0);
         this.elasticSearch.setFilter(null);

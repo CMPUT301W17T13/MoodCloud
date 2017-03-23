@@ -44,6 +44,93 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         ;
     }
 
+    public void testGetFolloweePostsWithFilter() throws Exception {
+
+        PostController controller = PostControllerTest.getController();
+        ProfileController profileController = new ProfileController();
+        profileController.setTimeout(PostControllerTest.timeout);
+        FollowController followController = new FollowController();
+        followController.setTimeout(PostControllerTest.timeout);
+
+        Profile follower = new Profile("Jane the Follower");
+        profileController.addOrUpdateProfiles(follower);
+        profileController.waitForTask();
+
+        Profile followee1 = new Profile("Jill the Followee");
+        profileController.addOrUpdateProfiles(followee1);
+        profileController.waitForTask();
+
+        Follow follow = new Follow(follower, followee1);
+        followController.addOrUpdateFollows(follow);
+        followController.waitForTask();
+
+        double[] location = {0.0d, 0.0d, 0.0d};
+
+        Post followee1post1 = new Post(    // 0
+                "I am angry",
+                Mood.ANGRY,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(900, 2, 14));
+
+        Post followee1post2 = new Post(    // 0
+                "I am sad",
+                Mood.SAD,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(900, 2, 14));
+
+        Post followee1post3 = new Post(    // 0
+                "I am angry again",
+                Mood.ANGRY,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(900, 2, 15));
+
+        Post followee1post4 = new Post(    // 0
+                "I am confused",
+                Mood.CONFUSED,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee1.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(901, 2, 15));
+
+        controller.addOrUpdatePosts(followee1post1, followee1post2, followee1post3, followee1post4);
+        controller.waitForTask();
+
+        Post followerPost = new Post(    // 0
+                "I am a follower post",
+                Mood.ANGRY,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                follower.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(3000, 2, 15));
+
+        SearchFilter filter = new SearchFilter().setMood(Mood.ANGRY);
+
+        ArrayList<Post> expected = new ArrayList<Post>();
+        expected.add(followee1post3);
+
+        ArrayList<Post> results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(results, expected);
+
+        profileController.deleteProfiles(follower, followee1);
+        followController.deleteFollows(follow);
+    }
+
     /*
 
     public void testGetLatestPostNoFilter() throws Exception {

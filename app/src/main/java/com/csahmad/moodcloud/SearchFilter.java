@@ -26,6 +26,9 @@ public class SearchFilter {
     private ArrayList<String> sortByFields;
     private SortOrder sortOrder = SortOrder.Descending;
 
+    private Integer mood;
+    private Integer context;
+
     // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
 
@@ -33,6 +36,38 @@ public class SearchFilter {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance, nonEmptyFields);
+    }
+
+    public boolean hasContext() {
+
+        return this.context != null;
+    }
+
+    public int getContext() {
+
+        return this.context;
+    }
+
+    public SearchFilter setContext(int context) {
+
+        this.context = context;
+        return this;
+    }
+
+    public boolean hasMood() {
+
+        return this.mood != null;
+    }
+
+    public int getMood() {
+
+        return this.mood;
+    }
+
+    public SearchFilter setMood(int mood) {
+
+        this.mood = mood;
+        return this;
     }
 
     public SearchFilter sortByDate() {
