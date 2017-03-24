@@ -29,16 +29,6 @@ public class ProfileController {
         this.elasticSearch.waitForTask();
     }
 
-    public ArrayList<Profile> getFollowersWithPosts(Profile followee, int from)
-            throws TimeoutException {
-
-        ArrayList<Profile> followers = new ArrayList<Profile>();
-        FollowController controller = new FollowController();
-        ArrayList<Follow> follows = controller.getFollowersWithPosts(followee, from);
-        for (Follow follow: follows) followers.add(follow.getFollower());
-        return followers;
-    }
-
     public ArrayList<Profile> getFollowers(Profile followee, int from) throws TimeoutException {
 
         ArrayList<Profile> followers = new ArrayList<Profile>();
@@ -46,16 +36,6 @@ public class ProfileController {
         ArrayList<Follow> follows = controller.getFollowers(followee, from);
         for (Follow follow: follows) followers.add(follow.getFollower());
         return followers;
-    }
-
-    public ArrayList<Profile> getFolloweesWithPosts(Profile follower, int from)
-            throws TimeoutException {
-
-        ArrayList<Profile> followees = new ArrayList<Profile>();
-        FollowController controller = new FollowController();
-        ArrayList<Follow> follows = controller.getFolloweesWithPosts(follower, from);
-        for (Follow follow: follows) followees.add(follow.getFollower());
-        return followees;
     }
 
     public ArrayList<Profile> getFollowees(Profile follower, int from) throws TimeoutException {

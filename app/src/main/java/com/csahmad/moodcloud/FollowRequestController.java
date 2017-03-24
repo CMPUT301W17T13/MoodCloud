@@ -34,16 +34,23 @@ public class FollowRequestController {
     }
 
     public boolean requestExists(Profile follower, Profile followee) {
+
         try {
-            ArrayList<FollowRequest> followers = getFollowRequests(followee, 0);
-            for (int i=0; i<followers.size(); i++){
-                if (follower.equals(followers.get(i).getFollower())){
-                    return TRUE;
-                }
-            }
-            return FALSE;
-        } catch (TimeoutException e){}
-        return FALSE;
+
+            SearchFilter filter = new SearchFilter()
+                    .addFieldValue(new FieldValue("followerId", follower.getId()))
+                    .addFieldValue(new FieldValue("followeeId", followee.getId()));
+
+            this.elasticSearch.setFilter(filter);
+
+            ArrayList<FollowRequest> results = this.getFollowRequests(filter, 0);
+
+            if (results.size() > 0) return true;
+            return false;
+        }
+
+        catch (TimeoutException e) {}
+        return false;
     }
 
     public ArrayList<FollowRequest> getFollowRequests(Profile followee, int from)
@@ -65,7 +72,7 @@ public class FollowRequestController {
         return this.elasticSearch.getById(id);
     }
 
-    public ArrayList<FollowRequest> getFollows(SearchFilter filter, int from)
+    public ArrayList<FollowRequest> getFollowRequests(SearchFilter filter, int from)
             throws TimeoutException {
 
         this.elasticSearch.setFilter(filter);
