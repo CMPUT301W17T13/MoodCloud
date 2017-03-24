@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
@@ -26,9 +27,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
+        PostController postController = new PostController();
 
-        //PostController postController = new PostController();
-        //Post oldPost = postController.getPostFromId();
+
+        //Post oldPost = postController.getPostFromId(post.get);
         //String oldExplannation = oldPost.getText();
         //String oldTrigger = oldPost.getTriggerText();
         //
