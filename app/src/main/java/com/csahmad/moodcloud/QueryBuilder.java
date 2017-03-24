@@ -46,7 +46,17 @@ public class QueryBuilder {
                     QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
                             filter.getLocationField(), filter.getDistanceUnits()));
 
-        query += TextUtils.join(",\n", components);
+        String joined = TextUtils.join("},\n{", components);
+
+        if (!joined.equals("")) {
+            query += "\"bool\": {\n" +
+                "\"must\": [\n" +
+                "{\n" +
+                joined + "\n" +
+                "}\n" +
+                "]\n" +
+                "}";
+        }
 
         query += "\n}";
 
@@ -125,9 +135,6 @@ public class QueryBuilder {
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "\"bool\": {\n" +
-                "\"must\": [";
-
         ArrayList<String> fieldValueStrings = new ArrayList<String>();
         String fieldValueString;
 
@@ -139,10 +146,7 @@ public class QueryBuilder {
             fieldValueStrings.add(fieldValueString);
         }
 
-        query += TextUtils.join(",\n", fieldValueStrings);
-        query += "\n]\n}";
-
-        return  query;
+        return TextUtils.join("},\n{", fieldValueStrings);
     }
 
     // Adds quotes to value if string
@@ -156,10 +160,8 @@ public class QueryBuilder {
         if (value instanceof String)
             stringValue = "\"" + stringValue + "\"";
 
-        return "{\n" +
-                "\"term\": {\n" +
+        return "\"term\": {\n" +
                 "\"" + field + "\": " + stringValue + "\n" +
-                "}\n" +
                 "}";
     }
 

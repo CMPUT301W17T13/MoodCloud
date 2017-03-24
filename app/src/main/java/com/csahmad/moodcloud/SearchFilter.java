@@ -16,7 +16,7 @@ public class SearchFilter {
 
     private Integer maxTimeUnitsAgo;
     private String timeUnits = "w";
-    private String dateField = "date";
+    private String dateField = "dateString";
 
     private Double maxDistance;
     private SimpleLocation location;
