@@ -120,6 +120,9 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 location,                               // Location
                 new GregorianCalendar(3000, 2, 15));
 
+        controller.addOrUpdatePosts(followerPost);
+        controller.waitForTask();
+
         SearchFilter filter = new SearchFilter().setMood(Mood.ANGRY);
 
         ArrayList<Post> expected = new ArrayList<Post>();
@@ -159,7 +162,10 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 location,                               // Location
                 new GregorianCalendar(twoWeeksAgoYear, twoWeeksAgoMonth, twoWeeksAgoDay));
 
-        filter.setMaxTimeUnitsAgo(1);
+        controller.addOrUpdatePosts(followee1post5, followee1post6);
+        controller.waitForTask();
+
+        filter = new SearchFilter().setMaxTimeUnitsAgo(1);
 
         expected.clear();
         expected.add(followee1post5);
