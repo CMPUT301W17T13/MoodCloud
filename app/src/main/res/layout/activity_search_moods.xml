@@ -6,28 +6,57 @@
     android:layout_height="match_parent"
     tools:context="com.csahmad.moodcloud.SearchMoods">
 
-    <android.support.design.widget.AppBarLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar3"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:title="Search Moods"
+            app:titleMarginStart="120dp"
+            app:titleTextColor="@android:color/background_light" />
 
-    </android.support.design.widget.AppBarLayout>
+        <Button
+            android:id="@+id/OnlyFollowingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Following"
+            android:layout_below="@+id/toolbar3"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="19dp" />
 
-    <include layout="@layout/content_search_moods" />
+        <Button
+            android:id="@+id/MyMoodsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/OnlyFollowingButton"
+            android:layout_below="@+id/OnlyFollowingButton"
+            android:layout_marginTop="12dp"
+            android:text="My Moods" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <Button
+            android:id="@+id/EveryoneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/MyMoodsButton"
+            android:layout_below="@+id/MyMoodsButton"
+            android:layout_marginTop="17dp"
+            android:text="Everyone" />
 
+        <Button
+            android:id="@+id/RecentWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/EveryoneButton"
+            android:layout_below="@+id/EveryoneButton"
+            android:layout_marginTop="20dp"
+            android:text="Recent Week" />
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
