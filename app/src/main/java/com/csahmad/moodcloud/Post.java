@@ -1,5 +1,6 @@
 package com.csahmad.moodcloud;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 //mwschafe commented unused import statement
 //import io.searchbox.annotations.JestId;
@@ -17,6 +18,7 @@ public class Post extends ElasticSearchObject {
     private int context;
     private String posterId;
     private Calendar date;
+    private String dateString;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
@@ -32,6 +34,9 @@ public class Post extends ElasticSearchObject {
         this.posterId = posterId;
         this.location = location;
         this.date = date;
+
+        SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
+        this.dateString = format.format(date.getTime());
     }
 
     @Override

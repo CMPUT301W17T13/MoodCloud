@@ -23,8 +23,18 @@ public class QueryBuilder {
             components.add(
                     QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields()));
 
-        if (filter.hasFieldValues())
-            components.add(QueryBuilder.buildExactFieldValues(filter.getFieldValues()));
+        if (filter.hasFieldValues()) {
+
+            ArrayList<FieldValue> fieldValues = filter.getFieldValues();
+
+            if (filter.hasMood())
+                fieldValues.add(new FieldValue("mood", filter.getMood()));
+
+            if (filter.hasContext())
+                fieldValues.add(new FieldValue("context", filter.getContext()));
+
+            components.add(QueryBuilder.buildExactFieldValues(fieldValues));
+        }
 
         if (filter.hasTimeUnitsAgo())
             components.add(
@@ -36,7 +46,17 @@ public class QueryBuilder {
                     QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
                             filter.getLocationField(), filter.getDistanceUnits()));
 
-        query += TextUtils.join(",\n", components);
+        String joined = TextUtils.join("},\n{", components);
+
+        if (!joined.equals("")) {
+            query += "\"bool\": {\n" +
+                "\"must\": [\n" +
+                "{\n" +
+                joined + "\n" +
+                "}\n" +
+                "]\n" +
+                "}";
+        }
 
         query += "\n}";
 
@@ -115,10 +135,6 @@ public class QueryBuilder {
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "\"constant_score\": {\n" +
-                "\"filter\": {\n" +
-                "\"term\": {\n";
-
         ArrayList<String> fieldValueStrings = new ArrayList<String>();
         String fieldValueString;
 
@@ -130,11 +146,7 @@ public class QueryBuilder {
             fieldValueStrings.add(fieldValueString);
         }
 
-        query += TextUtils.join(",\n", fieldValueStrings);
-        query += "\n";
-        query += "}\n}\n}";
-
-        return  query;
+        return TextUtils.join("},\n{", fieldValueStrings);
     }
 
     // Adds quotes to value if string
@@ -148,7 +160,9 @@ public class QueryBuilder {
         if (value instanceof String)
             stringValue = "\"" + stringValue + "\"";
 
-        return "\"" + field + "\": " + stringValue;
+        return "\"term\": {\n" +
+                "\"" + field + "\": " + stringValue + "\n" +
+                "}";
     }
 
     public static String buildMultiMatch(ArrayList<String> keywords, ArrayList<String> fields) {

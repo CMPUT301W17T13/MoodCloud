@@ -17,6 +17,46 @@ public class FollowRequestControllerTest extends ActivityInstrumentationTestCase
         super(MainActivity.class);
     }
 
+    public void testRequestExists() throws Exception {
+
+        FollowRequestController controller = FollowRequestControllerTest.getController();
+        ProfileController profileController = new ProfileController();
+        profileController.setTimeout(FollowRequestControllerTest.timeout);
+
+        Profile follower = new Profile("The Follower");
+        Profile followee = new Profile("The Followee");
+
+        Profile wrongFollower = new Profile("Wrong Follower");
+        Profile wrongFollowee = new Profile("Wrong Followee");
+
+        profileController.addOrUpdateProfiles(follower, followee, wrongFollower, wrongFollowee);
+        profileController.waitForTask();
+
+        boolean exists = controller.requestExists(follower, followee);
+        assertFalse(exists);
+
+        FollowRequest request1 = new FollowRequest(follower, wrongFollowee);
+        controller.addOrUpdateFollows(request1);
+        controller.waitForTask();
+        exists = controller.requestExists(follower, followee);
+        assertFalse(exists);
+
+        FollowRequest request2 = new FollowRequest(wrongFollower, followee);
+        controller.addOrUpdateFollows(request2);
+        controller.waitForTask();
+        exists = controller.requestExists(follower, followee);
+        assertFalse(exists);
+
+        FollowRequest request3 = new FollowRequest(follower, followee);
+        controller.addOrUpdateFollows(request3);
+        controller.waitForTask();
+        exists = controller.requestExists(follower, followee);
+        assertTrue(exists);
+
+        profileController.deleteProfiles(follower, followee, wrongFollower, wrongFollowee);
+        controller.deleteFollowRequests(request1, request2, request3);
+    }
+
     public void testGetFollowRequests() throws Exception {
 
         Profile follower = new Profile("Some Guy");

@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csahmad.moodcloud">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
         android:allowBackup="true"
@@ -29,15 +29,19 @@
         <activity android:name=".FollowingActivity" />
         <activity android:name=".ViewPostActivity" />
         <activity android:name=".FollowRequestActivity" />
-        <activity android:name=".ShowMapActivity">
+        <activity android:name=".ShowMapActivity"></activity>
 
-        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value=" AIzaSyBWrDcrtIqDi8Q8nDu1VJongKN0sMNt-wo"/>
+            android:value=" AIzaSyBWrDcrtIqDi8Q8nDu1VJongKN0sMNt-wo" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="7571000"/>
+            android:value="7571000" />
+
+        <activity
+            android:name=".SearchMoods"
+            android:label="@string/title_activity_search_moods"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
