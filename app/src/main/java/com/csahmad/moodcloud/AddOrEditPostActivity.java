@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeoutException;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
@@ -27,47 +28,82 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
+
         PostController postController = new PostController();
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("POST_ID");
+
+        try {
+
+            final EditText textExplanation = (EditText) findViewById(R.id.body);
+            final EditText textTrigger = (EditText) findViewById(R.id.trigger);
+
+            final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
+            final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+
+            if (id == null) {
+                setTitle("New Post");
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                        Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
+                                textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
+                                profile.getId() ,null, Calendar.getInstance());
+                        PostController postController = new PostController();
+                        postController.addOrUpdatePosts(post);
+                        ProfileController profileController = new ProfileController();
+                        profileController.addOrUpdateProfiles(profile);
+
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, NewsFeedActivity.class);
+                        startActivity(intent);
+                    }
+
+                });
+            } else{
+                final Post oldPost = postController.getPostFromId(id);
+                String oldExplannation = oldPost.getText();
+                String oldTrigger = oldPost.getTriggerText();
+                int oldmood = oldPost.getMood();
+                int oldcontext = oldPost.getContext();
+                setTitle("Edit Post");
+                textTrigger.setText(oldTrigger);
+                textExplanation.setText(oldExplannation);
+                moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
+                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                        oldPost.setMood(onRadioButtonClicked(moodButtons));
+                        oldPost.setContext(onStatusButtonClicked(statusButtons));
+                        oldPost.setText(textExplanation.getText().toString());
+                        oldPost.setTriggerText(textTrigger.getText().toString());
+
+                        PostController postController = new PostController();
+                        postController.addOrUpdatePosts(oldPost);
 
 
-        //Post oldPost = postController.getPostFromId(post.get);
-        //String oldExplannation = oldPost.getText();
-        //String oldTrigger = oldPost.getTriggerText();
-        //
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ViewPostActivity.class);
 
-        final EditText textExplanation = (EditText) findViewById(R.id.body);
-        final EditText textTrigger = (EditText) findViewById(R.id.trigger);
+                        intent.putExtra("POST_ID",oldPost.getId());
+                        startActivity(intent);
 
-        final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
-        final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+                    }
 
-        //if (id == null) {
-            //setTitle("New Post");
-        //} else{
-            //setTile("Edit Post");
-
-
-
-        //}
-        Button postButton = (Button) findViewById(R.id.postButton);
-        postButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
-                        textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                        profile.getId() ,null, Calendar.getInstance());
-                PostController postController = new PostController();
-                postController.addOrUpdatePosts(post);
-                ProfileController profileController = new ProfileController();
-                profileController.addOrUpdateProfiles(profile);
-
-                Context context = v.getContext();
-                Intent intent = new Intent(context, NewsFeedActivity.class);
-                startActivity(intent);
+                });
             }
 
-        });
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
 

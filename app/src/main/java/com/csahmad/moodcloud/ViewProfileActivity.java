@@ -148,6 +148,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, AddOrEditPostActivity.class);
+
                 startActivity(intent);
             }
         });
