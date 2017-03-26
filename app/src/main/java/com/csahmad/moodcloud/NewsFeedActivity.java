@@ -76,6 +76,15 @@ public class NewsFeedActivity extends AppCompatActivity {
                 startActivity(intent);
             }}
         );
+        ImageButton searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SearchMoods.class);
+                startActivity(intent);
+            }}
+        );
 
         ImageButton addPost = (ImageButton) findViewById(R.id.addPost);
         addPost.setOnClickListener(new View.OnClickListener(){

@@ -23,40 +23,107 @@
 
         <Button
             android:id="@+id/OnlyFollowingButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/toolbar3"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="16dp"
             android:text="Following"
-            android:layout_below="@+id/toolbar3"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="19dp" />
+            android:textColorLink="@android:color/background_light"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/MyMoodsButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/OnlyFollowingButton"
             android:layout_below="@+id/OnlyFollowingButton"
             android:layout_marginTop="12dp"
-            android:text="My Moods" />
+            android:text="My Moods"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/EveryoneButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/MyMoodsButton"
             android:layout_below="@+id/MyMoodsButton"
             android:layout_marginTop="17dp"
-            android:text="Everyone" />
+            android:text="Everyone"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/RecentWeekButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/EveryoneButton"
             android:layout_below="@+id/EveryoneButton"
             android:layout_marginTop="20dp"
             android:text="Recent Week" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/RecentWeekButton"
+            android:layout_below="@+id/RecentWeekButton"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="15dp"
+            android:text="By Mood"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Groups/Solo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:layout_below="@+id/button2"
+            android:layout_alignEnd="@+id/OnlyFollowingButton" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_alignTop="@+id/textView"
+            android:layout_marginRight="100dp"
+            android:layout_toEndOf="@+id/RecentWeekButton" />
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_alignStart="@+id/spinner2"
+            android:layout_alignEnd="@+id/spinner2" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_alignParentEnd="true"
+            android:text="Search" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_alignParentEnd="true"
+            android:text="Search" />
+
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

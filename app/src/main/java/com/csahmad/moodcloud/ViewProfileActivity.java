@@ -152,6 +152,15 @@ public class ViewProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        ImageButton searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SearchMoods.class);
+                startActivity(intent);
+            }}
+        );
 
         Button followingButton = (Button) findViewById(R.id.followingButton);
         followingButton.setOnClickListener(new View.OnClickListener(){
