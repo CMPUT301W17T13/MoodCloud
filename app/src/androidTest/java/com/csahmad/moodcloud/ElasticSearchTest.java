@@ -383,7 +383,7 @@ public class ElasticSearchTest extends ActivityInstrumentationTestCase2 {
 
         TestElasticSearchObject object4 = new TestElasticSearchObject();
         object4.setMessage("Thor / Giants hide in fear / As they feel thy hammer near");
-        object4.setMood("Angry");
+        object4.setMood("angry");
         object4.setDate(new GregorianCalendar(3000, 8, 26));
         object4.setLocation(new SimpleLocation(0.0d, 0.0d, 0.0d));
         elasticSearch.addOrUpdate(object4);
