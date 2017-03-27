@@ -10,23 +10,29 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 
 /**
  * Created by Erick on 3/24/2017.
  *
  * Testing class for user interface
+ *
  * Ensures that interface features such as buttons, text fields, news feeds, etc.
  * work as expected
  */
 
 @RunWith(AndroidJUnit4.class)
 public class UITest {
+
 
     //---|SIGN IN ACTIVITY TESTS|---
 
@@ -46,6 +52,12 @@ public class UITest {
         onView(withId(R.id.username)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
         //Enter a password into the password field
         onView(withId(R.id.password)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
+        try {
+            Thread.sleep(500);
+        }
+        catch(InterruptedException e){
+
+        }
         //Click the "sign in" button
         onView(withId(R.id.signIn)).perform(click());
 
@@ -66,33 +78,99 @@ public class UITest {
         onView(withId(R.id.title)).check(matches(withText("Create Account")));
     }
 
+
     //---|CREATE ACCOUNT ACTIVITY TESTS|---
 
     @Rule
     public ActivityTestRule<CreateAccountActivity> createAccountRule = new ActivityTestRule<CreateAccountActivity>(CreateAccountActivity.class);
 
     /**
-     * Tests that creating an account brings the user to the news feed screen
+     * Tests that creating a non-unique account holds user at create account screen
      *
-     * username = password = "activityTest"
+     * username = password = "esieben"
      */
     @Test
     public void createAccountTest() {
-        onView(withId(R.id.username)).perform(typeText("activiytTest"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("activityTest"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.username)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.create)).perform(click());
 
-        onView(withId(R.id.title)).check(matches(withText("News Feed")));
+        onView(withId(R.id.title)).check(matches(withText("Create Account")));
     }
 
     /**
      * Tests that the arrow button in the top left corner of the screen
      * returns the user to the sign in screen
      */
+    @Test
     public void backTest(){
         onView(withId(R.id.backButton)).perform(click());
 
         onView(withId(R.id.title)).check(matches(withText("Sign In")));
     }
 
+
+    //---|NEWSFEED ACTIVITY TESTS|---
+
+    @Rule
+    public ActivityTestRule<NewsFeedActivity> newsFeedRule = new ActivityTestRule<NewsFeedActivity>(NewsFeedActivity.class);
+
+    /**
+     * Tests that "Following" tab button takes the user to the correct screen
+     */
+    @Test
+    public void goToFollowingTest(){
+        onView(withId(R.id.followingButton)).perform(click());
+
+        onView(withId(R.id.title)).check(matches(withText("Following")));
+    }
+
+    /**
+     * Tests that "Profile" tab button takes the user to the correct screen
+     */
+    @Test
+    public void goToProfileTest(){
+        onView(withId(R.id.profileButton)).perform(click());
+
+        onView(withId(R.id.title)).check(matches(withText("Profile")));
+    }
+
+    /**
+     * Tests that "Map" tab button takes the user to the correct screen
+     */
+    @Test
+    public void goToMapTest(){
+        onView(withId(R.id.mapButton)).perform(click());
+
+        onView(withId(R.id.title)).check(matches(withText("Map")));
+    }
+
+    /**
+     * Tests that "+" button takes the user to the correct screen
+     */
+    @Test
+    public void goToAddPostTest(){
+        onView(withId(R.id.addPost)).perform(click());
+
+        onView(withId(R.id.title)).check(matches(withText("New Post")));
+    }
+
+    /**
+     * Tests that adding a post causes it to appear on the profile screen
+     */
+
+    public void addPostTest(){
+        onView(withId(R.id.addPost)).perform(click());
+
+        onView(withId(R.id.body)).perform(typeText("Testing the UI :D"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.happy_selected)).perform(click());
+        onView(withId(R.id.trigger)).perform(typeText("Having a lot of fun"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.group_selected)).perform(click());
+        onView(withId(R.id.postButton)).perform(click());
+
+        onView(withId(R.id.profileButton)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.postList)).atPosition(0).perform(scrollTo());
+
+
+    }
 }
