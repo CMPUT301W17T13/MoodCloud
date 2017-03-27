@@ -1,10 +1,11 @@
 package com.csahmad.moodcloud;
 
 import android.test.ActivityInstrumentationTestCase2;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+//import java.util.Calendar;
+//import java.util.GregorianCalendar;
 
-import static java.lang.Boolean.TRUE;
+//import static java.lang.Boolean.TRUE;
+//mwschafe commented out unused import statements
 
 /** Test the {@link Profile} class. */
 public class ProfileTest extends ActivityInstrumentationTestCase2 {

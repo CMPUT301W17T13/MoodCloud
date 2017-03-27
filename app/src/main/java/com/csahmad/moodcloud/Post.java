@@ -1,49 +1,42 @@
 package com.csahmad.moodcloud;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import io.searchbox.annotations.JestId;
+//mwschafe commented unused import statement
+//import io.searchbox.annotations.JestId;
 
 /** A mood event. */
-public class Post implements ElasticSearchObject {
+public class Post extends ElasticSearchObject {
 
     public static final Class type = Post.class;
     public static final String typeName = "post";
 
     private String text;
-    private String mood;
+    private int mood;
     private String triggerText;
     private String triggerImage;
-    private String context;
-    private Profile poster;
+    private int context;
+    private String posterId;
     private Calendar date;
+    private String dateString;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
-    /** This Post's unique ID (creating IDs handled by Jest). */
-    @JestId
-    private String id;
-
-    public Post(String text, String mood, String triggerText, String triggerImage, String context,
-                Profile poster, double[] location, Calendar date) {
+    public Post(String text, int mood, String triggerText, String triggerImage,
+                int context, String posterId, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
         this.triggerText = triggerText;
         this.triggerImage = triggerImage;
         this.context = context;
-        this.poster = poster;
+        this.posterId = posterId;
         this.location = location;
         this.date = date;
-    }
 
-    @Override
-    public boolean equals(Object other) {
-
-        if (!(other instanceof Post)) return false;
-        Post otherPost = (Post) other;
-        if (this.id == null) return this == otherPost;
-        return this.id == otherPost.id;
+        SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
+        this.dateString = format.format(date.getTime());
     }
 
     @Override
@@ -58,16 +51,6 @@ public class Post implements ElasticSearchObject {
         return Post.typeName;
     }
 
-    public String getId() {
-
-        return this.id;
-    }
-
-    public void setId(String id) {
-
-        this.id = id;
-    }
-
     public String getText() {
 
         return this.text;
@@ -78,12 +61,12 @@ public class Post implements ElasticSearchObject {
         this.text = text;
     }
 
-    public String getMood() {
+    public int getMood() {
 
         return this.mood;
     }
 
-    public void setMood(String mood) {
+    public void setMood(int mood) {
 
         this.mood = mood;
     }
@@ -108,24 +91,24 @@ public class Post implements ElasticSearchObject {
         this.triggerImage = triggerImage;
     }
 
-    public String getContext() {
+    public int getContext() {
 
         return this.context;
     }
 
-    public void setContext(String context) {
+    public void setContext(int context) {
 
         this.context = context;
     }
 
-    public Profile getPoster() {
+    public String getPosterId() {
 
-        return this.poster;
+        return this.posterId;
     }
 
-    public void setPoster(Profile poster) {
+    public void setPosterId(String posterId) {
 
-        this.poster = poster;
+        this.posterId = posterId;
     }
 
     public double[] getLocation() {

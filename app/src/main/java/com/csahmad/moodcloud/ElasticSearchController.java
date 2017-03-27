@@ -8,6 +8,8 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+//import java.util.Map;
+//mwschafe commented out unused import statements
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -19,9 +21,16 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.Refresh;
+import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
 
+/**
+ * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
+ * using elasticsearch.
+ *
+ * @see ElasticSearch
+ */
 public class ElasticSearchController {
 
     private static final String url = "http://cmput301.softwareprocess.es:8080";
@@ -175,8 +184,10 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
 
-                        if (isNew)
+                        if (isNew) {
                             item.setId(result.getId());
+                            Log.i("ID", "New id: " + item.getId());
+                        }
 
                         else if (item.getId() != result.getId())
                             throw new RuntimeException("Them IDs should be equal.");
@@ -247,8 +258,11 @@ public class ElasticSearchController {
 
                 DocumentResult result = ElasticSearchController.client.execute(get);
 
-                if (result.isSucceeded())
-                    return (T) result.getSourceAsObject(this.type);
+                if (result.isSucceeded()) {
+                    T resultObject = (T) result.getSourceAsObject(this.type);
+                    resultObject.setId(result.getId());
+                    return resultObject;
+                }
 
                 else
                     Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
@@ -367,21 +381,24 @@ public class ElasticSearchController {
                 SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
-                    //List<T> foundObjects = result.getSourceAsObjectList(this.type);
 
                     List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
                     Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
 
-                    for (SearchResult.Hit<T, Void> hit: hits)
-                        results.add(hit.source);
+                    for (SearchResult.Hit<T, Void> hit: hits) {
 
-                    //Log.i("ListSize", "Result size: " + Integer.toString(foundObjects.size()));
-                    //results.addAll(foundObjects);
+                        T object = hit.source;
+                        object.setId(hit.id);
+
+                        if (object.getId() == null)
+                            Log.i("Error", "ID should not be null!");
+
+                        results.add(object);
+                    }
                 }
 
                 else
-                    Log.i("Error", "The search query failed to find any objects that matched " +
-                            query);
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
             }
 
             catch (Exception e) {
@@ -415,11 +432,49 @@ public class ElasticSearchController {
                         .build();
 
                 ElasticSearchController.client.execute(createIndex);
+
+                ElasticSearchController.makeMappings();
             }
         }
 
         catch (IOException e) {
             Log.i("Error", "Could not make index.");
+        }
+    }
+
+    /** Make mappings. */
+    public static void makeMappings() {
+
+        ElasticSearchController.makeMapping("account",
+                MappingBuilder.buildNotAnalyzed("username"));
+
+        ElasticSearchController.makeMapping("follow",
+                MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+
+        ElasticSearchController.makeMapping("followRequest",
+                MappingBuilder.buildNotAnalyzed("followerId", "followeeId"));
+
+        ElasticSearchController.makeMapping("post",
+                MappingBuilder.buildNotAnalyzed("posterId"));
+    }
+
+    public static void makeMapping(String type, String mapping) {
+
+        PutMapping putMapping = new PutMapping.Builder(ElasticSearchController.index, type,
+                mapping).build();
+
+        Log.i("Mapping", mapping);
+
+        try {
+
+            JestResult result = ElasticSearchController.client.execute(putMapping);
+
+            if (!result.isSucceeded())
+                Log.i("Error", "Not succeeded (create mapping): " + result.getErrorMessage());
+        }
+
+        catch (IOException e) {
+            Log.i("Error", "Could not create mapping.");
         }
     }
 

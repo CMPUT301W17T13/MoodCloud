@@ -3,9 +3,10 @@ package com.csahmad.moodcloud;
 import java.util.ArrayList;
 
 /**
- * Created by oahmad on 2017-03-06.
+ * Defines restrictions on elasticsearch queries.
+ *
+ * @see ElasticSearch
  */
-
 public class SearchFilter {
 
     private ArrayList<String> keywords;
@@ -15,32 +16,133 @@ public class SearchFilter {
 
     private Integer maxTimeUnitsAgo;
     private String timeUnits = "w";
-    private String dateField = "date";
+    private String dateField = "dateString";
 
     private Double maxDistance;
     private SimpleLocation location;
     private String distanceUnits = "km";
     private String locationField = "location";
 
+    private ArrayList<String> sortByFields;
+    private SortOrder sortOrder = SortOrder.Descending;
+
+    private Integer mood;
+    private Integer context;
+
+    // Results must not have an empty list for any of these fields
+    private ArrayList<String> nonEmptyFields;
+
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance);
+                this.maxDistance, nonEmptyFields);
+    }
+
+    public boolean hasContext() {
+
+        return this.context != null;
+    }
+
+    public int getContext() {
+
+        return this.context;
+    }
+
+    public SearchFilter setContext(int context) {
+
+        this.context = context;
+        return this;
+    }
+
+    public boolean hasMood() {
+
+        return this.mood != null;
+    }
+
+    public int getMood() {
+
+        return this.mood;
+    }
+
+    public SearchFilter setMood(int mood) {
+
+        this.mood = mood;
+        return this;
+    }
+
+    public SearchFilter sortByDate() {
+
+        ArrayList<String> dateFields = new ArrayList<String>();
+
+        dateFields.add("year");
+        dateFields.add("month");
+        dateFields.add("dayOfMonth");
+        dateFields.add("hourOfDay");
+        dateFields.add("minute");
+        dateFields.add("second");
+
+        this.setSortByFields(dateFields);
+        this.setSortOrder(SortOrder.Descending);
+
+        return this;
+    }
+
+    public boolean hasSortByFields() {
+
+        return !NullTools.allNullOrEmpty(this.sortByFields);
+    }
+
+    public ArrayList<String> getSortByFields() {
+
+        return this.sortByFields;
+    }
+
+    public SearchFilter setSortByFields(ArrayList<String> fields) {
+
+        this.sortByFields = fields;
+        return this;
+    }
+
+    public SortOrder getSortOrder() {
+
+        return this.sortOrder;
+    }
+
+    public SearchFilter setSortOrder(SortOrder order) {
+
+        this.sortOrder = order;
+        return this;
+    }
+
+    public boolean hasNonEmptyFields() {
+
+        return !NullTools.allNullOrEmpty(this.nonEmptyFields);
     }
 
     public boolean hasKeywords() {
 
-        return this.keywords != null;
+        return !NullTools.allNullOrEmpty(this.keywords);
     }
 
     public boolean hasTimeUnitsAgo() {
 
-        return this.maxTimeUnitsAgo != null;
+        return !NullTools.allNullOrEmpty(this.maxTimeUnitsAgo);
     }
 
     public boolean hasMaxDistance() {
 
-        return this.maxDistance != null;
+        return !NullTools.allNullOrEmpty(this.maxDistance);
+    }
+
+    public ArrayList<String> getNonEmptyFields() {
+
+        return this.nonEmptyFields;
+    }
+
+    public SearchFilter setNonEmptyFields(ArrayList<String> fields) {
+
+        this.nonEmptyFields = fields;
+        return this;
     }
 
     public ArrayList<String> getKeywords() {
@@ -61,6 +163,16 @@ public class SearchFilter {
         }
 
         this.fieldValues.add(fieldValue);
+        return this;
+    }
+
+    public SearchFilter addNonEmptyField(String field) {
+
+        if (this.nonEmptyFields == null) {
+            this.nonEmptyFields = new ArrayList<String>();
+        }
+
+        this.nonEmptyFields.add(field);
         return this;
     }
 

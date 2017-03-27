@@ -5,10 +5,14 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-/**
- * Created by oahmad on 2017-03-01.
- */
+// TODO: 2017-03-18 Sort by date
+// TODO: 2017-03-18 Don't request more objects than are used
 
+/**
+ * Get {@link Post}s from elastic search or add/update {@link Post}s using elasticsearch.
+ *
+ * @see ElasticSearch
+ */
 public class PostController {
 
     private ElasticSearch<Post> elasticSearch =
@@ -42,6 +46,11 @@ public class PostController {
 
     public ArrayList<Post> getPosts(SearchFilter filter, int from) throws TimeoutException {
 
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.sortByDate();
+
         this.elasticSearch.setFilter(filter);
         ArrayList<Post> result = this.elasticSearch.getNext(from);
         this.elasticSearch.setFilter(null);
@@ -49,63 +58,66 @@ public class PostController {
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-11 Remove from?
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
-        ProfileController profileController = new ProfileController();
-        ArrayList<Profile> followees = profileController.getFollowees(follower, from);
-        return PostController.getLatestPosts(followees, filter);
+        ProfileController controller = new ProfileController();
+        return this.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
     // Note: latest posts only
-    // TODO: 2017-03-11 Remove from?
-    public static ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
-                                                   int from) {
+    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
+                                                   int from) throws TimeoutException {
 
-        return PostController.getLatestPosts(followee.getFollowers(), filter);
+        ProfileController controller = new ProfileController();
+        return this.getLatestPosts(controller.getFollowers(followee, from), filter);
     }
 
-    public static ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter) {
+    public ArrayList<Post> getPosts(Profile profile, SearchFilter filter, int from)
+        throws TimeoutException{
+
+        if (filter == null)
+            filter = new SearchFilter();
+
+        this.elasticSearch.setFilter(filter);
+
+        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
+                .sortByDate();
+
+        ArrayList<Post> result = this.elasticSearch.getNext(0);
+        this.elasticSearch.setFilter(null);
+
+        return result;
+    }
+
+    public ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter)
+        throws TimeoutException{
 
         ArrayList<Post> latestPosts = new ArrayList<Post>();
         Post post;
 
         for (Profile profile: profiles) {
-            post = PostController.getLatestPost(profile.getPosts(), filter);
+            post = this.getLatestPost(profile, filter);
             if (post != null) latestPosts.add(post);
         }
 
         return latestPosts;
     }
 
-    // TODO: 2017-03-11 Ignores filter
-    public static Post getLatestPost(ArrayList<Post> posts, SearchFilter filter) {
+    public Post getLatestPost(Profile profile, SearchFilter filter) throws TimeoutException {
 
-        if (posts == null)
-            throw new IllegalArgumentException("Cannot pass null.");
+        if (filter == null)
+            filter = new SearchFilter();
 
-        if (posts.size() == 0)
-            return null;
+        this.elasticSearch.setFilter(filter);
+        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
+                .sortByDate();
 
-        Post post;
-        Calendar postDate;
+        ArrayList<Post> result = this.elasticSearch.getNext(0);
+        this.elasticSearch.setFilter(null);
 
-        Post latestPost = posts.get(0);
-        Calendar latestPostDate;
-
-        for (int i = 0; i < posts.size(); i++) {
-
-            post = posts.get(i);
-            postDate = post.getDate();
-            latestPostDate = latestPost.getDate();
-
-            // If any posts at same time, assume post that appears later in list is newer
-            if (postDate.compareTo(latestPostDate) >= 0)
-                latestPost = post;
-        }
-
-        return latestPost;
+        if (result.size() > 0) return result.get(0);
+        return null;
     }
 
     public void deletePosts(Post... posts) {

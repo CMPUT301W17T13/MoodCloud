@@ -1,6 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -15,26 +17,113 @@ public class QueryBuilder {
         query += "\"size\": " + Integer.toString(resultSize) + ",\n";
         query += "\"query\": {\n";
 
-        if (filter.hasKeywords()) {
-            query += QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields());
-            query += "\n";
-        }
+        ArrayList<String> components = new ArrayList<String>();
+
+        if (filter.hasKeywords())
+            components.add(
+                    QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields()));
 
         if (filter.hasFieldValues()) {
-            query += QueryBuilder.buildExactFieldValues(filter.getFieldValues());
-            query += "\n";
+
+            ArrayList<FieldValue> fieldValues = filter.getFieldValues();
+
+            if (filter.hasMood())
+                fieldValues.add(new FieldValue("mood", filter.getMood()));
+
+            if (filter.hasContext())
+                fieldValues.add(new FieldValue("context", filter.getContext()));
+
+            components.add(QueryBuilder.buildExactFieldValues(fieldValues));
         }
 
-        if (filter.hasTimeUnitsAgo()) {
-            query += QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
-                    filter.getDateField());
-            query += "\n";
+        if (filter.hasTimeUnitsAgo())
+            components.add(
+                    QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
+                            filter.getDateField()));
+
+        if (filter.hasMaxDistance())
+            components.add(
+                    QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+                            filter.getLocationField(), filter.getDistanceUnits()));
+
+        String joined = TextUtils.join("},\n{", components);
+
+        if (!joined.equals("")) {
+            query += "\"bool\": {\n" +
+                "\"must\": [\n" +
+                "{\n" +
+                joined + "\n" +
+                "}\n" +
+                "]\n" +
+                "}";
         }
 
-        if (filter.hasMaxDistance()) {
-            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
-                    filter.getLocationField(), filter.getDistanceUnits());
-            query += "\n";
+        query += "\n}";
+
+        if (filter.hasNonEmptyFields()) {
+            query += ",\n";
+            query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
+        }
+
+        if (filter.hasSortByFields()) {
+            query += ",\n";
+            query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
+        }
+
+        query += "\n}";
+        Log.i("Query", query);
+        return query;
+    }
+
+    public static String buildSortBy(ArrayList<String> fields, SortOrder order) {
+
+        if (fields == null || order == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "\"sort\": [ ";
+
+        ArrayList<String> sortByList = new ArrayList<String>();
+        String sortByItem;
+
+        for (String field: fields) {
+
+            sortByItem = "{ \"" + field + "\": { \"order\": \"";
+
+            switch (order) {
+
+                case Ascending:
+                    sortByItem += "asc";
+                    break;
+
+                case Descending:
+                    sortByItem += "desc";
+                    break;
+            }
+
+            sortByItem += "\", \"ignore_unmapped\": true } }";
+
+            sortByList.add(sortByItem);
+        }
+
+        query += TextUtils.join(",\n", sortByList);
+
+        query += " ]";
+        return query;
+    }
+
+    public static String buildNonEmptyFields(ArrayList<String> fields) {
+
+        if (fields == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "\"filter\": {" +
+                "\"exists\": {";
+
+        int lastIndex = fields.size() - 1;
+
+        for (int i = 0; i < fields.size(); i++) {
+            query += "\"field\": \"" + fields.get(i) + "\"";
+            if (i < lastIndex) query += ", ";
         }
 
         query += "}\n}";
@@ -45,10 +134,6 @@ public class QueryBuilder {
 
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
-
-        String query = "{\n" +
-                "\"filter\": {\n" +
-                "\"term\": {\n";
 
         ArrayList<String> fieldValueStrings = new ArrayList<String>();
         String fieldValueString;
@@ -61,11 +146,7 @@ public class QueryBuilder {
             fieldValueStrings.add(fieldValueString);
         }
 
-        query += TextUtils.join(",\n", fieldValueStrings);
-        query += "\n";
-        query += "}\n}\n}";
-
-        return  query;
+        return TextUtils.join("},\n{", fieldValueStrings);
     }
 
     // Adds quotes to value if string
@@ -79,7 +160,9 @@ public class QueryBuilder {
         if (value instanceof String)
             stringValue = "\"" + stringValue + "\"";
 
-        return "\"" + field + "\": " + stringValue;
+        return "\"term\": {\n" +
+                "\"" + field + "\": " + stringValue + "\n" +
+                "}";
     }
 
     public static String buildMultiMatch(ArrayList<String> keywords, ArrayList<String> fields) {

@@ -2,13 +2,14 @@ package com.csahmad.moodcloud;
 
 import java.util.Calendar;
 
-import io.searchbox.annotations.JestId;
+//import io.searchbox.annotations.JestId;
+//mwschafe commented out unused import statements
 
 /**
  * Created by oahmad on 2017-03-09.
  */
 
-public class TestElasticSearchObject implements ElasticSearchObject {
+public class TestElasticSearchObject extends ElasticSearchObject {
 
     public static final String typeName = "testElasticSearchObject";
 
@@ -26,34 +27,6 @@ public class TestElasticSearchObject implements ElasticSearchObject {
         this.mood = mood;
         this.date = date;
         this.location = location;
-    }
-
-    @JestId
-    private String id;
-
-    @Override
-    public boolean equals(Object other) {
-
-        if (!(other instanceof TestElasticSearchObject)) return false;
-        TestElasticSearchObject otherTest = (TestElasticSearchObject) other;
-
-        return NullTools.equals(this.id, otherTest.getId()) &&
-                NullTools.equals(this.message, otherTest.getMessage()) &&
-                NullTools.equals(this.mood, otherTest.getMood()) &&
-                NullTools.equals(this.date, otherTest.getDate()) &&
-                NullTools.equals(this.location, otherTest.getLocation());
-    }
-
-    @Override
-    public String getId() {
-
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-
-        this.id = id;
     }
 
     @Override

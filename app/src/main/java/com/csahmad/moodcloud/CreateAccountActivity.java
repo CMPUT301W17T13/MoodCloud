@@ -1,15 +1,18 @@
 package com.csahmad.moodcloud;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+//import android.support.v7.widget.Toolbar;
+//mwschafe commented out unused import statements
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+//import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.TimeoutException;
@@ -17,7 +20,9 @@ import java.util.concurrent.TimeoutException;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-/** The activity for creating an {@link Account}. */
+/** The activity for creating an {@link Account}.
+ * @author Taylor
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
@@ -25,8 +30,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         final ProfileController profileController = new ProfileController();
         final AccountController accountController = new AccountController();
 
@@ -53,10 +58,19 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (unique) {
                     Profile profile = new Profile(usernameText.getText().toString());
                     profileController.addOrUpdateProfiles(profile);
+
+                    try {
+                        profileController.waitForTask();
+                    }
+
+                    catch (Exception e) {
+                        throw new RuntimeException("Crash on adding login profile.");
+                    }
+
                     Account account = new Account(usernameText.getText().toString(), passwordText.getText().toString(), profile);
                     accountController.addOrUpdateAccounts(account);
                     profile.setHomeProfile(TRUE);
-                    LocalData.store(profile.getId());
+                    LocalData.store(profile, getApplicationContext());
                     //probably something to sign in the user
                     Context context = view.getContext();
                     Intent intent = new Intent(context, NewsFeedActivity.class);
