@@ -35,12 +35,19 @@ public class Post extends ElasticSearchObject {
         this.context = context;
         this.posterId = posterId;
         this.location = location;
+<<<<<<< HEAD
         this.date = date;
         this.lat = lat;
         this.lo = lo;
+=======
+        this.setDate(date);
+    }
+
+    private static String makeDateString(Calendar date) {
+>>>>>>> refs/remotes/origin/master
 
         SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
-        this.dateString = format.format(date.getTime());
+        return format.format(date.getTime());
     }
 
     @Override
@@ -134,6 +141,7 @@ public class Post extends ElasticSearchObject {
         return lat;
     }
 
+<<<<<<< HEAD
     public void setLat(double lat) {
         this.lat = lat;
     }
@@ -144,5 +152,9 @@ public class Post extends ElasticSearchObject {
 
     public void setLo(double lo) {
         this.lo = lo;
+=======
+        this.date = date;
+        this.dateString = Post.makeDateString(date);
+>>>>>>> refs/remotes/origin/master
     }
 }
