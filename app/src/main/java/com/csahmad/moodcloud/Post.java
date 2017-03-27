@@ -33,10 +33,13 @@ public class Post extends ElasticSearchObject {
         this.context = context;
         this.posterId = posterId;
         this.location = location;
-        this.date = date;
+        this.setDate(date);
+    }
+
+    private static String makeDateString(Calendar date) {
 
         SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
-        this.dateString = format.format(date.getTime());
+        return format.format(date.getTime());
     }
 
     @Override
@@ -129,5 +132,6 @@ public class Post extends ElasticSearchObject {
     public void setDate(Calendar date) {
 
         this.date = date;
+        this.dateString = Post.makeDateString(date);
     }
 }
