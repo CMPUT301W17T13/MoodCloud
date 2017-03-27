@@ -181,6 +181,15 @@ public class ViewProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ShowMapActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

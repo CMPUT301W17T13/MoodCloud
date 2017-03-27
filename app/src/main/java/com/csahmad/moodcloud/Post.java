@@ -19,12 +19,14 @@ public class Post extends ElasticSearchObject {
     private String posterId;
     private Calendar date;
     private String dateString;
+    private double lat;
+    private double lo;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
     public Post(String text, int mood, String triggerText, String triggerImage,
-                int context, String posterId, double[] location, Calendar date) {
+                int context, String posterId, double[] location, Calendar date, Double lat, Double lo) {
 
         this.text = text;
         this.mood = mood;
@@ -34,6 +36,8 @@ public class Post extends ElasticSearchObject {
         this.posterId = posterId;
         this.location = location;
         this.date = date;
+        this.lat = lat;
+        this.lo = lo;
 
         SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
         this.dateString = format.format(date.getTime());
@@ -126,8 +130,19 @@ public class Post extends ElasticSearchObject {
         return this.date;
     }
 
-    public void setDate(Calendar date) {
+    public double getLat() {
+        return lat;
+    }
 
-        this.date = date;
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLo() {
+        return lo;
+    }
+
+    public void setLo(double lo) {
+        this.lo = lo;
     }
 }
