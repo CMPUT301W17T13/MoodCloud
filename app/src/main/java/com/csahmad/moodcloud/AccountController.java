@@ -86,7 +86,7 @@ public class AccountController {
     }
 
     /**
-     * Return {@link Account}s.
+     * Return {@link Account}s that match the given filter.
      *
      * <p>
      * If filter is null or has no restrictions, return all {@link Account}s.
