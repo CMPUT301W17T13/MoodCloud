@@ -36,9 +36,10 @@ public class ElasticSearchController {
     private static final String url = "http://cmput301.softwareprocess.es:8080";
     private static final String index = "cmput301w17t13";
 
+    /** How many results to return at a time when returning objects. */
     private static final int resultSize = 25;
 
-    /** For building and executing save commands and search queries. */
+    /** For building and executing elasticsearch commands/queries. */
     private static JestDroidClient client;
 
     public static int getResultSize() {
@@ -53,7 +54,7 @@ public class ElasticSearchController {
     public static class RefreshIndex extends AsyncTask<Void, Void, Void> {
 
         /**
-         * Deletes the given object(s) using elasticsearch.
+         * Refresh the elasticsearch index.
          *
          * @return null
          */
@@ -127,16 +128,17 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For saving or updating an object using elasticsearch.
+     * For adding or updating objects using elasticsearch.
      *
-     * If the object's ID is null, add (otherwise update)
+     * <p>
+     * If an object's ID is null, add (otherwise update).
      */
     public static class AddItems<T extends ElasticSearchObject> extends AsyncTask<T, Void, Void> {
 
         /**
-         * Saves/updates the given object(s) using elasticsearch.
+         * Adds/updates the given objects using elasticsearch.
          *
-         * @param items the objects to save/update
+         * @param items the objects to add/update
          * @return null
          */
         @Override
@@ -210,11 +212,13 @@ public class ElasticSearchController {
 
     // AsyncTask<Params, Progress, Result>
     /**
-     * For getting objects by ID.
+     * For getting an object by ID.
      */
     public static class GetById<T extends ElasticSearchObject> extends AsyncTask<String, Void, T> {
 
+        /** The type T. */
         private Class type;
+        /** The name of type T as defined in the elasticsearch index. */
         private String typeName;
 
         public Class getType() {
@@ -238,7 +242,7 @@ public class ElasticSearchController {
         }
 
         /**
-         * Gets the object with the given ID.
+         * Returns the object with the given ID.
          *
          * @param ids the first argument is the id of the object to get
          * @return the object with the given ID
@@ -283,9 +287,16 @@ public class ElasticSearchController {
     public static class GetItems<T extends ElasticSearchObject>
             extends AsyncTask<SearchFilter, Void, ArrayList<T>> {
 
+        /** Whether to only return one object (or zero if there are no objects to return). */
         private boolean singleResult = false;
+        /**
+         * Set to 0 to get the first x number of results, set to x to get the next x number of
+         * results, set to 2x to get the next x number of results after that, and so on.
+         */
         private int from = 0;
+        /** The type T. */
         private Class type;
+        /** The name of type T as defined in the elasticsearch index. */
         private String typeName;
 
         public boolean isSingleResult() {
@@ -426,7 +437,7 @@ public class ElasticSearchController {
     // Modified from this code:
     // http://www.programcreek.com/java-api-examples/index.php?api=io.searchbox.indices.IndicesExists
     // Accessed Mar 8, 2017
-    /** Make index if not exists. */
+    /** Make the index if it does not exist. */
     public static void makeIndex() {
 
         ElasticSearchController.setClient();        // Set up client if it is null
@@ -455,7 +466,7 @@ public class ElasticSearchController {
         }
     }
 
-    /** Make mappings. */
+    /** Make mappings for the index. */
     public static void makeMappings() {
 
         ElasticSearchController.makeMapping("account",
@@ -471,6 +482,7 @@ public class ElasticSearchController {
                 MappingBuilder.buildNotAnalyzed("posterId"));
     }
 
+    /** Make a mapping for an object. */
     public static void makeMapping(String type, String mapping) {
 
         PutMapping putMapping = new PutMapping.Builder(ElasticSearchController.index, type,
@@ -491,7 +503,7 @@ public class ElasticSearchController {
         }
     }
 
-    /** Set up client if it is null. */
+    /** Set up the client if it is null. */
     public static void setClient() {
 
         if (ElasticSearchController.client == null) {
