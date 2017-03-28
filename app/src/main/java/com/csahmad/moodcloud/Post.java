@@ -23,6 +23,8 @@ public class Post extends ElasticSearchObject {
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
+    private GeoPoint geoPoint;
+
     public Post(String text, int mood, String triggerText, String triggerImage,
                 int context, String posterId, double[] location, Calendar date) {
 
@@ -32,7 +34,7 @@ public class Post extends ElasticSearchObject {
         this.triggerImage = triggerImage;
         this.context = context;
         this.posterId = posterId;
-        this.location = location;
+        this.setLocation(location);
         this.setDate(date);
     }
 
@@ -122,6 +124,7 @@ public class Post extends ElasticSearchObject {
     public void setLocation(double[] location) {
 
         this.location = location;
+        this.geoPoint = new GeoPoint(location[0], location[1]);
     }
 
     public Calendar getDate() {

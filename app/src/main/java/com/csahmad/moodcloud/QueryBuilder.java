@@ -41,11 +41,6 @@ public class QueryBuilder {
                     QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
                             filter.getDateField()));
 
-        if (filter.hasMaxDistance())
-            components.add(
-                    QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
-                            filter.getLocationField(), filter.getDistanceUnits()));
-
         String joined = TextUtils.join("},\n{", components);
 
         if (!joined.equals("")) {
@@ -59,6 +54,12 @@ public class QueryBuilder {
         }
 
         query += "\n}";
+
+        if (filter.hasMaxDistance()) {
+            query += ",\n";
+            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+                    filter.getLocationField(), filter.getDistanceUnits());
+        }
 
         if (filter.hasNonEmptyFields()) {
             query += ",\n";
@@ -210,8 +211,8 @@ public class QueryBuilder {
         query += "\"geo_distance\": {\n";
         query += "\"distance\": \"" + Double.toString(maxDistance) + units + "\",\n";
         query += "\"" + locationField + "\": {\n";
-        query += "\"latitude\": " + location.getLatitude() + ",\n";
-        query += "\"longitude\": " + location.getLongitude() + "\n";
+        query += "\"lat\": " + location.getLatitude() + ",\n";
+        query += "\"lon\": " + location.getLongitude() + "\n";
 
         query += "}\n}\n}";
         return query;

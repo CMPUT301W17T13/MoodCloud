@@ -21,7 +21,7 @@ public class SearchFilter {
     private Double maxDistance;
     private SimpleLocation location;
     private String distanceUnits = "km";
-    private String locationField = "location";
+    private String locationField = "geoPoint";
 
     private ArrayList<String> sortByFields;
     private SortOrder sortOrder = SortOrder.Descending;
