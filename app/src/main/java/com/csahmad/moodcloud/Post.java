@@ -124,7 +124,9 @@ public class Post extends ElasticSearchObject {
     public void setLocation(double[] location) {
 
         this.location = location;
-        this.geoPoint = new GeoPoint(location[0], location[1]);
+
+        if (location != null)
+            this.geoPoint = new GeoPoint(location[0], location[1]);
     }
 
     public Calendar getDate() {
