@@ -14,9 +14,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        System.out.println(LocalData.getSignedInProfile((getApplicationContext())));
         if (LocalData.getSignedInProfile(getApplicationContext()) == null) {
 
             Intent intent = new Intent(this, SignInActivity.class);
+            this.startActivity(intent);
+        }
+
+        else {
+            Intent intent = new Intent(this, NewsFeedActivity.class);
             this.startActivity(intent);
         }
     }
