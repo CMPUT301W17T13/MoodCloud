@@ -65,11 +65,6 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.filter = filter;
     }
 
-    public boolean itemExists(T object) throws TimeoutException {
-
-        return this.getById(object.getId()) != null;
-    }
-
     /** Wait for the last AsyncTask execution to finish. */
     public void waitForTask()
             throws ExecutionException, InterruptedException, TimeoutException {
