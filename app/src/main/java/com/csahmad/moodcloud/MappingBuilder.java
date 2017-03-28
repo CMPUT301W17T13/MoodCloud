@@ -2,12 +2,10 @@ package com.csahmad.moodcloud;
 
 import android.util.Log;
 
-/**
- * Created by oahmad on 2017-03-12.
- */
-
+/** Builds type mappings for the elasticsearch index. */
 public class MappingBuilder {
 
+    /** Build a portion of a mapping indicating the given string fields should not be analyzed. */
     public static String buildNotAnalyzed(String... fields) {
 
         String mapping = "{\n" +

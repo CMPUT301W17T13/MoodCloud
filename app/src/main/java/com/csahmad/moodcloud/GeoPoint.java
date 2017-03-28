@@ -1,12 +1,11 @@
 package com.csahmad.moodcloud;
 
-/**
- * Created by oahmad on 2017-03-28.
- */
-
+/** Corresponds to the elasticsearch "geo_point" type. */
 public class GeoPoint {
 
+    /** The latitude. */
     private double lat;
+    /** The longitude. */
     private double lon;
 
     public GeoPoint(double lat, double lon) {
