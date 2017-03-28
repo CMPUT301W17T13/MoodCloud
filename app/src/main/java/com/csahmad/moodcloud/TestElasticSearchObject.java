@@ -2,13 +2,7 @@ package com.csahmad.moodcloud;
 
 import java.util.Calendar;
 
-//import io.searchbox.annotations.JestId;
-//mwschafe commented out unused import statements
-
-/**
- * Created by oahmad on 2017-03-09.
- */
-
+/** {@link ElasticSearchObject}s for use in tests. */
 public class TestElasticSearchObject extends ElasticSearchObject {
 
     public static final String typeName = "testElasticSearchObject";

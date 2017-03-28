@@ -9,45 +9,125 @@ import java.util.ArrayList;
  */
 public class SearchFilter {
 
+    /** Words that the fields in {@link #keywordFields} should contain. */
     private ArrayList<String> keywords;
+    /** Fields that should contain the words in {@link #keywords}. */
     private ArrayList<String> keywordFields;
 
+    /** Restrict certain fields to exact values. */
     private ArrayList<FieldValue> fieldValues;
 
+    /** The maximum number of {@link #timeUnits} ago a result can be dated at. */
     private Integer maxTimeUnitsAgo;
+    /** The units of time to use (eg. "w" for weeks). */
     private String timeUnits = "w";
-    private String dateField = "date";
+    /** The field to determine an object's date by. */
+    private String dateField = "dateString";
 
+    /** The maximum distance a result can be from {@link #location}. */
     private Double maxDistance;
+    /** The location to measure distance from. */
     private SimpleLocation location;
+    /** The units of distance to use (eg. "km") */
     private String distanceUnits = "km";
-    private String locationField = "location";
+    /** The field that contains the object's distance. */
+    private String locationField = "geoPoint";
 
-    private String sortByField;
-    private SortOrder sortOrder = SortOrder.Ascending;
+    /** The fields to sort results by. */
+    private ArrayList<String> sortByFields;
+    /** The order to sort results in. */
+    private SortOrder sortOrder = SortOrder.Descending;
 
-    // Results must not have an empty list for any of these fields
+    /**
+     * The mood results must have.
+     *
+     * @see Post
+     */
+    private Integer mood;
+    /**
+     * The social context results must have.
+     *
+     * @see Post
+     */
+    private Integer context;
+
+    /** Results must have a (non-empty) value for all of these fields. */
     private ArrayList<String> nonEmptyFields;
 
+    /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance, nonEmptyFields);
     }
 
-    public boolean hasSortByField() {
+    public boolean hasContext() {
 
-        return this.sortByField != null;
+        return this.context != null;
     }
 
-    public String getSortByField() {
+    public int getContext() {
 
-        return this.sortByField;
+        return this.context;
     }
 
-    public SearchFilter setSortByField(String field) {
+    public SearchFilter setContext(int context) {
 
-        this.sortByField = field;
+        this.context = context;
+        return this;
+    }
+
+    public boolean hasMood() {
+
+        return this.mood != null;
+    }
+
+    public int getMood() {
+
+        return this.mood;
+    }
+
+    public SearchFilter setMood(int mood) {
+
+        this.mood = mood;
+        return this;
+    }
+
+    /**
+     * Make this SearchFilter sort by date (making certain assumptions about how date is stored).
+     *
+     * @return this SearchFilter
+     */
+    public SearchFilter sortByDate() {
+
+        ArrayList<String> dateFields = new ArrayList<String>();
+
+        dateFields.add("year");
+        dateFields.add("month");
+        dateFields.add("dayOfMonth");
+        dateFields.add("hourOfDay");
+        dateFields.add("minute");
+        dateFields.add("second");
+
+        this.setSortByFields(dateFields);
+        this.setSortOrder(SortOrder.Descending);
+
+        return this;
+    }
+
+    public boolean hasSortByFields() {
+
+        return !NullTools.allNullOrEmpty(this.sortByFields);
+    }
+
+    public ArrayList<String> getSortByFields() {
+
+        return this.sortByFields;
+    }
+
+    public SearchFilter setSortByFields(ArrayList<String> fields) {
+
+        this.sortByFields = fields;
         return this;
     }
 
@@ -104,6 +184,12 @@ public class SearchFilter {
         return this;
     }
 
+    /**
+     * Add a {@link FieldValue} to {@link #fieldValues}.
+     *
+     * @param fieldValue the {@link FieldValue} to add
+     * @return this SearchFilter
+     */
     public SearchFilter addFieldValue(FieldValue fieldValue) {
 
         if (this.fieldValues == null) {
@@ -114,6 +200,12 @@ public class SearchFilter {
         return this;
     }
 
+    /**
+     * Add a field to {@link #nonEmptyFields}.
+     *
+     * @param field the field to add
+     * @return this SearchFilter
+     */
     public SearchFilter addNonEmptyField(String field) {
 
         if (this.nonEmptyFields == null) {

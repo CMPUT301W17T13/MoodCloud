@@ -1,9 +1,6 @@
 package com.csahmad.moodcloud;
 
-/**
- * Created by oahmad on 2017-03-07.
- */
-
+/** Determines how certain strings should be formatted. */
 public class StringFormats {
 
     public static final String dateFormat = "yyyy-MM-dd";

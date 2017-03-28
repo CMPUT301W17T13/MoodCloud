@@ -18,12 +18,17 @@ import java.util.concurrent.TimeoutException;
  */
 public class ElasticSearch<T extends ElasticSearchObject> {
 
+    /** The type T. */
     private Class type;
+    /** The name of type T as defined in the elasticsearch index. */
     private String typeName;
 
+    /** Restricts results returned by queries. */
     private SearchFilter filter;
 
+    /** The last {@link AsyncTask} that was executed within this ElasticSearch object. */
     private AsyncTask lastTask;
+    /** How long to wait when attempting to execute a task before a timeout occurs. */
     private Integer timeout;
 
     public ElasticSearch(Class type, String typeName) {
@@ -65,12 +70,13 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.filter = filter;
     }
 
-    public boolean itemExists(T object) throws TimeoutException {
-
-        return this.getById(object.getId()) != null;
-    }
-
-    /** Wait for the last AsyncTask execution to finish. */
+    /**
+     * Wait for the last {@link AsyncTask} execution to finish.
+     *
+     * @throws ExecutionException
+     * @throws InterruptedException
+     * @throws TimeoutException
+     */
     public void waitForTask()
             throws ExecutionException, InterruptedException, TimeoutException {
 
@@ -84,6 +90,16 @@ public class ElasticSearch<T extends ElasticSearchObject> {
             this.lastTask.get(this.timeout, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Return the object with the given id.
+     *
+     * <p>
+     * Return null if no object has the given id.
+     *
+     * @param id the id of the desired object
+     * @return the object with the given id
+     * @throws TimeoutException
+     */
     public T getById(String id) throws TimeoutException {
 
         if (id == null)
@@ -117,7 +133,53 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
+    /**
+     * Return only one object that matches {@link #filter}.
+     *
+     * <p>
+     * If {@link #filter} is null or has no restrictions, return any object. If no object matches
+     * {@link #filter} or no objects exist yet, return null.
+     *
+     * @return an object that matches {@link #filter}
+     * @throws TimeoutException
+     */
+    public T getSingleResult() throws TimeoutException {
+
+        ArrayList<T> results = this.getNext(0, true);
+        if (results.size() > 0) return results.get(0);
+        return null;
+    }
+
+    /**
+     * Return objects that match {@link #filter}.
+     *
+     * <p>
+     * If {@link #filter} is null or has no restrictions, return all objects.
+     *
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return objects that match {@link #filter}
+     * @throws TimeoutException
+     */
     public ArrayList<T> getNext(int from) throws TimeoutException {
+
+        return this.getNext(from, false);
+    }
+
+    /**
+     * Return objects that match {@link #filter}.
+     *
+     * <p>
+     * If {@link #filter} is null or has no restrictions, return all objects.
+     *
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @param singleResult whether to only return one object (or zero if there are no objects to
+     *                     return)
+     * @return objects that match {@link #filter}
+     * @throws TimeoutException
+     */
+    private ArrayList<T> getNext(int from, boolean singleResult) throws TimeoutException {
 
         this.refreshIndex();
 
@@ -136,6 +198,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
         this.lastTask = controller;
 
+        if (singleResult) controller.setSingleResult(true);
         controller.setFrom(from);
         controller.setType(this.type);
         controller.setTypeName(this.typeName);
@@ -162,7 +225,14 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
-    // Update if .id not null (otherwise add)
+    /**
+     * Update or add the given objects via elasticsearch.
+     *
+     * <p>
+     * If an object has a null id, add it. If an object has a non-null id, update it.
+     *
+     * @param objects the objects to add or update
+     */
     public void addOrUpdate(T... objects) {
 
         if (objects == null)
@@ -179,6 +249,11 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         controller.execute(objects);
     }
 
+    /**
+     * Delete the given objects via elasticsearch.
+     *
+     * @param objects the objects to delete
+     */
     public void delete(T... objects) {
 
         if (objects == null)
@@ -200,7 +275,13 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         controller.execute(objects);
     }
 
-    /** Delete all objects of the type this.type. */
+    /**
+     * Delete all objects of type T via elasticsearch.
+     *
+     * @throws TimeoutException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     public void deleteAll() throws TimeoutException, ExecutionException, InterruptedException {
 
         SearchFilter oldFilter = this.filter;
@@ -228,6 +309,9 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         this.filter = oldFilter;
     }
 
+    /**
+     * Refresh the elasticsearch index to make sure changes are reflected everywhere.
+     */
     public void refreshIndex() {
 
         ElasticSearchController.RefreshIndex controller =

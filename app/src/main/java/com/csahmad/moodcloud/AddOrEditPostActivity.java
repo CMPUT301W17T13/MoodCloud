@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.support.v7.widget.Toolbar;
 //mwschafe commented out unused import statements
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +15,9 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeoutException;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
@@ -26,38 +29,81 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
 
+        PostController postController = new PostController();
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("POST_ID");
 
-        final PostController postController = new PostController();
+        try {
 
-        final EditText textExplanation = (EditText) findViewById(R.id.body);
-        final EditText textTrigger = (EditText) findViewById(R.id.trigger);
+            final EditText textExplanation = (EditText) findViewById(R.id.body);
+            final EditText textTrigger = (EditText) findViewById(R.id.trigger);
 
-        final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
-        final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+            final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
+            final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+
+            if (id == null) {
+                setTitle("New Post");
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                        Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
+                                textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
+                                profile.getId() ,null, Calendar.getInstance());
+                        PostController postController = new PostController();
+                        postController.addOrUpdatePosts(post);
+                        ProfileController profileController = new ProfileController();
+                        profileController.addOrUpdateProfiles(profile);
+
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, NewsFeedActivity.class);
+                        startActivity(intent);
+                    }
+
+                });
+            } else{
+                final Post oldPost = postController.getPostFromId(id);
+                String oldExplannation = oldPost.getText();
+                String oldTrigger = oldPost.getTriggerText();
+                int oldmood = oldPost.getMood();
+                int oldcontext = oldPost.getContext();
+                setTitle("Edit Post");
+                textTrigger.setText(oldTrigger);
+                textExplanation.setText(oldExplannation);
+                moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
+                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                        oldPost.setMood(onRadioButtonClicked(moodButtons));
+                        oldPost.setContext(onStatusButtonClicked(statusButtons));
+                        oldPost.setText(textExplanation.getText().toString());
+                        oldPost.setTriggerText(textTrigger.getText().toString());
+
+                        PostController postController = new PostController();
+                        postController.addOrUpdatePosts(oldPost);
 
 
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ViewPostActivity.class);
 
+                        intent.putExtra("POST_ID",oldPost.getId());
+                        startActivity(intent);
 
+                    }
 
-        Button postButton = (Button) findViewById(R.id.postButton);
-        postButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
-                        textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                        profile.getId() ,null, Calendar.getInstance());
-                PostController postController = new PostController();
-                postController.addOrUpdatePosts(post);
-                ProfileController profileController = new ProfileController();
-                profileController.addOrUpdateProfiles(profile);
-
-                Context context = v.getContext();
-                Intent intent = new Intent(context, NewsFeedActivity.class);
-                startActivity(intent);
+                });
             }
 
-        });
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
 
@@ -74,61 +120,76 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     }
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
-    public Mood onRadioButtonClicked(View view) {
+    public Integer onRadioButtonClicked(View view) {
 
-        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        Mood mood = null;
+        int checked = ((RadioGroup) view).getCheckedRadioButtonId();
+        Integer mood = null;
 
-        switch(view.getId()) {
+        Log.i("selected", Integer.toString(view.getId()));
+        Log.i("selected", Integer.toString(R.id.confused_selected));
+
+        switch(checked) {
+
             case R.id.angry_selected:
-                if (checked)
+                mood = Mood.ANGRY;
+                break;
 
-                    mood = Mood.Angry;
             case R.id.confused_selected:
-                if (checked)
-                    mood = Mood.Confused;
+                mood = Mood.CONFUSED;
+                break;
+
             case R.id.scared_selected:
-                if (checked)
-                    mood = Mood.Scared;
+                mood = Mood.SCARED;
+                break;
 
             case R.id.happy_selected:
-                if (checked)
-                    mood = Mood.Happy;
+                mood = Mood.HAPPY;
+                break;
+
             case R.id.sad_selected:
-                if (checked)
-                    mood = Mood.Sad;
+                mood = Mood.SAD;
+                break;
+
             case R.id.surprised_selected:
-                if (checked)
-                    mood = Mood.Surprised;
+                mood = Mood.SURPRISED;
+                break;
+
             case R.id.ashamed_selected:
-                if (checked)
-                    mood = Mood.Ashamed;
+                mood = Mood.ASHAMED;
+                break;
+
             case R.id.disgusted_selected:
-                if (checked)
-                    mood = Mood.Disgusted;
+                mood = Mood.DISGUSTED;
+                break;
+
+            default:
+                throw new RuntimeException("fsdfdssdfsd");
         }
+
         return mood;
     }
 
-    public SocialContext onStatusButtonClicked(View view) {
+    public Integer onStatusButtonClicked(View view) {
 
-        boolean checked = ((RadioGroup) view).getCheckedRadioButtonId() != -1;
-        SocialContext status = null;
+        int checked = ((RadioGroup) view).getCheckedRadioButtonId();
+        Integer status = null;
 
-        switch (view.getId()) {
+        switch (checked) {
             case R.id.alone_selected:
-                if (checked)
-
-                    status = SocialContext.Alone;
+                status = SocialContext.ALONE;
+                break;
             case R.id.crowd_selected:
-                if (checked)
-
-                    status = SocialContext.WithCrowd;
+                status = SocialContext.WITH_CROWD;
+                break;
             case R.id.group_selected:
-                if (checked)
-
-                    status = SocialContext.WithGroup;
+                status = SocialContext.WITH_GROUP;
+                break;
+            default:
+                throw new RuntimeException("other fsdfdssdfsd");
         }
         return status;
     }
+
+    //public
+    //covert the mood and status back to button selection.
 }

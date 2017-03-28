@@ -5,12 +5,18 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by oahmad on 2017-03-06.
- */
-
+/** Build query strings to be used in elasticsearch queries. */
 public class QueryBuilder {
 
+    /**
+     * Return an elasticsearch query reflecting the restrictions in the given filter.
+     *
+     * @param filter the restrictions the query should enforce
+     * @param resultSize the maximum number of results to return
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return an elasticsearch query reflecting the restrictions in the given filter
+     */
     public static String build(SearchFilter filter, int resultSize, int from) {
 
         String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
@@ -23,31 +29,52 @@ public class QueryBuilder {
             components.add(
                     QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields()));
 
-        if (filter.hasFieldValues())
-            components.add(QueryBuilder.buildExactFieldValues(filter.getFieldValues()));
+        if (filter.hasFieldValues()) {
+
+            ArrayList<FieldValue> fieldValues = filter.getFieldValues();
+
+            if (filter.hasMood())
+                fieldValues.add(new FieldValue("mood", filter.getMood()));
+
+            if (filter.hasContext())
+                fieldValues.add(new FieldValue("context", filter.getContext()));
+
+            components.add(QueryBuilder.buildExactFieldValues(fieldValues));
+        }
 
         if (filter.hasTimeUnitsAgo())
             components.add(
                     QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
                             filter.getDateField()));
 
-        if (filter.hasMaxDistance())
-            components.add(
-                    QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
-                            filter.getLocationField(), filter.getDistanceUnits()));
+        String joined = TextUtils.join("},\n{", components);
 
-        query += TextUtils.join(",\n", components);
+        if (!joined.equals("")) {
+            query += "\"bool\": {\n" +
+                "\"must\": [\n" +
+                "{\n" +
+                joined + "\n" +
+                "}\n" +
+                "]\n" +
+                "}";
+        }
 
         query += "\n}";
+
+        if (filter.hasMaxDistance()) {
+            query += ",\n";
+            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+                    filter.getLocationField(), filter.getDistanceUnits());
+        }
 
         if (filter.hasNonEmptyFields()) {
             query += ",\n";
             query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
         }
 
-        if (filter.hasSortByField()) {
+        if (filter.hasSortByFields()) {
             query += ",\n";
-            query += QueryBuilder.buildSortBy(filter.getSortByField(), filter.getSortOrder());
+            query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
         }
 
         query += "\n}";
@@ -55,28 +82,56 @@ public class QueryBuilder {
         return query;
     }
 
-    public static String buildSortBy(String field, SortOrder order) {
+    /**
+     * Return a portion of a query indicating how the results should be sorted.
+     *
+     * @param fields the fields to sort by
+     * @param order the order to sort by
+     * @return a portion of a query indicating how the results should be sorted
+     */
+    public static String buildSortBy(ArrayList<String> fields, SortOrder order) {
 
-        if (field == null || order == null)
+        if (fields == null || order == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "\"sort\": [ { \"" + field + "\": { \"order\": \"";
+        String query = "\"sort\": [ ";
 
-        switch (order) {
+        ArrayList<String> sortByList = new ArrayList<String>();
+        String sortByItem;
 
-            case Ascending:
-                query += "asc";
-                break;
+        for (String field: fields) {
 
-            case Descending:
-                query += "desc";
-                break;
+            sortByItem = "{ \"" + field + "\": { \"order\": \"";
+
+            switch (order) {
+
+                case Ascending:
+                    sortByItem += "asc";
+                    break;
+
+                case Descending:
+                    sortByItem += "desc";
+                    break;
+            }
+
+            sortByItem += "\", \"ignore_unmapped\": true } }";
+
+            sortByList.add(sortByItem);
         }
 
-        query += "\" } } ]";
+        query += TextUtils.join(",\n", sortByList);
+
+        query += " ]";
         return query;
     }
 
+    /**
+     * Return a portion of a query indicating that the given fields should not be empty in the
+     * returned objects.
+     *
+     * @param fields the fields that should not be empty
+     * @return
+     */
     public static String buildNonEmptyFields(ArrayList<String> fields) {
 
         if (fields == null)
@@ -96,14 +151,16 @@ public class QueryBuilder {
         return query;
     }
 
+    /**
+     * Return a portion of a query indicating that certain fields should have certain values.
+     *
+     * @param fieldValues a list of field: value restrictions
+     * @return a portion of a query indicating that certain fields should have certain values
+     */
     public static String buildExactFieldValues(ArrayList<FieldValue> fieldValues) {
 
         if (fieldValues == null)
             throw new IllegalArgumentException("Cannot pass null value.");
-
-        String query = "\"constant_score\": {\n" +
-                "\"filter\": {\n" +
-                "\"term\": {\n";
 
         ArrayList<String> fieldValueStrings = new ArrayList<String>();
         String fieldValueString;
@@ -116,14 +173,19 @@ public class QueryBuilder {
             fieldValueStrings.add(fieldValueString);
         }
 
-        query += TextUtils.join(",\n", fieldValueStrings);
-        query += "\n";
-        query += "}\n}\n}";
-
-        return  query;
+        return TextUtils.join("},\n{", fieldValueStrings);
     }
 
-    // Adds quotes to value if string
+    /**
+     * Return a portion of a query indicating that the given field should have the given value.
+     *
+     * <p>
+     * Adds quotation marks to value if it is a string.
+     *
+     * @param field the field to restrict the value of
+     * @param value the value the given field should be
+     * @return a portion of a query indicating that the given field should have the given value
+     */
     private static String buildExactFieldValue(String field, Object value) {
 
         if (field == null || value == null)
@@ -134,9 +196,20 @@ public class QueryBuilder {
         if (value instanceof String)
             stringValue = "\"" + stringValue + "\"";
 
-        return "\"" + field + "\": " + stringValue;
+        return "\"term\": {\n" +
+                "\"" + field + "\": " + stringValue + "\n" +
+                "}";
     }
 
+    /**
+     * Return a portion of a query indicating that any of the given fields should have any of the
+     * given keywords.
+     *
+     * @param keywords the keywords to search for
+     * @param fields the fields to search for given the keywords in
+     * @return a portion of a query indicating that any of the given fields should have any of the
+     * given keywords
+     */
     public static String buildMultiMatch(ArrayList<String> keywords, ArrayList<String> fields) {
 
         if (keywords == null || fields == null)
@@ -151,6 +224,16 @@ public class QueryBuilder {
         return query;
     }
 
+    /**
+     * Return a portion of a query indicating that the returned objects should not be older than
+     * the given date/time restriction.
+     *
+     * @param timeUnitsAgo the maximum amount of timeUnits ago a returned object can be dated it
+     * @param timeUnits the time units (eg. "w" for weeks)
+     * @param dateField the field that contains the object's date
+     * @return a portion of a query indicating that the returned objects should not be older than
+     * the given date/time restriction
+     */
     public static String buildSinceDate(int timeUnitsAgo, String timeUnits, String dateField) {
 
         if (timeUnitsAgo < 0)
@@ -169,6 +252,17 @@ public class QueryBuilder {
         return query;
     }
 
+    /**
+     * Return a portion of a query indicating that the returned objects should be within the given
+     * distance of the given location.
+     *
+     * @param location the location to measure the distance from
+     * @param maxDistance the maximum distance a returned object can be
+     * @param locationField the name of the object's location field
+     * @param units the units of maxDistance (eg. "km")
+     * @return a portion of a query indicating that the returned objects should be within the given
+     * distance of the given location
+     */
     public static String buildGeoDistance(SimpleLocation location, double maxDistance,
                                           String locationField, String units) {
 
@@ -182,13 +276,19 @@ public class QueryBuilder {
         query += "\"geo_distance\": {\n";
         query += "\"distance\": \"" + Double.toString(maxDistance) + units + "\",\n";
         query += "\"" + locationField + "\": {\n";
-        query += "\"latitude\": " + location.getLatitude() + ",\n";
-        query += "\"longitude\": " + location.getLongitude() + "\n";
+        query += "\"lat\": " + location.getLatitude() + ",\n";
+        query += "\"lon\": " + location.getLongitude() + "\n";
 
         query += "}\n}\n}";
         return query;
     }
 
+    /**
+     * Return a string representing a list of strings that can be used in an elasticsearch query.
+     *
+     * @param strings the strings to include in the list
+     * @return a string representing a list of strings that can be used in an elasticsearch query
+     */
     private static String buildStringList(ArrayList<String> strings) {
 
         ArrayList<String> quotedStrings = new ArrayList<String>();

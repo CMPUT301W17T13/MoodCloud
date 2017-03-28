@@ -1,5 +1,6 @@
 package com.csahmad.moodcloud;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 //mwschafe commented unused import statement
 //import io.searchbox.annotations.JestId;
@@ -11,18 +12,21 @@ public class Post extends ElasticSearchObject {
     public static final String typeName = "post";
 
     private String text;
-    private Mood mood;
+    private int mood;
     private String triggerText;
     private String triggerImage;
-    private SocialContext context;
+    private int context;
     private String posterId;
     private Calendar date;
+    private String dateString;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
-    public Post(String text, Mood mood, String triggerText, String triggerImage,
-                SocialContext context, String posterId, double[] location, Calendar date) {
+    private GeoPoint geoPoint;
+
+    public Post(String text, int mood, String triggerText, String triggerImage,
+                int context, String posterId, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
@@ -30,8 +34,14 @@ public class Post extends ElasticSearchObject {
         this.triggerImage = triggerImage;
         this.context = context;
         this.posterId = posterId;
-        this.location = location;
-        this.date = date;
+        this.setLocation(location);
+        this.setDate(date);
+    }
+
+    private static String makeDateString(Calendar date) {
+
+        SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
+        return format.format(date.getTime());
     }
 
     @Override
@@ -56,12 +66,12 @@ public class Post extends ElasticSearchObject {
         this.text = text;
     }
 
-    public Mood getMood() {
+    public int getMood() {
 
         return this.mood;
     }
 
-    public void setMood(Mood mood) {
+    public void setMood(int mood) {
 
         this.mood = mood;
     }
@@ -86,12 +96,12 @@ public class Post extends ElasticSearchObject {
         this.triggerImage = triggerImage;
     }
 
-    public SocialContext getContext() {
+    public int getContext() {
 
         return this.context;
     }
 
-    public void setContext(SocialContext context) {
+    public void setContext(int context) {
 
         this.context = context;
     }
@@ -114,6 +124,9 @@ public class Post extends ElasticSearchObject {
     public void setLocation(double[] location) {
 
         this.location = location;
+
+        if (location != null)
+            this.geoPoint = new GeoPoint(location[0], location[1]);
     }
 
     public Calendar getDate() {
@@ -124,5 +137,6 @@ public class Post extends ElasticSearchObject {
     public void setDate(Calendar date) {
 
         this.date = date;
+        this.dateString = Post.makeDateString(date);
     }
 }
