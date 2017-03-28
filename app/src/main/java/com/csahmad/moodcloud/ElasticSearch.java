@@ -117,7 +117,19 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return null;
     }
 
+    public T getSingleResult() throws TimeoutException {
+
+        ArrayList<T> results = this.getNext(0, true);
+        if (results.size() > 0) return results.get(0);
+        return null;
+    }
+
     public ArrayList<T> getNext(int from) throws TimeoutException {
+
+        return this.getNext(from, false);
+    }
+
+    private ArrayList<T> getNext(int from, boolean singleResult) throws TimeoutException {
 
         this.refreshIndex();
 
@@ -136,6 +148,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         ElasticSearchController.GetItems<T> controller = new ElasticSearchController.GetItems<T>();
         this.lastTask = controller;
 
+        if (singleResult) controller.setSingleResult(true);
         controller.setFrom(from);
         controller.setType(this.type);
         controller.setTypeName(this.typeName);

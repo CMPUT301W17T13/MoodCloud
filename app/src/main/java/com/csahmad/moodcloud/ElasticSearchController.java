@@ -283,9 +283,20 @@ public class ElasticSearchController {
     public static class GetItems<T extends ElasticSearchObject>
             extends AsyncTask<SearchFilter, Void, ArrayList<T>> {
 
+        private boolean singleResult = false;
         private int from = 0;
         private Class type;
         private String typeName;
+
+        public boolean isSingleResult() {
+
+            return this.singleResult;
+        }
+
+        public void setSingleResult(boolean singleResult) {
+
+            this.singleResult = singleResult;
+        }
 
         public int getFrom() {
 
@@ -361,8 +372,10 @@ public class ElasticSearchController {
 
                 SearchFilter searchFilter = searchFilters[0];
 
-                query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize,
-                        this.from);
+                int resultSize = ElasticSearchController.resultSize;
+                if (this.singleResult) resultSize = 1;
+
+                query = QueryBuilder.build(searchFilter, resultSize, this.from);
 
                 Log.i("Conditional", "If I'm here, should be a searchFilter.");
             }

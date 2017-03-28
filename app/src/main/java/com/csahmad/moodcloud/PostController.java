@@ -113,11 +113,9 @@ public class PostController {
         filter.addFieldValue(new FieldValue("posterId", profile.getId()))
                 .sortByDate();
 
-        ArrayList<Post> result = this.elasticSearch.getNext(0);
+        Post result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
-
-        if (result.size() > 0) return result.get(0);
-        return null;
+        return result;
     }
 
     public void deletePosts(Post... posts) {

@@ -46,11 +46,9 @@ public class AccountController {
 
         this.elasticSearch.setFilter(filter);
 
-        ArrayList<Account> result = this.elasticSearch.getNext(0);
+        Account result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
-
-        if (result.size() == 0) return null;
-        return result.get(0);
+        return result;
     }
 
     public ArrayList<Account> getAccounts(SearchFilter filter, int from)
