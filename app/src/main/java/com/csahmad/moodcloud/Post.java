@@ -1,7 +1,7 @@
 package com.csahmad.moodcloud;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 //mwschafe commented unused import statement
 //import io.searchbox.annotations.JestId;
 
@@ -26,7 +26,7 @@ public class Post extends ElasticSearchObject {
     private double[] location;
 
     public Post(String text, int mood, String triggerText, String triggerImage,
-                int context, String posterId, double[] location, Calendar date, Double lat, Double lo) {
+                int context, String posterId, double[] location, Calendar date, double lat, double lo) {
 
         this.text = text;
         this.mood = mood;
@@ -35,16 +35,13 @@ public class Post extends ElasticSearchObject {
         this.context = context;
         this.posterId = posterId;
         this.location = location;
-<<<<<<< HEAD
         this.date = date;
         this.lat = lat;
         this.lo = lo;
-=======
-        this.setDate(date);
     }
 
     private static String makeDateString(Calendar date) {
->>>>>>> refs/remotes/origin/master
+
 
         SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
         return format.format(date.getTime());
@@ -60,6 +57,22 @@ public class Post extends ElasticSearchObject {
     public String getTypeName() {
 
         return Post.typeName;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLo(double lo) {
+        this.lo = lo;
+    }
+
+    public double getLat() {
+        return this.lat;
+    }
+
+    public double getLo() {
+        return this.lo;
     }
 
     public String getText() {
@@ -137,24 +150,4 @@ public class Post extends ElasticSearchObject {
         return this.date;
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-<<<<<<< HEAD
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLo() {
-        return lo;
-    }
-
-    public void setLo(double lo) {
-        this.lo = lo;
-=======
-        this.date = date;
-        this.dateString = Post.makeDateString(date);
->>>>>>> refs/remotes/origin/master
-    }
 }

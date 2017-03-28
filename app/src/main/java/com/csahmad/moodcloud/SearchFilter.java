@@ -29,6 +29,9 @@ public class SearchFilter {
     private Integer mood;
     private Integer context;
 
+    private Double lat;
+    private Double lo;
+
     // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
 
@@ -272,6 +275,24 @@ public class SearchFilter {
         
         return this.locationField;
     }
+
+    public Double getLat(){
+        return this.lat;
+    }
+
+    public Double getLo(){
+        return this.lo;
+    }
+    public SearchFilter setLat(){
+        this.lat = lat;
+        return this;
+    }
+
+    public SearchFilter setLo(){
+        this.lo = lo;
+        return this;
+    }
+
 
     public SearchFilter setLocationField(String locationField) {
         

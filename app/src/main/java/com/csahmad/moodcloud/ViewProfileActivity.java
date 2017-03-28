@@ -198,7 +198,7 @@ public class ViewProfileActivity extends AppCompatActivity {
      *         2017-03-7
      * @author Taylor
      */
-    public class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
+    public static class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
