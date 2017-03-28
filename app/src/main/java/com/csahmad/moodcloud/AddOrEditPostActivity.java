@@ -82,7 +82,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         oldPost.setContext(onStatusButtonClicked(statusButtons));
                         oldPost.setText(textExplanation.getText().toString());
                         oldPost.setTriggerText(textTrigger.getText().toString());
-
+                        oldPost.setDate(Calendar.getInstance());
                         PostController postController = new PostController();
                         postController.addOrUpdatePosts(oldPost);
 
