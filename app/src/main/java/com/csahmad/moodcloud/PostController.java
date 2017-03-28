@@ -5,9 +5,6 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-// TODO: 2017-03-18 Sort by date
-// TODO: 2017-03-18 Don't request more objects than are used
-
 /**
  * Get {@link Post}s from elastic search or add/update {@link Post}s using elasticsearch.
  *
@@ -28,22 +25,60 @@ public class PostController {
         this.elasticSearch.setTimeout(timeout);
     }
 
-    // Note: stores post in LocoalData.homeProfile AND sends the post to the internets
+    /**
+     * Add or update the given {@link Post}s via elasticsearch.
+     *
+     * <p>
+     * If a {@link Post} has a null {@link Post#id}, add it. If a {@link Post} has a non-null
+     * {@link Post#id}, update it.
+     *
+     * @param posts the {@link Post}s to add or update
+     */
     public void addOrUpdatePosts(Post... posts) {
 
         this.elasticSearch.addOrUpdate(posts);
     }
 
+    /**
+     * Wait for the last task to finish executing.
+     *
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws TimeoutException
+     */
     public void waitForTask() throws InterruptedException, ExecutionException, TimeoutException {
 
         this.elasticSearch.waitForTask();
     }
 
+    /**
+     * Return the {@link Post} that has the given id.
+     *
+     * <p>
+     * Return null if no {@link Post} has the given id.
+     *
+     * @param id the id of the desired {@link Post}
+     * @return the {@link Post} that has the given id
+     * @throws TimeoutException
+     */
     public Post getPostFromId(String id) throws TimeoutException {
 
         return this.elasticSearch.getById(id);
     }
 
+    /**
+     * Return {@link Post}s that match the given filter.
+     *
+     * <p>
+     * If filter is null or has no restrictions, return all {@link Post}s.
+     *
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return {@link Post}s from the elasticsearch index
+     * @throws TimeoutException
+     */
     public ArrayList<Post> getPosts(SearchFilter filter, int from) throws TimeoutException {
 
         if (filter == null)
@@ -57,7 +92,17 @@ public class PostController {
         return result;
     }
 
-    // Note: latest posts only
+    /**
+     * Return the latest {@link Post} of each followee of the given follower.
+     *
+     * @param follower the follower of the followees with the desired posts
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return the latest {@link Post} of each followee of the given follower
+     * @throws TimeoutException
+     */
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
@@ -65,7 +110,17 @@ public class PostController {
         return this.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
-    // Note: latest posts only
+    /**
+     * Return the latest {@link Post} of each follower of the given followee.
+     *
+     * @param followee the followee of the followers with the desired posts
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return the latest {@link Post} of each follower of the given followee
+     * @throws TimeoutException
+     */
     public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
                                                    int from) throws TimeoutException {
 
@@ -73,6 +128,17 @@ public class PostController {
         return this.getLatestPosts(controller.getFollowers(followee, from), filter);
     }
 
+    /**
+     * Return the {@link Post}s associated with the given profile.
+     *
+     * @param profile the poster of the posts to return
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return the {@link Post}s posted by the given profile
+     * @throws TimeoutException
+     */
     public ArrayList<Post> getPosts(Profile profile, SearchFilter filter, int from)
         throws TimeoutException{
 
@@ -90,6 +156,15 @@ public class PostController {
         return result;
     }
 
+    /**
+     * Return the latest {@link Post} of each of the given profiles.
+     *
+     * @param profiles the {@link Profile}s with the posts to return
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @return the latest {@link Post} posted by each profile
+     * @throws TimeoutException
+     */
     public ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter)
         throws TimeoutException{
 
@@ -104,6 +179,18 @@ public class PostController {
         return latestPosts;
     }
 
+    /**
+     * Return the latest {@link Post} posted by the given profile.
+     *
+     * <p>
+     * If there are no posts to return, return null.
+     *
+     * @param profile the poster of the post to return
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @return the latest {@link Post} posted by the given profile
+     * @throws TimeoutException
+     */
     public Post getLatestPost(Profile profile, SearchFilter filter) throws TimeoutException {
 
         if (filter == null)
@@ -113,13 +200,16 @@ public class PostController {
         filter.addFieldValue(new FieldValue("posterId", profile.getId()))
                 .sortByDate();
 
-        ArrayList<Post> result = this.elasticSearch.getNext(0);
+        Post result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
-
-        if (result.size() > 0) return result.get(0);
-        return null;
+        return result;
     }
 
+    /**
+     * Delete the given {@link Post}s via elasticsearch.
+     *
+     * @param posts
+     */
     public void deletePosts(Post... posts) {
 
         this.elasticSearch.delete(posts);

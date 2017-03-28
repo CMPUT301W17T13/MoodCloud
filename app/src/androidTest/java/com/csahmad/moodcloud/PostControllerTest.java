@@ -173,6 +173,14 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         results = controller.getFolloweePosts(follower, filter, 0);
         assertEquals(results, expected);
 
+        filter = new SearchFilter()
+                .setLocation(new SimpleLocation(0.0d, 0.0d, 0.0d))
+                .setMaxDistance(1.1d);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+
+        ;
+
         profileController.deleteProfiles(follower, followee1);
         followController.deleteFollows(follow);
         controller.deletePosts(followerPost, followee1post1, followee1post2, followee1post3,
