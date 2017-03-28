@@ -1,9 +1,10 @@
 package com.csahmad.moodcloud;
 
 /**
- * Created by oahmad on 2017-03-19.
+ * Represents a social context.
+ *
+ * @see Post
  */
-
 public class SocialContext {
 
     public static final int ALONE = 0;

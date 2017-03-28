@@ -1,9 +1,10 @@
 package com.csahmad.moodcloud;
 
 /**
- * Created by oahmad on 2017-03-19.
+ * Represents a mood.
+ *
+ * @see Post
  */
-
 public class Mood {
 
     public static final int ANGRY = 0;
