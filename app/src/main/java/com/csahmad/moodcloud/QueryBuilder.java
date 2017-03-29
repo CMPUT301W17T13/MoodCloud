@@ -179,9 +179,6 @@ public class QueryBuilder {
     /**
      * Return a portion of a query indicating that the given field should have the given value.
      *
-     * <p>
-     * Adds quotation marks to value if it is a string.
-     *
      * @param field the field to restrict the value of
      * @param value the value the given field should be
      * @return a portion of a query indicating that the given field should have the given value
@@ -192,9 +189,6 @@ public class QueryBuilder {
             throw new IllegalArgumentException("Cannot pass null values.");
 
         String stringValue = value.toString();
-
-        if (value instanceof String)
-            stringValue = "\"" + stringValue + "\"";
 
         return "\"term\": {\n" +
                 "\"" + field + "\": " + stringValue + "\n" +

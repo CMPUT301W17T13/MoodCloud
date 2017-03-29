@@ -27,27 +27,76 @@ public class SearchMoods extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner2);
+        final EditText findText = (EditText) findViewById(R.id.findText);
+
+        final Spinner topSpinner = (Spinner) findViewById(R.id.spinner2);
+        ArrayAdapter<CharSequence> topAdapter = ArrayAdapter.createFromResource(this,
+                R.array.whereArray);
+        topAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        topSpinner.setAdapter(topAdapter);
+
+        final Spinner moodSpinner = (Spinner) findViewById(R.id.spinner2);
 // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> moodAdapter = ArrayAdapter.createFromResource(this,
                 R.array.moodsArray, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        moodSpinner.setAdapter(moodAdapter);
 
-        Spinner spinner2 = (Spinner) findViewById(R.id.spinner3);
+        final Spinner contextSpinner = (Spinner) findViewById(R.id.spinner3);
 // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> contextAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groupSoloArray, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
-        spinner2.setAdapter(adapter2);
+        contextSpinner.setAdapter(contextAdapter);
+
+        Button searchButton = (Button) findViewById(R.id.searchButton);
+
+        final Context context = this;
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keyword = findText.getText().toString();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+
+                if (!keyword.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any")) {
+                    filter.setMood(Mood.fromString(moodString));
+                }
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, SearchResultsActivity.class);
+
+                if (where == "Recent Week") {
+                    filter.setMaxTimeUnitsAgo(1);
+                    where = "Everyone";
+                }
+
+                intent.putExtra("WHERE", where);
+                intent.putExtra("FILTER", filter);
+                startActivity(intent);
+            }
+        });
 
         Button findUserButton = (Button) findViewById(R.id.findUserButton);
         final EditText findUser = (EditText) findViewById(R.id.findUser);
-        final Context context = this;
 
         findUserButton.setOnClickListener(new View.OnClickListener() {
 

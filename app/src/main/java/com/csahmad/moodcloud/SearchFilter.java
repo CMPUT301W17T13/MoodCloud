@@ -1,13 +1,114 @@
 package com.csahmad.moodcloud;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.ArrayList;
 
+// Parcelable so can pass between activities with Intents:
+// https://developer.android.com/reference/android/os/Parcelable.html
+// Accessed January 29, 2017
 /**
  * Defines restrictions on elasticsearch queries.
  *
  * @see ElasticSearch
  */
-public class SearchFilter {
+public class SearchFilter implements Parcelable {
+
+    public SearchFilter() {}
+
+    // For creating the Parcel:
+    // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
+    // Accessed January 29, 2017
+    /** For creating the {@link Parcel}. */
+    public static final Parcelable.Creator<SearchFilter> CREATOR =
+            new Parcelable.Creator<SearchFilter>() {
+
+        public SearchFilter createFromParcel(Parcel in) {
+
+            return new SearchFilter(in);
+        }
+
+        public SearchFilter[] newArray(int size) {
+
+            return new SearchFilter[size];
+        }
+    };
+
+    // For Parcelable
+    // 0 because no special objects to handle:
+    // https://developer.android.com/reference/android/os/Parcelable.html
+    // Accessed January 29, 2017
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    // Initialize SearchFilter from a SearchFilter Parcel:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /** Initialize SearchFilter from a SearchFilter {@link Parcel}. */
+    public SearchFilter(Parcel in) {
+
+        this.readFromParcel(in);
+    }
+
+    ;
+
+    /**
+     * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
+     *
+     * @param in the {@link Parcel} to read from
+     */
+    private void readFromParcel(Parcel in) {
+
+        in.readStringList(this.keywords);
+        in.readStringList(this.keywordFields);
+
+        this.fieldValues = ParcelIO.readFieldValues(in);
+
+        this.maxTimeUnitsAgo = ParcelIO.readInteger(in);
+        this.timeUnits = in.readString();
+        this.dateField = in.readString();
+
+        this.maxDistance = ParcelIO.readDouble(in);
+        this.location = ParcelIO.readLocation(in);
+        this.distanceUnits = in.readString();
+        this.locationField = in.readString();
+
+        in.readStringList(this.sortByFields);
+        this.sortOrder = ParcelIO.readSortOrder(in);
+    }
+
+    // For Parcelable
+    // Write the fields:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /**
+     * Write this SearchFilter's fields to the given {@link Parcel}
+     *
+     * @param out the {@link Parcel} to write to
+     */
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+
+        out.writeStringList(this.keywords);
+        out.writeStringList(this.keywordFields);
+
+        ParcelIO.writeFieldValues(out, this.fieldValues);
+
+        ParcelIO.writeInteger(out, this.maxTimeUnitsAgo);
+        out.writeString(this.timeUnits);
+        out.writeString(this.dateField);
+
+        ParcelIO.writeDouble(out, this.maxDistance);
+        ParcelIO.writeLocation(out, this.location);
+        out.writeString(this.distanceUnits);
+        out.writeString(this.locationField);
+
+        out.writeStringList(this.sortByFields);
+        ParcelIO.writeSortOrder(out, this.sortOrder);
+    }
 
     /** Words that the fields in {@link #keywordFields} should contain. */
     private ArrayList<String> keywords;
@@ -59,6 +160,30 @@ public class SearchFilter {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance, nonEmptyFields);
+    }
+
+    /**
+     * Add the given field name to {@link #keywordFields}.
+     *
+     * @param field the field to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addKeywordField(String field) {
+
+        this.keywordFields.add(field);
+        return this;
+    }
+
+    /**
+     * Add the given keyword to {@link #keywords}.
+     *
+     * @param keyword the keyword to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addKeyword(String keyword) {
+
+        this.keywords.add(keyword);
+        return this;
     }
 
     public boolean hasContext() {
