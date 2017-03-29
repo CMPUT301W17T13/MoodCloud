@@ -12,6 +12,8 @@ import java.util.List;
 //mwschafe commented out unused import statements
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.Count;
+import io.searchbox.core.CountResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -274,6 +276,76 @@ public class ElasticSearchController {
 
             catch (IOException e) {
                 Log.i("Error", "Could not get object by ID.");
+            }
+
+            return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For counting the number of objects that match the given restrictions.
+     */
+    public static class GetCount<T extends ElasticSearchObject>
+            extends AsyncTask<SearchFilter, Void, Double> {
+
+        /** The name of type T as defined in the elasticsearch index. */
+        private String typeName;
+
+        public String getTypeName() {
+
+            return this.typeName;
+        }
+
+        public void setTypeName(String typeName) {
+
+            this.typeName = typeName;
+        }
+
+        /**
+         * Returns the number of objects that match the restrictions in the given search filter.
+         *
+         * @param searchFilters only pass one search filter to restrict the search (or pass no
+         *                      search filters to get all objects)
+         * @return the number of objects matching the restrictions in the given search filter
+         */
+        @Override
+        protected Double doInBackground(SearchFilter... searchFilters) {
+
+            String query;
+
+            if (searchFilters.length == 0 || searchFilters[0] == null ||
+                    !searchFilters[0].hasRestrictions())
+
+                query = "";
+
+            // If keyword passed, make the query string (otherwise leave query as an empty string)
+            //if (!keywordString.equals("")) {
+            else {
+                SearchFilter searchFilter = searchFilters[0];
+                query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize, 0);
+            }
+
+            Count count = new Count.Builder()
+                    .addIndex(ElasticSearchController.index)
+                    .addType(this.typeName)
+                    .query(query)
+                    .build();
+
+            try {
+
+                CountResult result = ElasticSearchController.client.execute(count);
+
+                if (result.isSucceeded()) {
+                    return result.getCount();
+                }
+
+                else
+                    Log.i("Error", "Elasticsearch died with " + result.getErrorMessage());
+            }
+
+            catch (IOException e) {
+                Log.i("Error", "Something went wrong trying to get count from elasticsearch.");
             }
 
             return null;
