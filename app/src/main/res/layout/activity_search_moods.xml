@@ -21,59 +21,25 @@
             app:titleMarginStart="120dp"
             app:titleTextColor="@android:color/background_light" />
 
-        <Button
-            android:id="@+id/OnlyFollowingButton"
-            style="@style/Widget.AppCompat.Button.Colored"
+        <TextView
+            android:id="@+id/whereText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/toolbar3"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="16dp"
-            android:text="Following"
-            android:textColorLink="@android:color/background_light"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/MyMoodsButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/OnlyFollowingButton"
-            android:layout_below="@+id/OnlyFollowingButton"
-            android:layout_marginTop="12dp"
-            android:text="My Moods"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/EveryoneButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/MyMoodsButton"
-            android:layout_below="@+id/MyMoodsButton"
-            android:layout_marginTop="17dp"
-            android:text="Everyone"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/RecentWeekButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/EveryoneButton"
-            android:layout_below="@+id/EveryoneButton"
-            android:layout_marginTop="20dp"
-            android:text="Recent Week" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Where"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/RecentWeekButton"
-            android:layout_below="@+id/RecentWeekButton"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/whereText"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:text="By Mood"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -81,68 +47,92 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_below="@+id/textView"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:text="Groups/Solo"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:layout_below="@+id/button2"
-            android:layout_alignEnd="@+id/OnlyFollowingButton" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <Spinner
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/textView"
             android:layout_alignBottom="@+id/textView"
             android:layout_alignTop="@+id/textView"
-            android:layout_marginRight="100dp"
-            android:layout_toEndOf="@+id/RecentWeekButton" />
+            android:layout_marginRight="16dp" />
 
         <Spinner
             android:id="@+id/spinner3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView2"
-            android:layout_alignStart="@+id/spinner2"
-            android:layout_alignEnd="@+id/spinner2" />
-
-        <Button
-            android:id="@+id/button2"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView"
-            android:layout_alignBottom="@+id/textView"
-            android:layout_alignParentEnd="true"
-            android:text="Search" />
-
-        <Button
-            android:id="@+id/button3"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView2"
+            android:layout_height="match_parent"
             android:layout_alignBottom="@+id/textView2"
-            android:layout_alignParentEnd="true"
-            android:text="Search" />
+            android:layout_alignEnd="@+id/spinner2"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_alignTop="@+id/textView2" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/spinner1"
+            android:layout_alignBottom="@+id/whereText"
+            android:layout_alignEnd="@+id/spinner2"
+            android:layout_toRightOf="@+id/whereText"
+            android:layout_alignTop="@+id/whereText"/>
 
         <EditText
             android:id="@+id/findUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/OnlyFollowingButton"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="13dp"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/searchButton"
+            android:layout_marginTop="24dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Find user" />
+            android:hint="Find user" />
 
-        <Button
-            android:id="@+id/findUserButton"
+        <EditText
+            android:id="@+id/findText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/findUser"
-            android:layout_alignTop="@+id/MyMoodsButton"
-            android:layout_marginEnd="59dp"
-            android:hint="Search user" />
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Find Text" />
+
+        <Button
+            android:id="@+id/searchButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/findText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:hint="Search" />
+
+        <ImageButton
+            android:id="@+id/backButton"
+            style="@android:style/Widget.Holo.Light.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/background_light"
+            app:srcCompat="?attr/actionModeCloseDrawable" />
+
+        <Button
+            android:id="@+id/searchUsers"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/findUser"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:hint="Search Users" />
 
 
     </RelativeLayout>

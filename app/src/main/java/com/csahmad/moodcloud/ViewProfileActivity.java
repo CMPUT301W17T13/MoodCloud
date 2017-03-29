@@ -93,7 +93,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             );
         }else {
             FollowController followController = new FollowController();
-            FollowRequestController followRequestController = new FollowRequestController();
+            final FollowRequestController followRequestController = new FollowRequestController();
             if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
                 //Button button = (Button) findViewById(R.id.followeditbutton);
                 followeditbutton.setText("Followed");
@@ -110,8 +110,22 @@ public class ViewProfileActivity extends AppCompatActivity {
                     followeditbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view){
-                            Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
-                            followeditbutton.setText("button clicked");
+                            //Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
+                            FollowRequest followRequest = new FollowRequest(
+                                    LocalData.getSignedInProfile(getApplicationContext()), profile);
+                            followRequestController.addOrUpdateFollows(followRequest);
+                            try {
+                                followRequestController.waitForTask();
+                                //textText.setText(followRequest.getId().toString());
+                                if (followRequestController.getFollowRequestFromID(followRequest.getId()).equals(followRequest)) {
+                                    followeditbutton.setText("Request Sent");
+                                } else {
+                                    followeditbutton.setText("Request Not Sent");
+                                }
+                                followeditbutton.setClickable(FALSE);
+                            } catch (InterruptedException e) {}
+                            catch (TimeoutException e) {}
+                            catch (ExecutionException e) {}
                             /**FollowRequest followRequest = new FollowRequest(
                              LocalData.getSignedInProfile(getApplicationContext()), profile);
                              FollowRequestController followRequestController = new FollowRequestController();
