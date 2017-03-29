@@ -57,6 +57,7 @@ public class ViewPostActivity extends AppCompatActivity {
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
             final Button button = (Button) findViewById(R.id.button);
+            final Button deleteButton = (Button) findViewById(R.id.deleteButton);
             if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
                 //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
 
@@ -70,7 +71,16 @@ public class ViewPostActivity extends AppCompatActivity {
                         startActivity(intent);
                     }}
                 );
+                deleteButton.setText("Delete Post");
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        postController.deletePosts(post);
+                        finish();
+                    }}
+                );
             } else {
+                deleteButton.setVisibility(View.GONE);
                 FollowController followController = new FollowController();
                 FollowRequestController followRequestController = new FollowRequestController();
                 if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
