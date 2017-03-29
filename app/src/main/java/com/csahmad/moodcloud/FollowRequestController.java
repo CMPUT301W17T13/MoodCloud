@@ -90,6 +90,26 @@ public class FollowRequestController {
     }
 
     /**
+     * Return the number of follow requests for the given {@link Profile}.
+     *
+     * @param followee the {@link Profile} to get the number of follow requests for
+     * @return the number of follow requests for the given {@link Profile}
+     * @throws TimeoutException
+     */
+    public Double getFollowRequestCount(Profile followee) throws TimeoutException {
+
+        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("followeeId",
+                followee.getId()));
+
+        this.elasticSearch.setFilter(filter);
+
+        Double count = this.elasticSearch.getCount();
+        this.elasticSearch.setFilter(null);
+
+        return count;
+    }
+
+    /**
      * Return the {@link FollowRequest} that has the given id.
      *
      * <p>
