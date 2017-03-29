@@ -111,7 +111,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
 
-                Intent intent = new Intent(AddOrEditPostActivity.this, NewsFeedActivity.class);
+                Intent intent = new Intent(AddOrEditPostActivity.this, ViewProfileActivity.class);
                 startActivity(intent);
             }}
         );
