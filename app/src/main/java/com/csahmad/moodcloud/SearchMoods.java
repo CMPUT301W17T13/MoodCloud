@@ -31,7 +31,7 @@ public class SearchMoods extends AppCompatActivity {
 
         final Spinner topSpinner = (Spinner) findViewById(R.id.spinner2);
         ArrayAdapter<CharSequence> topAdapter = ArrayAdapter.createFromResource(this,
-                R.array.whereArray);
+                R.array.whereArray, android.R.layout.simple_spinner_item);
         topAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         topSpinner.setAdapter(topAdapter);
 
@@ -95,7 +95,7 @@ public class SearchMoods extends AppCompatActivity {
             }
         });
 
-        Button findUserButton = (Button) findViewById(R.id.findUserButton);
+        Button findUserButton = (Button) findViewById(R.id.searchUsers);
         final EditText findUser = (EditText) findViewById(R.id.findUser);
 
         findUserButton.setOnClickListener(new View.OnClickListener() {
