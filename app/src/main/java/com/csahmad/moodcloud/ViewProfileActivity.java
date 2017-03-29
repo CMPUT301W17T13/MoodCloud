@@ -37,9 +37,9 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onStart() {
 
-        super.onCreate(savedInstanceState);
+        super.onStart();
         setContentView(R.layout.activity_view_profile);
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
