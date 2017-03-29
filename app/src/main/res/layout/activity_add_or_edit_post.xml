@@ -232,7 +232,7 @@
         android:layout_alignParentEnd="true">
 
         <RadioButton
-            android:id="@+id/crowd_selected"
+            android:id="@+id/alone_selected"
             android:layout_width="30dp"
             android:layout_height="30dp" />
         <RadioButton
@@ -240,7 +240,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
         <RadioButton
-            android:id="@+id/alone_selected"
+            android:id="@+id/crowd_selected"
             android:layout_width="30dp"
             android:layout_height="30dp" />
     </RadioGroup>

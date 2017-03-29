@@ -42,7 +42,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
 
             if (id == null) {
-                setTitle("New Post");
+
                 Button postButton = (Button) findViewById(R.id.postButton);
                 postButton.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -56,9 +56,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         ProfileController profileController = new ProfileController();
                         profileController.addOrUpdateProfiles(profile);
 
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, NewsFeedActivity.class);
-                        startActivity(intent);
+                        //Context context = v.getContext();
+                        finish();
                     }
 
                 });
@@ -68,7 +67,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 String oldTrigger = oldPost.getTriggerText();
                 int oldmood = oldPost.getMood();
                 int oldcontext = oldPost.getContext();
-                setTitle("Edit Post");
+
                 textTrigger.setText(oldTrigger);
                 textExplanation.setText(oldExplannation);
                 moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
@@ -77,7 +76,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 postButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                        //Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                         oldPost.setMood(onRadioButtonClicked(moodButtons));
                         oldPost.setContext(onStatusButtonClicked(statusButtons));
                         oldPost.setText(textExplanation.getText().toString());
@@ -111,7 +110,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Context context = view.getContext();
+
                 Intent intent = new Intent(AddOrEditPostActivity.this, NewsFeedActivity.class);
                 startActivity(intent);
             }}
@@ -120,6 +119,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
     }
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
+    //A converter function that converts the selected radio button in a radio group to a mood
     public Integer onRadioButtonClicked(View view) {
 
         int checked = ((RadioGroup) view).getCheckedRadioButtonId();
@@ -190,6 +190,5 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         return status;
     }
 
-    //public
-    //covert the mood and status back to button selection.
+
 }

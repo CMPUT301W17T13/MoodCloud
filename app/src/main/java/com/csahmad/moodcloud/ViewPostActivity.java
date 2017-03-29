@@ -48,11 +48,9 @@ public class ViewPostActivity extends AppCompatActivity {
             SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
             dateText.setText(format1.format(post.getDate().getTime()));
             TextView contextText = (TextView) findViewById(R.id.contextText);
-            ArrayList<String> contexts = new ArrayList<>();
-            contexts.add("Alone");
-            contexts.add("With a Group");
-            contexts.add("In a Crowd");
-            contextText.setText(contexts.get(post.getContext()));
+            String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
+            contextText.setText(contexts[post.getContext()]);
+
             TextView triggerText = (TextView) findViewById(R.id.triggerText);
             triggerText.setText("Trigger: " + post.getTriggerText());
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
