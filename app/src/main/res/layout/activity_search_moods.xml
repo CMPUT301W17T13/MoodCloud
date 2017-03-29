@@ -124,6 +124,26 @@
             android:layout_alignParentEnd="true"
             android:text="Search" />
 
+        <EditText
+            android:id="@+id/findUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/OnlyFollowingButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="13dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Find user" />
+
+        <Button
+            android:id="@+id/findUserButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/findUser"
+            android:layout_alignTop="@+id/MyMoodsButton"
+            android:layout_marginEnd="59dp"
+            android:hint="Search user" />
+
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

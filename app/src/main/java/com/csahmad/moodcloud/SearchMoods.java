@@ -1,15 +1,22 @@
 package com.csahmad.moodcloud;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.util.concurrent.TimeoutException;
 
 public class SearchMoods extends AppCompatActivity {
 
@@ -37,6 +44,37 @@ public class SearchMoods extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner2.setAdapter(adapter2);
+
+        Button findUserButton = (Button) findViewById(R.id.findUserButton);
+        final EditText findUser = (EditText) findViewById(R.id.findUser);
+        final Context context = this;
+
+        findUserButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                try {
+
+                    String input = findUser.getText().toString();
+                    ProfileController controller = new ProfileController();
+                    Profile profile = controller.getProfileFromUsername(input);
+
+                    if (profile == null)
+                        Toast.makeText(context, "No such user", Toast.LENGTH_LONG).show();
+
+                    else {
+                        Intent intent = new Intent(context, ViewProfileActivity.class);
+                        intent.putExtra("ID", profile.getId());
+                        startActivity(intent);
+                    }
+                }
+
+                catch (TimeoutException e) {
+                    Log.i("Error", "Oh no");
+                }
+            }
+        });
 
 
 
