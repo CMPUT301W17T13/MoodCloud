@@ -37,6 +37,8 @@
                   android:screenOrientation="portrait"/>
         <activity android:name=".ViewPostActivity"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".SearchResultsActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".FollowRequestActivity"
                   android:screenOrientation="portrait"/>
         <activity android:name=".ShowMapActivity"
