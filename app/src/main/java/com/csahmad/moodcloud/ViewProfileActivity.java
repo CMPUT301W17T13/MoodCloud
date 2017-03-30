@@ -150,9 +150,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Context context = view.getContext();
-                Intent intent = new Intent(context, SignInActivity.class);
-                startActivity(intent);
+                finish();
             }}
         );
 

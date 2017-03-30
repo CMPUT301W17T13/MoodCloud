@@ -130,9 +130,7 @@ public class ViewPostActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Context context = view.getContext();
-                Intent intent = new Intent(context, NewsFeedActivity.class);
-                startActivity(intent);
+                finish();
             }}
         );
     }
