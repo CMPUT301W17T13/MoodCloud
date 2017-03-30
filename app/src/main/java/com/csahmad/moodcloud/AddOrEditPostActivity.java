@@ -3,6 +3,9 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 //import android.provider.MediaStore;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.support.v7.widget.Toolbar;
@@ -14,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,78 +32,107 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
-
         PostController postController = new PostController();
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("POST_ID");
 
-        try {
-
-            final EditText textExplanation = (EditText) findViewById(R.id.body);
-            final EditText textTrigger = (EditText) findViewById(R.id.trigger);
-
-            final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
-            final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
-
-            if (id == null) {
-
-                Button postButton = (Button) findViewById(R.id.postButton);
-                postButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                        Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
-                                textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                                profile.getId() ,null, Calendar.getInstance());
-                        PostController postController = new PostController();
-                        postController.addOrUpdatePosts(post);
-                        ProfileController profileController = new ProfileController();
-                        profileController.addOrUpdateProfiles(profile);
-
-                        //Context context = v.getContext();
-                        finish();
-                    }
-
-                });
-            } else{
-                final Post oldPost = postController.getPostFromId(id);
-                String oldExplannation = oldPost.getText();
-                String oldTrigger = oldPost.getTriggerText();
-                int oldmood = oldPost.getMood();
-                int oldcontext = oldPost.getContext();
-
-                textTrigger.setText(oldTrigger);
-                textExplanation.setText(oldExplannation);
-                moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
-                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
-                Button postButton = (Button) findViewById(R.id.postButton);
-                postButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        //Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                        oldPost.setMood(onRadioButtonClicked(moodButtons));
-                        oldPost.setContext(onStatusButtonClicked(statusButtons));
-                        oldPost.setText(textExplanation.getText().toString());
-                        oldPost.setTriggerText(textTrigger.getText().toString());
-                        oldPost.setDate(Calendar.getInstance());
-                        PostController postController = new PostController();
-                        postController.addOrUpdatePosts(oldPost);
+        if(isNetworkAvailable()) {
+            Intent intent = getIntent();
+            String id = intent.getStringExtra("POST_ID");
 
 
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ViewPostActivity.class);
+            try {
 
-                        intent.putExtra("POST_ID",oldPost.getId());
-                        startActivity(intent);
+                final EditText textExplanation = (EditText) findViewById(R.id.body);
+                final EditText textTrigger = (EditText) findViewById(R.id.trigger);
 
-                    }
+                final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
+                final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
 
-                });
+                if (id == null) {
+
+                    Button postButton = (Button) findViewById(R.id.postButton);
+                    postButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (textExplanation.getText().toString().equals("")) {
+                                Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
+                            } else if (onRadioButtonClicked(moodButtons) == 8) {
+                                Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
+                            } else if (textTrigger.getText().toString().equals("")) {
+                                Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
+                            } else if (onStatusButtonClicked(statusButtons) == 4) {
+                                Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
+                            } else {
+                                Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                                Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
+                                        textTrigger.getText().toString(), null, onStatusButtonClicked(statusButtons),
+                                        profile.getId(), null, Calendar.getInstance());
+                                PostController postController = new PostController();
+                                postController.addOrUpdatePosts(post);
+                                ProfileController profileController = new ProfileController();
+                                profileController.addOrUpdateProfiles(profile);
+
+
+                                finish();
+                            }
+                        }
+
+                    });
+                } else {
+
+                    final Post oldPost = postController.getPostFromId(id);
+                    String oldExplannation = oldPost.getText();
+                    String oldTrigger = oldPost.getTriggerText();
+                    int oldmood = oldPost.getMood();
+                    int oldcontext = oldPost.getContext();
+
+                    textTrigger.setText(oldTrigger);
+                    textExplanation.setText(oldExplannation);
+                    moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
+                    statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+                    Button postButton = (Button) findViewById(R.id.postButton);
+                    postButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (textExplanation.getText().toString().equals("")) {
+                                Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
+                            } else if (onRadioButtonClicked(moodButtons) == 8) {
+                                Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
+                            } else if (textTrigger.getText().toString().equals("")) {
+                                Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
+                            } else if (onStatusButtonClicked(statusButtons) == 4) {
+                                Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
+                            } else {
+                                oldPost.setMood(onRadioButtonClicked(moodButtons));
+                                oldPost.setContext(onStatusButtonClicked(statusButtons));
+                                oldPost.setText(textExplanation.getText().toString());
+                                oldPost.setTriggerText(textTrigger.getText().toString());
+                                oldPost.setDate(Calendar.getInstance());
+
+                                PostController postController = new PostController();
+                                postController.addOrUpdatePosts(oldPost);
+
+
+                                //Context context = v.getContext();
+                                //Intent intent = new Intent(context, ViewPostActivity.class);
+
+                                //intent.putExtra("POST_ID", oldPost.getId());
+                                finish();
+                                //startActivity(intent);
+                            }
+
+
+                        }
+
+                    });
+                }
+
+            } catch (TimeoutException e) {
+                e.printStackTrace();
             }
+        }//else{
 
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
+        //}
 
 
 
@@ -162,7 +195,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 break;
 
             default:
-                throw new RuntimeException("fsdfdssdfsd");
+                //throw new RuntimeException("fsdfdssdfsd");
+                return 8;
         }
 
         return mood;
@@ -184,9 +218,17 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 status = SocialContext.WITH_GROUP;
                 break;
             default:
-                throw new RuntimeException("other fsdfdssdfsd");
+                //throw new RuntimeException("other fsdfdssdfsd");
+                return 4;
         }
         return status;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 

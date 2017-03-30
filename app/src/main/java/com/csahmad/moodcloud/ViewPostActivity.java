@@ -81,6 +81,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 );
             } else {
                 deleteButton.setVisibility(View.GONE);
+
                 FollowController followController = new FollowController();
                 FollowRequestController followRequestController = new FollowRequestController();
                 if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
