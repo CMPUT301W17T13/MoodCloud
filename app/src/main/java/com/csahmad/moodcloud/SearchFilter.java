@@ -326,6 +326,28 @@ public class SearchFilter implements Parcelable {
     }
 
     /**
+     * Remove the {@link FieldValue} with the given field name (if it exists).
+     *
+     * @param field the field name of the field value to remove
+     */
+    public void removeFieldValue(String field) {
+
+        if (this.fieldValues == null) return;
+
+        FieldValue fieldValue;
+
+        for (int i = 0; i < this.fieldValues.size(); i++) {
+
+            fieldValue = this.fieldValues.get(i);
+
+            if (fieldValue.getFieldName() == field) {
+                this.fieldValues.remove(i);
+                return;
+            }
+        }
+    }
+
+    /**
      * Add a {@link FieldValue} to {@link #fieldValues}.
      *
      * @param fieldValue the {@link FieldValue} to add

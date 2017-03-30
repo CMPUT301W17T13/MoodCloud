@@ -157,9 +157,12 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
                 "Thor",                                 // Trigger text
                 null,                                   // Trigger image
                 SocialContext.ALONE,                                // Social context
-                followee1.getId(),                    // Poster ID
+                followee2.getId(),                    // Poster ID
                 location,                               // Location
                 new GregorianCalendar(2015, 2, 15));
+
+        controller.addOrUpdatePosts(followee2post1);
+        controller.waitForTask();
 
         expected.clear();
         expected.add(followee1post3);
