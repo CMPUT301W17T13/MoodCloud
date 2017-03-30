@@ -79,8 +79,8 @@ public class SearchFilter implements Parcelable {
         this.sortByFields = ParcelIO.readStringList(in);
         this.sortOrder = ParcelIO.readSortOrder(in);
 
-        this.mood = in.readInt();
-        this.context = in.readInt();
+        this.mood = ParcelIO.readInteger(in);
+        this.context = ParcelIO.readInteger(in);
 
         this.nonEmptyFields = ParcelIO.readStringList(in);
     }
@@ -114,8 +114,8 @@ public class SearchFilter implements Parcelable {
         out.writeStringList(this.sortByFields);
         ParcelIO.writeSortOrder(out, this.sortOrder);
 
-        out.writeInt(this.mood);
-        out.writeInt(this.context);
+        ParcelIO.writeInteger(out, this.mood);
+        ParcelIO.writeInteger(out, this.context);
 
         out.writeStringList(this.nonEmptyFields);
     }
