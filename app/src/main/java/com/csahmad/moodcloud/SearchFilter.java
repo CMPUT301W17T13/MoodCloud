@@ -163,11 +163,12 @@ public class SearchFilter implements Parcelable {
     /** Results must have a (non-empty) value for all of these fields. */
     private ArrayList<String> nonEmptyFields;
 
+    // TODO: 2017-03-30 Maybe just check if a SearchFilter is null instead of having this method.
     /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, nonEmptyFields);
+                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields);
     }
 
     /**

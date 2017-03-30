@@ -76,9 +76,8 @@ public class SearchMoods extends AppCompatActivity {
                     for (String keyword: keywords) filter.addKeyword(keyword);
                 }
 
-                if (!moodString.equals("Any")) {
+                if (!moodString.equals("Any"))
                     filter.setMood(Mood.fromString(moodString));
-                }
 
                 if (!contextString.equals("Any")) {
                     filter.setContext(SocialContext.fromString(contextString));

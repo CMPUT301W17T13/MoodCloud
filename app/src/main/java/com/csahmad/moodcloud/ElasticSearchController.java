@@ -274,8 +274,10 @@ public class ElasticSearchController {
                     return resultObject;
                 }
 
-                else
-                    Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
+                else {
+                    Log.i("Error", "Elasticsearch died (get by ID): " + result.getErrorMessage());
+                    Log.i("Error", "died type: " + this.getTypeName());
+                }
             }
 
             catch (IOException e) {

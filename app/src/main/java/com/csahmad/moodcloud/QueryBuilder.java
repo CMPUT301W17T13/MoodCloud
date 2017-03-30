@@ -29,9 +29,12 @@ public class QueryBuilder {
             components.add(
                     QueryBuilder.buildMultiMatch(filter.getKeywords(), filter.getKeywordFields()));
 
-        if (filter.hasFieldValues()) {
+        if (filter.hasFieldValues() || filter.hasMood() || filter.hasContext()) {
 
             ArrayList<FieldValue> fieldValues = filter.getFieldValues();
+
+            if (fieldValues == null)
+                fieldValues = new ArrayList<FieldValue>();
 
             if (filter.hasMood())
                 fieldValues.add(new FieldValue("mood", filter.getMood()));
@@ -78,8 +81,9 @@ public class QueryBuilder {
         }
 
         query += "\n}";
-        Log.i("Query", query);
-        return query;
+        Log.i("Before", query);
+        // TODO: 2017-03-30 Gross
+        return query.replace("\"query\": {\n\n},", "");
     }
 
     /**
