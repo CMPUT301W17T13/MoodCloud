@@ -123,12 +123,24 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         controller.addOrUpdatePosts(followerPost);
         controller.waitForTask();
 
-        SearchFilter filter = new SearchFilter().setMood(Mood.ANGRY);
+        SearchFilter filter = new SearchFilter();
 
         ArrayList<Post> expected = new ArrayList<Post>();
-        expected.add(followee1post3);
+        expected.add(followee1post4);
 
         ArrayList<Post> results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(results, expected);
+
+        filter.setMood(Mood.ANGRY);
+        expected.clear();
+        expected.add(followee1post3);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(results, expected);
+
+        filter.sortByDate();
+
+        results = controller.getFolloweePosts(follower, filter, 0);
         assertEquals(results, expected);
 
         Calendar currentDate = GregorianCalendar.getInstance();
