@@ -18,6 +18,55 @@ public class ParcelIO {
      */
     private static double nullDoubleParcelValue = -200.0d;
 
+    public static double[] readLocationArray(Parcel in) {
+
+        double[] location = {ParcelIO.nullDoubleParcelValue, ParcelIO.nullDoubleParcelValue,
+                ParcelIO.nullDoubleParcelValue};
+
+        in.readDoubleArray(location);
+
+        if (location[0] == ParcelIO.nullDoubleParcelValue &&
+                location[1] == ParcelIO.nullDoubleParcelValue &&
+                location[2] == ParcelIO.nullDoubleParcelValue)
+
+            return null;
+
+        return location;
+    }
+
+    /**
+     * Read and return a {@link GeoPoint} from the given {@link Parcel}.
+     *
+     * @param in the {@link Parcel} to read from
+     * @return
+     */
+    public static GeoPoint readGeoPoint(Parcel in) {
+
+        Double lat = ParcelIO.readDouble(in);
+        Double lon = ParcelIO.readDouble(in);
+        if (lat == null && lon == null) return null;
+        return new GeoPoint(lat, lon);
+    }
+
+    /**
+     * Write the given {@link GeoPoint} to the given {@link Parcel}.
+     *
+     * @param out the {@link Parcel} to write to
+     * @param geoPoint the {@link GeoPoint} to write
+     */
+    public static void writeGeoPoint(Parcel out, GeoPoint geoPoint) {
+
+        if (geoPoint == null) {
+            ParcelIO.writeDouble(out, null);
+            ParcelIO.writeDouble(out, null);
+        }
+
+        else {
+            ParcelIO.writeDouble(out, geoPoint.getLat());
+            ParcelIO.writeDouble(out, geoPoint.getLon());
+        }
+    }
+
     /**
      * Write the given {@link SortOrder} value to the given {@link Parcel}.
      *

@@ -53,8 +53,6 @@ public class SearchFilter implements Parcelable {
         this.readFromParcel(in);
     }
 
-    ;
-
     /**
      * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
      *
