@@ -1,9 +1,10 @@
 package com.csahmad.moodcloud;
 
 /**
- * Created by oahmad on 2017-03-17.
+ * The order to sort something by (used in {@link SearchFilter}).
+ *
+ * @see SearchFilter
  */
-
 public enum SortOrder {
 
     Ascending, Descending

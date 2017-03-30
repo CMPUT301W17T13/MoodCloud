@@ -123,4 +123,14 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:text="Button" />
 
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/button"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="Button" />
+
 </RelativeLayout>

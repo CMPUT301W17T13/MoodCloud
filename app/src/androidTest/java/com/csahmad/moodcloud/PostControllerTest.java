@@ -123,13 +123,53 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         controller.addOrUpdatePosts(followerPost);
         controller.waitForTask();
 
-        SearchFilter filter = new SearchFilter().setMood(Mood.ANGRY);
+        SearchFilter filter = new SearchFilter();
 
         ArrayList<Post> expected = new ArrayList<Post>();
-        expected.add(followee1post3);
+        expected.add(followee1post4);
 
         ArrayList<Post> results = controller.getFolloweePosts(follower, filter, 0);
-        assertEquals(results, expected);
+        assertEquals(expected, results);
+
+        filter.setMood(Mood.ANGRY);
+        expected.clear();
+        expected.add(followee1post3);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(expected, results);
+
+        filter.sortByDate();
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(expected, results);
+
+        Profile followee2 = new Profile("Jack the Followee");
+        profileController.addOrUpdateProfiles(followee2);
+        profileController.waitForTask();
+
+        Follow follow2 = new Follow(follower, followee2);
+        followController.addOrUpdateFollows(follow2);
+        followController.waitForTask();
+
+        Post followee2post1 = new Post(    // 0
+                "I too am angry",
+                Mood.ANGRY,                                // Mood
+                "Thor",                                 // Trigger text
+                null,                                   // Trigger image
+                SocialContext.ALONE,                                // Social context
+                followee2.getId(),                    // Poster ID
+                location,                               // Location
+                new GregorianCalendar(2015, 2, 15));
+
+        controller.addOrUpdatePosts(followee2post1);
+        controller.waitForTask();
+
+        expected.clear();
+        expected.add(followee1post3);
+        expected.add(followee2post1);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+        assertEquals(expected, results);
 
         Calendar currentDate = GregorianCalendar.getInstance();
         int currentYear = currentDate.get(Calendar.YEAR);
@@ -171,12 +211,20 @@ public class PostControllerTest extends ActivityInstrumentationTestCase2 {
         expected.add(followee1post5);
 
         results = controller.getFolloweePosts(follower, filter, 0);
-        assertEquals(results, expected);
+        assertEquals(expected, results);
 
-        profileController.deleteProfiles(follower, followee1);
-        followController.deleteFollows(follow);
+        filter = new SearchFilter()
+                .setLocation(new SimpleLocation(0.0d, 0.0d, 0.0d))
+                .setMaxDistance(1.1d);
+
+        results = controller.getFolloweePosts(follower, filter, 0);
+
+        ;
+
+        profileController.deleteProfiles(follower, followee1, followee2);
+        followController.deleteFollows(follow, follow2);
         controller.deletePosts(followerPost, followee1post1, followee1post2, followee1post3,
-                followee1post4, followee1post5, followee1post6);
+                followee1post4, followee1post5, followee1post6, followee2post1);
     }
 
     /*
