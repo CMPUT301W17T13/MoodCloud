@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
@@ -41,16 +43,18 @@ public class SearchResultsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
         Intent intent = getIntent();
         String where = intent.getStringExtra("WHERE");
-        SearchFilter filter = intent.getParcelableExtra("FILTER");
+        final SearchFilter filter = intent.getParcelableExtra("FILTER");
+            //Toast.makeText(getApplicationContext(), "filter null", Toast.LENGTH_LONG).show();
+
         PostController postController = new PostController();
         final ArrayList<Post> mDataset;
         try {
-            if (where == "Following") {
+            if (where.equals("Following")) {
                 mDataset = postController.getFolloweePosts(
                         LocalData.getSignedInProfile(getApplicationContext()),
                         filter, 0);
             } else {
-                if (where == "My Moods") {
+                if (where.equals("My Moods")) {
                     mDataset = postController.getPosts(
                             LocalData.getSignedInProfile(getApplicationContext()),
                             filter, 0);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -97,6 +98,14 @@ public class SearchMoods extends AppCompatActivity {
 
         Button findUserButton = (Button) findViewById(R.id.searchUsers);
         final EditText findUser = (EditText) findViewById(R.id.findUser);
+
+        ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                finish();
+            }}
+        );
 
         findUserButton.setOnClickListener(new View.OnClickListener() {
 
