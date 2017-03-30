@@ -62,8 +62,8 @@ public class SearchFilter implements Parcelable {
      */
     private void readFromParcel(Parcel in) {
 
-        in.readStringList(this.keywords);
-        in.readStringList(this.keywordFields);
+        this.keywords = ParcelIO.readStringList(in);
+        this.keywordFields = ParcelIO.readStringList(in);
 
         this.fieldValues = ParcelIO.readFieldValues(in);
 
@@ -76,7 +76,7 @@ public class SearchFilter implements Parcelable {
         this.distanceUnits = in.readString();
         this.locationField = in.readString();
 
-        in.readStringList(this.sortByFields);
+        this.sortByFields = ParcelIO.readStringList(in);
         this.sortOrder = ParcelIO.readSortOrder(in);
     }
 

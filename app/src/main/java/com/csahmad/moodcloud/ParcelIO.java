@@ -2,6 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.os.Parcel;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Read/write values from/to a {@link Parcel}. */
 public class ParcelIO {
@@ -179,6 +180,12 @@ public class ParcelIO {
      */
     public static void writeFieldValues(Parcel out, ArrayList<FieldValue> fieldValues) {
 
+        if (fieldValues == null) {
+            out.writeStringList(null);
+            out.writeStringList(null);
+            return;
+        }
+
         ArrayList<String> fields = new ArrayList<String>();
         ArrayList<String> values = new ArrayList<String>();
 
@@ -193,6 +200,23 @@ public class ParcelIO {
 
         out.writeStringList(fields);
         out.writeStringList(values);
+    }
+
+    /**
+     * Read and return an {@link ArrayList} of {@link String}s from the given {@link Parcel}.
+     *
+     * <p>
+     * If the read {@link ArrayList} is empty, return null.
+     *
+     * @param in the {@link Parcel} to read from
+     * @return the {@link ArrayList} read from the given {@link Parcel}
+     */
+    public static ArrayList<String> readStringList(Parcel in) {
+
+        ArrayList<String> list = new ArrayList<String>();
+        in.readStringList(list);
+        if (list.size() == 0) return null;
+        return list;
     }
 
     /**
@@ -215,6 +239,7 @@ public class ParcelIO {
         for (int i = 0; i < size; i++)
             fieldValues.add(new FieldValue(fields.get(i), values.get(i)));
 
+        if (fieldValues.size() == 0) return null;
         return fieldValues;
     }
 }
