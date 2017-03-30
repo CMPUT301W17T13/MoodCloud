@@ -38,10 +38,17 @@ public class ViewPostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String id = intent.getStringExtra("POST_ID");
         try {
+
             final Post post = postController.getPostFromId(id);
             final Profile profile = profileController.getProfileFromID(post.getPosterId());
             TextView nameText = (TextView) findViewById(R.id.nameText);
-            nameText.setText("Name: " + profile.getName());
+
+            if (profile == null)
+                nameText.setText(ElasticSearchObject.dummyText);
+
+            else
+                nameText.setText("Name: " + profile.getName());
+
             final TextView textText = (TextView) findViewById(R.id.textText);
             textText.setText(post.getText());
             TextView dateText = (TextView) findViewById(R.id.dateText);
@@ -80,10 +87,15 @@ public class ViewPostActivity extends AppCompatActivity {
                     }}
                 );
             } else {
+
                 deleteButton.setVisibility(View.GONE);
                 FollowController followController = new FollowController();
                 FollowRequestController followRequestController = new FollowRequestController();
-                if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
+
+                if (profile == null) {
+                    button.setText("Can't follow dummy");
+                    button.setClickable(FALSE);
+                } else if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
                     //Button button = (Button) findViewById(R.id.followeditbutton);
                     button.setText("Followed");
                     button.setClickable(FALSE);

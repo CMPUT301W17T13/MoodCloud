@@ -9,6 +9,9 @@ public class Profile extends ElasticSearchObject {
 
     public static final String typeName = "profile";
 
+    public static final Profile dummy =
+            (Profile) new Profile(ElasticSearchObject.dummyText).setIsDummy(true);
+
     private String name;
 
     /** Whether this is the profile of the signed in user. */

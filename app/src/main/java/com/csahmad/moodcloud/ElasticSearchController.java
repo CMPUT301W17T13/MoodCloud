@@ -105,6 +105,8 @@ public class ElasticSearchController {
 
             for (T item: items) {
 
+                if (item.isDummy()) continue;
+
                 if (item.getId() == null)
                     throw new IllegalArgumentException("Given item has no ID.");
 
@@ -153,6 +155,8 @@ public class ElasticSearchController {
 
             // Save/update each object
             for (T item: items) {
+
+                if (item.isDummy()) continue;
 
                 Index index;
 
