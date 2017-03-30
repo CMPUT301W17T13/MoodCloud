@@ -170,6 +170,9 @@ public class SearchFilter implements Parcelable {
      */
     public SearchFilter addKeywordField(String field) {
 
+        if (this.keywordFields == null)
+            this.keywordFields = new ArrayList<String>();
+
         this.keywordFields.add(field);
         return this;
     }
@@ -181,6 +184,9 @@ public class SearchFilter implements Parcelable {
      * @return this SearchFilter
      */
     public SearchFilter addKeyword(String keyword) {
+
+        if (this.keywords == null)
+            this.keywords = new ArrayList<String>();
 
         this.keywords.add(keyword);
         return this;
