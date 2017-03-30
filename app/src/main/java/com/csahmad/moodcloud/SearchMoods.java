@@ -29,7 +29,7 @@ public class SearchMoods extends AppCompatActivity {
 
         final EditText findText = (EditText) findViewById(R.id.findText);
 
-        final Spinner topSpinner = (Spinner) findViewById(R.id.spinner2);
+        final Spinner topSpinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> topAdapter = ArrayAdapter.createFromResource(this,
                 R.array.whereArray, android.R.layout.simple_spinner_item);
         topAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
