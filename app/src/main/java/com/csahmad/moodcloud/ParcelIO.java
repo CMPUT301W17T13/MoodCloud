@@ -15,7 +15,7 @@ public class ParcelIO {
      * What to replace null values with when writing {@link Double}s to {@link Parcel} (and what to
      * interpret as null values when reading {@link double}s from {@link Parcel}).
      */
-    private static double nullDoubleParcelValue = -1.0d;
+    private static double nullDoubleParcelValue = -200.0d;
 
     /**
      * Write the given {@link SortOrder} value to the given {@link Parcel}.
