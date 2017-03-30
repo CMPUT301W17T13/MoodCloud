@@ -32,9 +32,7 @@ public class LocalData {
 
     public static Profile getSignedInProfile(Context context) {
 
-        if (LocalData.signedInProfile == null)
-            LocalData.tryReadProfile(context);
-
+        LocalData.tryReadProfile(context);
         return LocalData.signedInProfile;
     }
 

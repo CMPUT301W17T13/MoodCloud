@@ -135,6 +135,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             Profile profile = null;
             try {
                 profile = new ProfileController().getProfileFromID(post.getPosterId());
+                if (profile == null) profile = Profile.dummy;
             } catch (TimeoutException e) {
                 e.printStackTrace();
             }

@@ -53,8 +53,6 @@ public class SearchFilter implements Parcelable {
         this.readFromParcel(in);
     }
 
-    ;
-
     /**
      * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
      *
@@ -165,11 +163,12 @@ public class SearchFilter implements Parcelable {
     /** Results must have a (non-empty) value for all of these fields. */
     private ArrayList<String> nonEmptyFields;
 
+    // TODO: 2017-03-30 Maybe just check if a SearchFilter is null instead of having this method.
     /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, nonEmptyFields);
+                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields);
     }
 
     /**
@@ -323,6 +322,28 @@ public class SearchFilter implements Parcelable {
         
         this.keywords = keywords;
         return this;
+    }
+
+    /**
+     * Remove the {@link FieldValue} with the given field name (if it exists).
+     *
+     * @param field the field name of the field value to remove
+     */
+    public void removeFieldValue(String field) {
+
+        if (this.fieldValues == null) return;
+
+        FieldValue fieldValue;
+
+        for (int i = 0; i < this.fieldValues.size(); i++) {
+
+            fieldValue = this.fieldValues.get(i);
+
+            if (fieldValue.getFieldName() == field) {
+                this.fieldValues.remove(i);
+                return;
+            }
+        }
     }
 
     /**

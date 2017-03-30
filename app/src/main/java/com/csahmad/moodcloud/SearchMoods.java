@@ -64,20 +64,20 @@ public class SearchMoods extends AppCompatActivity {
             public void onClick(View v) {
 
                 String where = (String) topSpinner.getSelectedItem();
-                String keyword = findText.getText().toString();
+                String keywordString = findText.getText().toString().trim();
                 String moodString = (String) moodSpinner.getSelectedItem();
                 String contextString = (String) contextSpinner.getSelectedItem();
 
                 SearchFilter filter = new SearchFilter();
 
-                if (!keyword.equals("")) {
+                if (!keywordString.equals("")) {
                     filter.addKeywordField("triggerText");
-                    filter.addKeyword(keyword);
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
                 }
 
-                if (!moodString.equals("Any")) {
+                if (!moodString.equals("Any"))
                     filter.setMood(Mood.fromString(moodString));
-                }
 
                 if (!contextString.equals("Any")) {
                     filter.setContext(SocialContext.fromString(contextString));

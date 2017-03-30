@@ -1,5 +1,7 @@
 package com.csahmad.moodcloud;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
@@ -197,11 +199,16 @@ public class PostController {
             filter = new SearchFilter();
 
         this.elasticSearch.setFilter(filter);
+        filter.removeFieldValue("posterId");
         filter.addFieldValue(new FieldValue("posterId", profile.getId()))
                 .sortByDate();
 
         Post result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
+
+        if (result == null)
+            Log.i("Theprofile", profile.toString());
+
         return result;
     }
 

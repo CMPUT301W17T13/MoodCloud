@@ -1,12 +1,95 @@
 package com.csahmad.moodcloud;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 //mwschafe commented unused import statement
 //import io.searchbox.annotations.JestId;
 
 /** A mood event. */
-public class Post extends ElasticSearchObject {
+public class Post extends ElasticSearchObject implements Parcelable {
+
+    // For creating the Parcel:
+    // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
+    // Accessed January 29, 2017
+    /** For creating the {@link Parcel}. */
+    public static final Parcelable.Creator<Post> CREATOR =
+            new Parcelable.Creator<Post>() {
+
+                public Post createFromParcel(Parcel in) {
+
+                    return new Post(in);
+                }
+
+                public Post[] newArray(int size) {
+
+                    return new Post[size];
+                }
+            };
+
+    // For Parcelable
+    // 0 because no special objects to handle:
+    // https://developer.android.com/reference/android/os/Parcelable.html
+    // Accessed January 29, 2017
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    // Initialize Post from a SearchFilter Parcel:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /** Initialize Post from a Post {@link Parcel}. */
+    public Post(Parcel in) {
+
+        this.readFromParcel(in);
+    }
+
+    /**
+     * Read the values to assign to this Post's fields from the given {@link Parcel}.
+     *
+     * @param in the {@link Parcel} to read from
+     */
+    private void readFromParcel(Parcel in) {
+
+        this.text = in.readString();
+        this.mood = ParcelIO.readInteger(in);
+        this.triggerText = in.readString();
+        this.triggerImage = in.readString();
+        this.context = ParcelIO.readInteger(in);
+        this.posterId = in.readString();
+        this.date = (Calendar) in.readSerializable();
+        this.dateString = in.readString();
+        this.location = ParcelIO.readLocationArray(in);
+        this.geoPoint = ParcelIO.readGeoPoint(in);
+    }
+
+    // For Parcelable
+    // Write the fields:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /**
+     * Write this Post's fields to the given {@link Parcel}
+     *
+     * @param out the {@link Parcel} to write to
+     */
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+
+        out.writeString(this.text);
+        ParcelIO.writeInteger(out, this.mood);
+        out.writeString(this.triggerText);
+        out.writeString(this.triggerImage);
+        ParcelIO.writeInteger(out, this.context);
+        out.writeString(this.posterId);
+        out.writeSerializable(this.date);
+        out.writeString(this.dateString);
+        out.writeDoubleArray(this.location);
+        ParcelIO.writeGeoPoint(out, this.geoPoint);
+    }
 
     public static final Class type = Post.class;
     public static final String typeName = "post";
