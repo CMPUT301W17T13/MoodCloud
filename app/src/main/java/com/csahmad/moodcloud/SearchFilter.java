@@ -78,6 +78,11 @@ public class SearchFilter implements Parcelable {
 
         this.sortByFields = ParcelIO.readStringList(in);
         this.sortOrder = ParcelIO.readSortOrder(in);
+
+        this.mood = in.readInt();
+        this.context = in.readInt();
+
+        this.nonEmptyFields = ParcelIO.readStringList(in);
     }
 
     // For Parcelable
@@ -108,6 +113,11 @@ public class SearchFilter implements Parcelable {
 
         out.writeStringList(this.sortByFields);
         ParcelIO.writeSortOrder(out, this.sortOrder);
+
+        out.writeInt(this.mood);
+        out.writeInt(this.context);
+
+        out.writeStringList(this.nonEmptyFields);
     }
 
     /** Words that the fields in {@link #keywordFields} should contain. */
@@ -197,7 +207,7 @@ public class SearchFilter implements Parcelable {
         return this.context != null;
     }
 
-    public int getContext() {
+    public Integer getContext() {
 
         return this.context;
     }
@@ -213,7 +223,7 @@ public class SearchFilter implements Parcelable {
         return this.mood != null;
     }
 
-    public int getMood() {
+    public Integer getMood() {
 
         return this.mood;
     }
