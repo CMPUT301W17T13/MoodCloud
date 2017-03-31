@@ -3,7 +3,10 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 //import android.provider.MediaStore;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,16 +37,39 @@ import java.util.concurrent.TimeoutException;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
+    private static final int TAKE_IMAGE_REQUEST = 0;
+    private String image;
+    private ImageView moodPhoto;
     Uri imageFileUri;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+
+        if (requestCode == TAKE_IMAGE_REQUEST){
+
+            if (resultCode == RESULT_OK){
+                this.image = intent.getStringExtra("IMAGE");
+                Bitmap bitmap = intent.getParcelableExtra("BITMAP");
+                this.moodPhoto.setImageBitmap(bitmap);
+            }
+            else if (resultCode == RESULT_CANCELED)
+                Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
+        moodPhoto = (ImageView)findViewById(R.id.moodPhoto);
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
             String id = intent.getStringExtra("POST_ID");
+
 
 
             try {
@@ -63,7 +89,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             Context context = view.getContext();
                             Intent intent = new Intent(context, TakePhotoActivity.class);
-                            startActivity(intent);
+                            startActivityForResult(intent,TAKE_IMAGE_REQUEST);
                         }
                     });
                     Button postButton = (Button) findViewById(R.id.postButton);
@@ -82,7 +108,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             } else {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                                 Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
-                                        textTrigger.getText().toString(), null, onStatusButtonClicked(statusButtons),
+                                        textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
                                         profile.getId(), null, Calendar.getInstance());
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(post);
@@ -98,6 +124,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 } else {
 
                     final Post oldPost = postController.getPostFromId(id);
+                    this.moodPhoto.setImageBitmap(ImageConverter.toBitmap(oldPost.getTriggerImage()));
                     String oldExplannation = oldPost.getText();
                     String oldTrigger = oldPost.getTriggerText();
                     int oldmood = oldPost.getMood();
@@ -124,6 +151,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 oldPost.setContext(onStatusButtonClicked(statusButtons));
                                 oldPost.setText(textExplanation.getText().toString());
                                 oldPost.setTriggerText(textTrigger.getText().toString());
+                                oldPost.setTriggerImage(image);
                                 oldPost.setDate(Calendar.getInstance());
 
                                 PostController postController = new PostController();
