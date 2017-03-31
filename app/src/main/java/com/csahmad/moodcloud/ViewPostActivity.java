@@ -31,9 +31,9 @@ public class ViewPostActivity extends AppCompatActivity {
    //FollowRequestController followRequestController = new FollowRequestController();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onStart() {
 
-        super.onCreate(savedInstanceState);
+        super.onStart();
         setContentView(R.layout.activity_view_post);
         Intent intent = getIntent();
         String id = intent.getStringExtra("POST_ID");
@@ -89,6 +89,7 @@ public class ViewPostActivity extends AppCompatActivity {
             } else {
 
                 deleteButton.setVisibility(View.GONE);
+
                 FollowController followController = new FollowController();
                 FollowRequestController followRequestController = new FollowRequestController();
 
