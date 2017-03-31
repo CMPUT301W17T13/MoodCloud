@@ -1,70 +1,109 @@
 package com.csahmad.moodcloud;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-//import android.provider.MediaStore;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-//import android.support.v7.widget.Toolbar;
-//mwschafe commented out unused import statements
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
+
+import android.location.Location;
+import android.location.LocationManager;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
+
     private static final int TAKE_IMAGE_REQUEST = 0;
+    private static final int READ_LOCATION_REQUEST = 1;
     private String image;
     private ImageView moodPhoto;
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        if (requestCode == TAKE_IMAGE_REQUEST){
+        if (requestCode == TAKE_IMAGE_REQUEST) {
 
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 this.image = intent.getStringExtra("IMAGE");
                 Bitmap bitmap = intent.getParcelableExtra("BITMAP");
                 this.moodPhoto.setImageBitmap(bitmap);
-            }
-            else if (resultCode == RESULT_CANCELED)
+            } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
         }
     }
 
+    /** Request permission from the user to access location. */
+    public void requestLocationPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                READ_LOCATION_REQUEST);
+    }
+
+    /**
+     * Return whether this app currently has permission to access location.
+     *
+     * @return whether this app currently has permission to access location
+     */
+    public boolean haveLocationPermission() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED)
+
+            return false;
+
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
-        moodPhoto = (ImageView)findViewById(R.id.moodPhoto);
+        moodPhoto = (ImageView) findViewById(R.id.moodPhoto);
+
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            requestLocationPermission();
+        }
+
+        final double[] locationArray;
+
+        if (haveLocationPermission()) {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            double altitude = location.getAltitude();
+            locationArray = new double[]{latitude, longitude, altitude};
+        }
+
+        else
+            locationArray = null;
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
@@ -109,7 +148,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                                 Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
                                         textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
-                                        profile.getId(), null, Calendar.getInstance());
+                                        profile.getId(), locationArray, Calendar.getInstance());
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(post);
                                 ProfileController profileController = new ProfileController();
