@@ -1,204 +1,44 @@
 package com.csahmad.moodcloud;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import java.util.ArrayList;
 
-// Parcelable so can pass between activities with Intents:
-// https://developer.android.com/reference/android/os/Parcelable.html
-// Accessed January 29, 2017
 /**
  * Defines restrictions on elasticsearch queries.
  *
  * @see ElasticSearch
  */
-public class SearchFilter implements Parcelable {
+public class SearchFilter {
 
-    public SearchFilter() {}
-
-    // For creating the Parcel:
-    // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
-    // Accessed January 29, 2017
-    /** For creating the {@link Parcel}. */
-    public static final Parcelable.Creator<SearchFilter> CREATOR =
-            new Parcelable.Creator<SearchFilter>() {
-
-        public SearchFilter createFromParcel(Parcel in) {
-
-            return new SearchFilter(in);
-        }
-
-        public SearchFilter[] newArray(int size) {
-
-            return new SearchFilter[size];
-        }
-    };
-
-    // For Parcelable
-    // 0 because no special objects to handle:
-    // https://developer.android.com/reference/android/os/Parcelable.html
-    // Accessed January 29, 2017
-    @Override
-    public int describeContents() {
-
-        return 0;
-    }
-
-    // Initialize SearchFilter from a SearchFilter Parcel:
-    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
-    // Accessed January 29, 2017
-    /** Initialize SearchFilter from a SearchFilter {@link Parcel}. */
-    public SearchFilter(Parcel in) {
-
-        this.readFromParcel(in);
-    }
-
-    /**
-     * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
-     *
-     * @param in the {@link Parcel} to read from
-     */
-    private void readFromParcel(Parcel in) {
-
-        this.keywords = ParcelIO.readStringList(in);
-        this.keywordFields = ParcelIO.readStringList(in);
-
-        this.fieldValues = ParcelIO.readFieldValues(in);
-
-        this.maxTimeUnitsAgo = ParcelIO.readInteger(in);
-        this.timeUnits = in.readString();
-        this.dateField = in.readString();
-
-        this.maxDistance = ParcelIO.readDouble(in);
-        this.location = ParcelIO.readLocation(in);
-        this.distanceUnits = in.readString();
-        this.locationField = in.readString();
-
-        this.sortByFields = ParcelIO.readStringList(in);
-        this.sortOrder = ParcelIO.readSortOrder(in);
-
-        this.mood = ParcelIO.readInteger(in);
-        this.context = ParcelIO.readInteger(in);
-
-        this.nonEmptyFields = ParcelIO.readStringList(in);
-    }
-
-    // For Parcelable
-    // Write the fields:
-    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
-    // Accessed January 29, 2017
-    /**
-     * Write this SearchFilter's fields to the given {@link Parcel}
-     *
-     * @param out the {@link Parcel} to write to
-     */
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-
-        out.writeStringList(this.keywords);
-        out.writeStringList(this.keywordFields);
-
-        ParcelIO.writeFieldValues(out, this.fieldValues);
-
-        ParcelIO.writeInteger(out, this.maxTimeUnitsAgo);
-        out.writeString(this.timeUnits);
-        out.writeString(this.dateField);
-
-        ParcelIO.writeDouble(out, this.maxDistance);
-        ParcelIO.writeLocation(out, this.location);
-        out.writeString(this.distanceUnits);
-        out.writeString(this.locationField);
-
-        out.writeStringList(this.sortByFields);
-        ParcelIO.writeSortOrder(out, this.sortOrder);
-
-        ParcelIO.writeInteger(out, this.mood);
-        ParcelIO.writeInteger(out, this.context);
-
-        out.writeStringList(this.nonEmptyFields);
-    }
-
-    /** Words that the fields in {@link #keywordFields} should contain. */
     private ArrayList<String> keywords;
-    /** Fields that should contain the words in {@link #keywords}. */
     private ArrayList<String> keywordFields;
 
-    /** Restrict certain fields to exact values. */
     private ArrayList<FieldValue> fieldValues;
 
-    /** The maximum number of {@link #timeUnits} ago a result can be dated at. */
     private Integer maxTimeUnitsAgo;
-    /** The units of time to use (eg. "w" for weeks). */
     private String timeUnits = "w";
-    /** The field to determine an object's date by. */
     private String dateField = "dateString";
 
-    /** The maximum distance a result can be from {@link #location}. */
     private Double maxDistance;
-    /** The location to measure distance from. */
     private SimpleLocation location;
-    /** The units of distance to use (eg. "km") */
     private String distanceUnits = "km";
-    /** The field that contains the object's distance. */
-    private String locationField = "geoPoint";
+    private String locationField = "location";
 
-    /** The fields to sort results by. */
     private ArrayList<String> sortByFields;
-    /** The order to sort results in. */
     private SortOrder sortOrder = SortOrder.Descending;
 
-    /**
-     * The mood results must have.
-     *
-     * @see Post
-     */
     private Integer mood;
-    /**
-     * The social context results must have.
-     *
-     * @see Post
-     */
     private Integer context;
 
-    /** Results must have a (non-empty) value for all of these fields. */
+    private Double lat;
+    private Double lo;
+
+    // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
 
-    // TODO: 2017-03-30 Maybe just check if a SearchFilter is null instead of having this method.
-    /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields);
-    }
-
-    /**
-     * Add the given field name to {@link #keywordFields}.
-     *
-     * @param field the field to add
-     * @return this SearchFilter
-     */
-    public SearchFilter addKeywordField(String field) {
-
-        if (this.keywordFields == null)
-            this.keywordFields = new ArrayList<String>();
-
-        this.keywordFields.add(field);
-        return this;
-    }
-
-    /**
-     * Add the given keyword to {@link #keywords}.
-     *
-     * @param keyword the keyword to add
-     * @return this SearchFilter
-     */
-    public SearchFilter addKeyword(String keyword) {
-
-        if (this.keywords == null)
-            this.keywords = new ArrayList<String>();
-
-        this.keywords.add(keyword);
-        return this;
+                this.maxDistance, nonEmptyFields);
     }
 
     public boolean hasContext() {
@@ -206,7 +46,7 @@ public class SearchFilter implements Parcelable {
         return this.context != null;
     }
 
-    public Integer getContext() {
+    public int getContext() {
 
         return this.context;
     }
@@ -222,7 +62,7 @@ public class SearchFilter implements Parcelable {
         return this.mood != null;
     }
 
-    public Integer getMood() {
+    public int getMood() {
 
         return this.mood;
     }
@@ -233,11 +73,6 @@ public class SearchFilter implements Parcelable {
         return this;
     }
 
-    /**
-     * Make this SearchFilter sort by date (making certain assumptions about how date is stored).
-     *
-     * @return this SearchFilter
-     */
     public SearchFilter sortByDate() {
 
         ArrayList<String> dateFields = new ArrayList<String>();
@@ -324,34 +159,6 @@ public class SearchFilter implements Parcelable {
         return this;
     }
 
-    /**
-     * Remove the {@link FieldValue} with the given field name (if it exists).
-     *
-     * @param field the field name of the field value to remove
-     */
-    public void removeFieldValue(String field) {
-
-        if (this.fieldValues == null) return;
-
-        FieldValue fieldValue;
-
-        for (int i = 0; i < this.fieldValues.size(); i++) {
-
-            fieldValue = this.fieldValues.get(i);
-
-            if (fieldValue.getFieldName() == field) {
-                this.fieldValues.remove(i);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Add a {@link FieldValue} to {@link #fieldValues}.
-     *
-     * @param fieldValue the {@link FieldValue} to add
-     * @return this SearchFilter
-     */
     public SearchFilter addFieldValue(FieldValue fieldValue) {
 
         if (this.fieldValues == null) {
@@ -362,12 +169,6 @@ public class SearchFilter implements Parcelable {
         return this;
     }
 
-    /**
-     * Add a field to {@link #nonEmptyFields}.
-     *
-     * @param field the field to add
-     * @return this SearchFilter
-     */
     public SearchFilter addNonEmptyField(String field) {
 
         if (this.nonEmptyFields == null) {
@@ -474,6 +275,24 @@ public class SearchFilter implements Parcelable {
         
         return this.locationField;
     }
+
+    public Double getLat(){
+        return this.lat;
+    }
+
+    public Double getLo(){
+        return this.lo;
+    }
+    public SearchFilter setLat(){
+        this.lat = lat;
+        return this;
+    }
+
+    public SearchFilter setLo(){
+        this.lo = lo;
+        return this;
+    }
+
 
     public SearchFilter setLocationField(String locationField) {
         

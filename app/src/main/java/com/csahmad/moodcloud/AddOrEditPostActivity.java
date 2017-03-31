@@ -3,6 +3,8 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 //import android.provider.MediaStore;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.support.v7.widget.Toolbar;
@@ -32,6 +34,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         PostController postController = new PostController();
         Intent intent = getIntent();
         String id = intent.getStringExtra("POST_ID");
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        final double longitude = location.getLongitude();
+        final double latitude = location.getLatitude();
 
         try {
 
@@ -50,7 +56,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                         Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
                                 textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                                profile.getId() ,null, Calendar.getInstance());
+                                profile.getId() ,null, Calendar.getInstance(), latitude, longitude);
                         PostController postController = new PostController();
                         postController.addOrUpdatePosts(post);
                         ProfileController profileController = new ProfileController();

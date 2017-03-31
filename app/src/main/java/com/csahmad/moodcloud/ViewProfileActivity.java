@@ -193,6 +193,15 @@ public class ViewProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ShowMapActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -201,7 +210,7 @@ public class ViewProfileActivity extends AppCompatActivity {
      *         2017-03-7
      * @author Taylor
      */
-    public class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
+    public static class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
