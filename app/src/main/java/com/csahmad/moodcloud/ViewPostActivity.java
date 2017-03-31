@@ -63,6 +63,8 @@ public class ViewPostActivity extends AppCompatActivity {
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
+            ImageView triggerImage = (ImageView) findViewById(R.id.triggerImage);
+            triggerImage.setImageBitmap(ImageConverter.toBitmap(post.getTriggerImage()));
             final Button button = (Button) findViewById(R.id.button);
             final Button deleteButton = (Button) findViewById(R.id.deleteButton);
             if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
@@ -138,6 +140,8 @@ public class ViewPostActivity extends AppCompatActivity {
             }
             moodImage.setImageResource(draws[post.getMood()]);
         } catch (TimeoutException e){}
+
+
 
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
