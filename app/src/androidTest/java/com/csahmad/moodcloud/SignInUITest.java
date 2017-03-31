@@ -5,6 +5,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,37 +36,53 @@ import static org.hamcrest.Matchers.anything;
 public class SignInUITest {
 
 
-    //---|SIGN IN ACTIVITY TESTS|---
+    Profile testProfile = new Profile("JohnSmith");
+    Account testAccount = new Account("JohnSmith", "123456", testProfile);
+    ProfileController PC = new ProfileController();
+    AccountController AC = new AccountController();
 
     @Rule
     //Rule used to instantiate activity on which the following tests will be performed
     public ActivityTestRule<SignInActivity> signInRule = new ActivityTestRule<SignInActivity>(SignInActivity.class);
 
     /**
-     * Tests that signing in brings the user to the newsfeed page
+     * Create {@Link Account} and {@Link Profile}that will be used in the tests
+     */
+    @Before
+    public void setUp(){
+        PC.addOrUpdateProfiles(testProfile);
+        AC.addOrUpdateAccounts(testAccount);
+    }
+
+    /**
+     * Remove objects created for testing
+     */
+    @After
+    public void cleanUp(){
+        PC.deleteProfiles(testProfile);
+        AC.deleteAccounts(testAccount);
+    }
+
+    /**
+     * Tests that signing in causes the user's profile to be loaded
      *
-     * uses username = password = "esieben" (existing account)
+     *
      */
     @Test
     public void loginTest() {
         //target the desired interface element and on it, perform the necessary actions
         //Enter a name into the username field
-        onView(withId(R.id.username)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.username)).perform(typeText("JohnSmith"), ViewActions.closeSoftKeyboard());
         //Enter a password into the password field
-        onView(withId(R.id.password)).perform(typeText("esieben"), ViewActions.closeSoftKeyboard());
-        try {
-            Thread.sleep(500);
-        }
-        catch(InterruptedException e){
-
-        }
+        onView(withId(R.id.password)).perform(typeText("123456"), ViewActions.closeSoftKeyboard());
         //Click the "sign in" button
         onView(withId(R.id.signIn)).perform(click());
 
         //now on news feed activity
-        //ensure that the toolbar title is "News Feed" (check that the screen changed to the
-        //correct activity)
-        onView(withId(R.id.title)).check(matches(withText("News Feed")));
+        onView(withId(R.id.profileButton)).perform(click());
+
+        //now on profile activity
+        onView(withId(R.id.profileName)).check(matches(withText("Name: JohnSmith")));
 
     }
 

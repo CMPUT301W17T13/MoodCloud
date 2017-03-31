@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -103,6 +104,15 @@ public class ViewProfileUITest {
             psc.addOrUpdatePosts(testPost1, testPost2);
             LocalData.store(testProfile, targetContext);
         }
+
+        /**
+         * clean up instantiated objects after tests are completed
+         */
+        @Override
+        protected void afterActivityFinished(){
+            prc.deleteProfiles(testProfile, testFollower);
+            psc.deletePosts(testPost1, testPost2);
+        }
     };
 
     /**
@@ -144,7 +154,5 @@ public class ViewProfileUITest {
         onView(withId(R.id.followeditbutton)).perform(click());
         onView(withId(R.id.followerList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, MyViewAction.clickChildViewWithId(R.id.accept)));
     }
-
-
 }
 
