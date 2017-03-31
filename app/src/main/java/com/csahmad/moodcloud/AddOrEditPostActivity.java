@@ -40,7 +40,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private static final int TAKE_IMAGE_REQUEST = 0;
     private String image;
     private ImageView moodPhoto;
-    Uri imageFileUri;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -122,6 +122,15 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                     });
                 } else {
+                    ImageButton photoButton = (ImageButton) findViewById(R.id.takephoto);
+                    photoButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent intent = new Intent(context, TakePhotoActivity.class);
+                            startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+                        }
+                    });
 
                     final Post oldPost = postController.getPostFromId(id);
                     this.moodPhoto.setImageBitmap(ImageConverter.toBitmap(oldPost.getTriggerImage()));
@@ -134,6 +143,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     textExplanation.setText(oldExplannation);
                     moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
                     statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+
                     Button postButton = (Button) findViewById(R.id.postButton);
                     postButton.setOnClickListener(new View.OnClickListener() {
                         @Override
