@@ -151,6 +151,39 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
+     * Return the number of objects matching the restrictions in {@link #filter}.
+     *
+     * @return the number of objects matching the restrictions in {@link #filter}
+     * @throws TimeoutException
+     */
+    public Double getCount() throws TimeoutException {
+
+        ElasticSearchController.GetCount<T> controller = new ElasticSearchController.GetCount<T>();
+        this.lastTask = controller;
+        controller.setTypeName(this.typeName);
+        controller.execute(this.filter);
+
+        try {
+
+            if (this.timeout == null)
+                return controller.get();
+
+            else
+                return controller.get(this.timeout, TimeUnit.MILLISECONDS);
+        }
+
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * Return objects that match {@link #filter}.
      *
      * <p>

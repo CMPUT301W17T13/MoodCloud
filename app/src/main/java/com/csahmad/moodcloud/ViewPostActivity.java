@@ -48,17 +48,16 @@ public class ViewPostActivity extends AppCompatActivity {
             SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
             dateText.setText(format1.format(post.getDate().getTime()));
             TextView contextText = (TextView) findViewById(R.id.contextText);
-            ArrayList<String> contexts = new ArrayList<>();
-            contexts.add("Alone");
-            contexts.add("With a Group");
-            contexts.add("In a Crowd");
-            contextText.setText(contexts.get(post.getContext()));
+            String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
+            contextText.setText(contexts[post.getContext()]);
+
             TextView triggerText = (TextView) findViewById(R.id.triggerText);
             triggerText.setText("Trigger: " + post.getTriggerText());
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
             R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
             final Button button = (Button) findViewById(R.id.button);
+            final Button deleteButton = (Button) findViewById(R.id.deleteButton);
             if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
                 //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
 
@@ -72,7 +71,16 @@ public class ViewPostActivity extends AppCompatActivity {
                         startActivity(intent);
                     }}
                 );
+                deleteButton.setText("Delete Post");
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        postController.deletePosts(post);
+                        finish();
+                    }}
+                );
             } else {
+                deleteButton.setVisibility(View.GONE);
                 FollowController followController = new FollowController();
                 FollowRequestController followRequestController = new FollowRequestController();
                 if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
