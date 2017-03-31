@@ -6,6 +6,7 @@ import android.location.Location;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
@@ -20,7 +21,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeoutException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -45,6 +48,7 @@ public class ViewProfileUITest {
     private Profile testFollower;
     private Post testPost1;
     private Post testPost2;
+    private Post testPost3;
     private Location location;
 
 
@@ -58,7 +62,7 @@ public class ViewProfileUITest {
         protected Intent getActivityIntent(){
             Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Intent i = new Intent(targetContext, ViewProfileActivity.class);
-            i.putExtra("ID", "testID");
+            i.putExtra("ID", "JohnID");
             return i;
         }
 
@@ -68,13 +72,13 @@ public class ViewProfileUITest {
             prc = new ProfileController();
             psc = new PostController();
             frc = new FollowRequestController();
-            testProfile = new Profile("testProfile");
-            testFollower = new Profile("testFollower");
+            testProfile = new Profile("JohnSmith");
+            testFollower = new Profile("EdJohnson");
             FollowRequest fr = new FollowRequest(testFollower, testProfile);
 
 
-            testProfile.setId("testID");
-            testFollower.setId("followerID");
+            testProfile.setId("JohnID");
+            testFollower.setId("EdID");
             prc.addOrUpdateProfiles(testProfile, testFollower);
             frc.addOrUpdateFollows(fr);
 
@@ -87,7 +91,7 @@ public class ViewProfileUITest {
                     "Deadline approaching",                    // Trigger text
                     null,                                      // Trigger image
                     SocialContext.ALONE,                       // Social context
-                    "testID",                                  // Poster ID
+                    "JohnID",                                  // Poster ID
                     location,                                  // Location
                     new GregorianCalendar(2017, 3, 28));
 
@@ -97,11 +101,30 @@ public class ViewProfileUITest {
                     "Deadline is close",
                     null,
                     SocialContext.ALONE,
-                    "testID",
+                    "JohnID",
                     location,
-                    new GregorianCalendar(2017, 3, 28));
+                    new GregorianCalendar(2017, 3, 27));
 
-            psc.addOrUpdatePosts(testPost1, testPost2);
+            testPost3 = new Post(
+                    "I'm going to delete this post ;P",
+                    Mood.HAPPY,
+                    "For testing",
+                    null,
+                    SocialContext.ALONE,
+                    "JohnID",
+                    location,
+                    new GregorianCalendar(2017, 3, 29));
+            testPost3.setId("testPost3Id");
+
+            //delete any existing posts from database
+            try{
+                ArrayList<Post> userPosts = psc.getPosts(testProfile, null, 0);
+                for(int i=0; i<userPosts.size()-1; i++){
+                    psc.deletePosts(userPosts.get(i));
+                }
+            }
+            catch(TimeoutException e){}
+            psc.addOrUpdatePosts(testPost1, testPost2, testPost3);
             LocalData.store(testProfile, targetContext);
         }
 
@@ -112,6 +135,12 @@ public class ViewProfileUITest {
         protected void afterActivityFinished(){
             prc.deleteProfiles(testProfile, testFollower);
             psc.deletePosts(testPost1, testPost2);
+            try{
+                if(psc.getPostFromId("testPost3Id") != null){
+                    psc.deletePosts(testPost3);
+                }
+            }
+            catch(TimeoutException e){}
         }
     };
 
@@ -153,6 +182,22 @@ public class ViewProfileUITest {
     public void handleFollowRequestTest(){
         onView(withId(R.id.followeditbutton)).perform(click());
         onView(withId(R.id.followerList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, MyViewAction.clickChildViewWithId(R.id.accept)));
+    }
+
+    /**
+     * Test deletion of a {@Link Post}
+     */
+    @Test
+    public void deletePostTest(){
+        onView(withId(R.id.profilePostList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        try{
+            Thread.sleep(500);
+        }
+        catch(InterruptedException e){}
+        onView(withId(R.id.deleteButton)).perform(click());
+        onView(withId(R.id.profilePostList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(withId(R.id.textText)).check(matches(withText("Testing the UI :D")));
+
     }
 }
 
