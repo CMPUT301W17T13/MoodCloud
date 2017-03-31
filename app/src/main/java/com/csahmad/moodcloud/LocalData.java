@@ -8,12 +8,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
@@ -33,6 +35,10 @@ public class LocalData {
     public static Profile getSignedInProfile(Context context) {
 
         LocalData.tryReadProfile(context);
+<<<<<<< HEAD
+
+=======
+>>>>>>> refs/remotes/origin/master
         return LocalData.signedInProfile;
     }
 
@@ -139,7 +145,5 @@ public class LocalData {
         }
         return true;
     }
-
-
 
 }
