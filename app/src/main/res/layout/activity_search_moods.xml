@@ -28,7 +28,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/toolbar3"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Where"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -39,7 +39,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/whereText"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="By Mood"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Groups/Solo"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -88,8 +88,9 @@
             android:layout_below="@+id/searchButton"
             android:layout_marginTop="24dp"
             android:ems="10"
+            android:hint="Find user"
             android:inputType="textPersonName"
-            android:hint="Find user" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <EditText
             android:id="@+id/findText"
@@ -99,18 +100,20 @@
             android:layout_below="@+id/textView2"
             android:layout_marginTop="24dp"
             android:ems="10"
+            android:hint="Find Text"
             android:inputType="textPersonName"
-            android:hint="Find Text" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <Button
             android:id="@+id/searchButton"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/findText"
-            android:layout_centerHorizontal="true"
+            android:layout_alignEnd="@+id/findUser"
+            android:layout_below="@+id/recentBox"
             android:layout_marginTop="16dp"
-            android:hint="Search" />
+            android:hint="Search"
+            android:text="Search" />
 
         <ImageButton
             android:id="@+id/backButton"
@@ -132,7 +135,37 @@
             android:layout_below="@+id/findUser"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:hint="Search Users" />
+            android:hint="Search Users"
+            android:text="Search Users" />
+
+        <CheckBox
+            android:id="@+id/recentBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Only Recent Week"
+            android:onClick="onCheckboxClicked"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/findText"
+            android:layout_alignStart="@+id/findText" />
+
+        <CheckBox
+            android:id="@+id/nearBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Within 5km"
+            android:onClick="onCheckboxClicked"
+            android:layout_above="@+id/searchButton"
+            android:layout_alignStart="@+id/button2" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/searchButton"
+            android:layout_marginStart="22dp"
+            android:layout_toEndOf="@+id/searchButton"
+            android:text="Show Map" />
 
 
     </RelativeLayout>
