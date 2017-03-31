@@ -9,52 +9,32 @@ import java.util.ArrayList;
  */
 public class SearchFilter {
 
-    /** Words that the fields in {@link #keywordFields} should contain. */
     private ArrayList<String> keywords;
-    /** Fields that should contain the words in {@link #keywords}. */
     private ArrayList<String> keywordFields;
 
-    /** Restrict certain fields to exact values. */
     private ArrayList<FieldValue> fieldValues;
 
-    /** The maximum number of {@link #timeUnits} ago a result can be dated at. */
     private Integer maxTimeUnitsAgo;
-    /** The units of time to use (eg. "w" for weeks). */
     private String timeUnits = "w";
-    /** The field to determine an object's date by. */
     private String dateField = "dateString";
 
-    /** The maximum distance a result can be from {@link #location}. */
     private Double maxDistance;
-    /** The location to measure distance from. */
     private SimpleLocation location;
-    /** The units of distance to use (eg. "km") */
     private String distanceUnits = "km";
-    /** The field that contains the object's distance. */
-    private String locationField = "geoPoint";
+    private String locationField = "location";
 
-    /** The fields to sort results by. */
     private ArrayList<String> sortByFields;
-    /** The order to sort results in. */
     private SortOrder sortOrder = SortOrder.Descending;
 
-    /**
-     * The mood results must have.
-     *
-     * @see Post
-     */
     private Integer mood;
-    /**
-     * The social context results must have.
-     *
-     * @see Post
-     */
     private Integer context;
 
-    /** Results must have a (non-empty) value for all of these fields. */
+    private Double lat;
+    private Double lo;
+
+    // Results must not have an empty list for any of these fields
     private ArrayList<String> nonEmptyFields;
 
-    /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
@@ -93,11 +73,6 @@ public class SearchFilter {
         return this;
     }
 
-    /**
-     * Make this SearchFilter sort by date (making certain assumptions about how date is stored).
-     *
-     * @return this SearchFilter
-     */
     public SearchFilter sortByDate() {
 
         ArrayList<String> dateFields = new ArrayList<String>();
@@ -184,12 +159,6 @@ public class SearchFilter {
         return this;
     }
 
-    /**
-     * Add a {@link FieldValue} to {@link #fieldValues}.
-     *
-     * @param fieldValue the {@link FieldValue} to add
-     * @return this SearchFilter
-     */
     public SearchFilter addFieldValue(FieldValue fieldValue) {
 
         if (this.fieldValues == null) {
@@ -200,12 +169,6 @@ public class SearchFilter {
         return this;
     }
 
-    /**
-     * Add a field to {@link #nonEmptyFields}.
-     *
-     * @param field the field to add
-     * @return this SearchFilter
-     */
     public SearchFilter addNonEmptyField(String field) {
 
         if (this.nonEmptyFields == null) {
@@ -312,6 +275,24 @@ public class SearchFilter {
         
         return this.locationField;
     }
+
+    public Double getLat(){
+        return this.lat;
+    }
+
+    public Double getLo(){
+        return this.lo;
+    }
+    public SearchFilter setLat(){
+        this.lat = lat;
+        return this;
+    }
+
+    public SearchFilter setLo(){
+        this.lo = lo;
+        return this;
+    }
+
 
     public SearchFilter setLocationField(String locationField) {
         

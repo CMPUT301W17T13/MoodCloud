@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MoodCloud</string>
     <string name="title_activity_search_moods">SearchMoods</string>
+    <string name="AIzaSyBefpDPT4F99H6tQSDf8iS_BopdOB7cWLA">GoogleMapsKey</string>
     <string-array name="moodsArray">
         <item>Angry</item>
         <item>Confused</item>

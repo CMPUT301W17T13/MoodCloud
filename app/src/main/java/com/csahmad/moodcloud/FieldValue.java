@@ -12,7 +12,7 @@ package com.csahmad.moodcloud;
 public class FieldValue {
 
     private String fieldName;
-    private Object value;
+    private String value;
 
     public FieldValue(String fieldName, Object value) {
 
@@ -20,7 +20,23 @@ public class FieldValue {
             throw new IllegalArgumentException("Cannot pass null values.");
 
         this.fieldName = fieldName;
-        this.value = value;
+        this.setValue(value);
+    }
+
+    /**
+     * If the given value is a {@link String}, add double quotation marks around it and set
+     * {@link #value} to the result. If the given value is not a {@link String}, call
+     * {@link Object#toString()} on it and set {@link #value} to the result.
+     *
+     * @param value
+     */
+    private void setValue(Object value) {
+
+        if (value instanceof String)
+            this.value = "\"" + value + "\"";
+
+        else
+            this.value = value.toString();
     }
 
     public String getFieldName() {
@@ -28,7 +44,7 @@ public class FieldValue {
         return this.fieldName;
     }
 
-    public Object getValue() {
+    public String getValue() {
 
         return this.value;
     }

@@ -36,6 +36,15 @@ public class ProfileController {
         this.elasticSearch.waitForTask();
     }
 
+    public Profile getProfileFromUsername(String username) throws TimeoutException {
+
+        AccountController controller = new AccountController();
+        Account account = controller.getAccountFromUsername(username);
+
+        if (account == null) return null;
+        return account.getProfile();
+    }
+
     /**
      * Get the followers of the given {@link Profile}.
      *

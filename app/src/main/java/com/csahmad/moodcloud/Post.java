@@ -1,7 +1,7 @@
 package com.csahmad.moodcloud;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 //mwschafe commented unused import statement
 //import io.searchbox.annotations.JestId;
 
@@ -19,14 +19,14 @@ public class Post extends ElasticSearchObject {
     private String posterId;
     private Calendar date;
     private String dateString;
+    private double lat;
+    private double lo;
 
     /** The location of the Post in the form {latitude, longitude, altitude} */
     private double[] location;
 
-    private GeoPoint geoPoint;
-
     public Post(String text, int mood, String triggerText, String triggerImage,
-                int context, String posterId, double[] location, Calendar date) {
+                int context, String posterId, double[] location, Calendar date, double lat, double lo) {
 
         this.text = text;
         this.mood = mood;
@@ -34,11 +34,14 @@ public class Post extends ElasticSearchObject {
         this.triggerImage = triggerImage;
         this.context = context;
         this.posterId = posterId;
-        this.setLocation(location);
-        this.setDate(date);
+        this.location = location;
+        this.date = date;
+        this.lat = lat;
+        this.lo = lo;
     }
 
     private static String makeDateString(Calendar date) {
+
 
         SimpleDateFormat format = new SimpleDateFormat(StringFormats.dateFormat);
         return format.format(date.getTime());
@@ -54,6 +57,22 @@ public class Post extends ElasticSearchObject {
     public String getTypeName() {
 
         return Post.typeName;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLo(double lo) {
+        this.lo = lo;
+    }
+
+    public double getLat() {
+        return this.lat;
+    }
+
+    public double getLo() {
+        return this.lo;
     }
 
     public String getText() {
@@ -124,9 +143,6 @@ public class Post extends ElasticSearchObject {
     public void setLocation(double[] location) {
 
         this.location = location;
-
-        if (location != null)
-            this.geoPoint = new GeoPoint(location[0], location[1]);
     }
 
     public Calendar getDate() {
@@ -134,9 +150,4 @@ public class Post extends ElasticSearchObject {
         return this.date;
     }
 
-    public void setDate(Calendar date) {
-
-        this.date = date;
-        this.dateString = Post.makeDateString(date);
-    }
 }

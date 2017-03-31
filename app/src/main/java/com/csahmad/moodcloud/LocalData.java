@@ -35,7 +35,10 @@ public class LocalData {
     public static Profile getSignedInProfile(Context context) {
 
         LocalData.tryReadProfile(context);
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
         return LocalData.signedInProfile;
     }
 

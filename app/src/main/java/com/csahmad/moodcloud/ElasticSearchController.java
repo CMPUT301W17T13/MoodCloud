@@ -105,6 +105,8 @@ public class ElasticSearchController {
 
             for (T item: items) {
 
+                if (item.isDummy()) continue;
+
                 if (item.getId() == null)
                     throw new IllegalArgumentException("Given item has no ID.");
 
@@ -153,6 +155,8 @@ public class ElasticSearchController {
 
             // Save/update each object
             for (T item: items) {
+
+                if (item.isDummy()) continue;
 
                 Index index;
 
@@ -270,8 +274,10 @@ public class ElasticSearchController {
                     return resultObject;
                 }
 
-                else
-                    Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
+                else {
+                    Log.i("Error", "Elasticsearch died (get by ID): " + result.getErrorMessage());
+                    Log.i("Error", "died type: " + this.getTypeName());
+                }
             }
 
             catch (IOException e) {

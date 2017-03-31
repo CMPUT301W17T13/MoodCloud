@@ -61,6 +61,16 @@ public class FollowingActivity extends AppCompatActivity {
             System.err.println("TimeoutException: " + e.getMessage());
         }
 
+        Button mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ShowMapActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +109,7 @@ public class FollowingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         Button profileButton = (Button) findViewById(R.id.profileButton);
         profileButton.setOnClickListener(new View.OnClickListener(){
