@@ -22,7 +22,7 @@
     <EditText
         android:id="@+id/body"
         android:layout_width="fill_parent"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:scrollbars="horizontal"
         android:background="@android:color/background_light"
         android:hint="Say something:"
@@ -40,7 +40,7 @@
     <ImageView
         android:id="@+id/moodPhoto"
         android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/body"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
@@ -200,7 +200,7 @@
     <EditText
         android:id="@+id/trigger"
         android:layout_width="300dp"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/surprised"
         android:layout_centerHorizontal="true"
         android:background="@android:color/background_light"
@@ -236,7 +236,7 @@
         android:layout_height="40dp"
         android:background="@color/colorPrimary"
         android:hint="Post"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/crowd"
         android:layout_centerHorizontal="true" />
 
     <RadioGroup

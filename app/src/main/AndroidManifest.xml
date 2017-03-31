@@ -67,8 +67,10 @@
         <activity
             android:name=".SearchMoods"
             android:label="@string/title_activity_search_moods"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".TakePhotoActivity"></activity>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".TakePhotoActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
