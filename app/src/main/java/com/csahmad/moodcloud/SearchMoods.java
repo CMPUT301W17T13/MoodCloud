@@ -1,16 +1,23 @@
 package com.csahmad.moodcloud;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -19,7 +26,55 @@ import android.widget.Toast;
 import java.lang.reflect.Array;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class SearchMoods extends AppCompatActivity {
+
+    boolean recent = FALSE;
+    boolean locperm = FALSE;
+    boolean near = FALSE;
+    private static final int READ_LOCATION_REQUEST = 1;
+
+
+    //https://developer.android.com/guide/topics/ui/controls/checkbox.html
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.recentBox:
+                if (checked){
+                    recent = TRUE;
+                }
+                break;
+            case R.id.nearBox:
+                if (checked) {
+                    recent = TRUE;
+                }
+                break;
+        }
+    }
+
+    /**
+     * Return whether this app currently has permission to access location.
+     *
+     * @return whether this app currently has permission to access location
+     */
+    public boolean haveLocationPermission() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED)
+
+            return false;
+
+        return true;
+    }
+
+    /** Request permission from the user to access location. */
+    public void requestLocationPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                READ_LOCATION_REQUEST);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +113,8 @@ public class SearchMoods extends AppCompatActivity {
 
         final Context context = this;
 
+
+
         searchButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -85,9 +142,28 @@ public class SearchMoods extends AppCompatActivity {
 
                 Intent intent = new Intent(context, SearchResultsActivity.class);
 
-                if (where == "Recent Week") {
+                if (recent == TRUE) {
                     filter.setMaxTimeUnitsAgo(1);
-                    where = "Everyone";
+                }
+
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                if (haveLocationPermission()) {
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    double altitude = location.getAltitude();
+                    locperm = TRUE;
+                    if (near == TRUE){
+                        filter.setMaxDistance(5.0d);
+                        filter.setLocation(new SimpleLocation(latitude,longitude,altitude));
+                    }
                 }
 
                 intent.putExtra("WHERE", where);
