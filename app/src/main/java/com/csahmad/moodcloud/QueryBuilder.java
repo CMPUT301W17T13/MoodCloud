@@ -80,10 +80,54 @@ public class QueryBuilder {
             query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
         }
 
+        if (filter.hasTermAggregations()) {
+            query += ",\n";
+            query += QueryBuilder.buildTermAggregations(filter.getTermAggregationFields());
+        }
+
         query += "\n}";
         Log.i("Before", query);
         // TODO: 2017-03-30 Gross
         return query.replace("\"query\": {\n\n},", "");
+    }
+
+    /**
+     * Return a portion of a query indicating the terms in the given fields should be counted.
+     *
+     * @param fields the names of the fields to aggregate
+     * @return a portion of a query indicating the terms in the given fields should be counted
+     */
+    public static String buildTermAggregations(ArrayList<String> fields) {
+
+        if (fields == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        String query = "\"aggs\": {\n";
+
+        ArrayList<String> components = new ArrayList<String>();
+
+        for (String field: fields)
+            components.add(QueryBuilder.buildTermAggregation(field));
+
+        query += TextUtils.join(",\n", components);
+
+        return query + "\n}";
+    }
+
+    /**
+     * Return a portion of a query indicating the terms in the given field should be counted.
+     *
+     * @param field the name of the field to aggregate
+     * @return a portion of a query indicating the terms in the given field should be counted
+     */
+    private static String buildTermAggregation(String field) {
+
+        if (field == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        return "\"" + field + "\": {\n" +
+                "\"terms\": {" + "\"field\": \"" + field + "\"}\n" +
+                "}";
     }
 
     /**

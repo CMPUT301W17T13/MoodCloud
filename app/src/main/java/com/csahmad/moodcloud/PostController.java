@@ -1,9 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -25,6 +24,45 @@ public class PostController {
     public void setTimeout(Integer timeout) {
 
         this.elasticSearch.setTimeout(timeout);
+    }
+
+    /**
+     * Return the number of occurrences of each mood for all posts matching the restrictions in the
+     * given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @return the number of occurrences of each mood
+     * @see Post#mood
+     */
+    public HashMap<Integer, Long> getMoodCounts(SearchFilter filter) throws TimeoutException {
+
+        int[] moods = {Mood.ANGRY, Mood.CONFUSED, Mood.DISGUSTED, Mood.SCARED, Mood.HAPPY,
+            Mood.SAD, Mood.ASHAMED, Mood.SURPRISED};
+
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.addTermAggregation("mood");
+        this.elasticSearch.setFilter(filter);
+
+        HashMap<String, Long> countsStringKeys = this.elasticSearch.getTermCounts().get("mood");
+        HashMap<Integer, Long> counts = new HashMap<Integer, Long>();
+
+        for (String stringKey: countsStringKeys.keySet())
+            counts.put(Integer.parseInt(stringKey), countsStringKeys.get(stringKey));
+
+        for (int mood: moods) {
+
+            if (!counts.containsKey(mood))
+                counts.put(mood, 0l);
+        }
+
+        this.elasticSearch.setFilter(null);
+
+        return counts;
     }
 
     /**

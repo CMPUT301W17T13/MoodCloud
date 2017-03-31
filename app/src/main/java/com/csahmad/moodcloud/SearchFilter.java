@@ -81,6 +81,8 @@ public class SearchFilter implements Parcelable {
         this.context = ParcelIO.readInteger(in);
 
         this.nonEmptyFields = ParcelIO.readStringList(in);
+
+        this.termAggregationFields = ParcelIO.readStringList(in);
     }
 
     // For Parcelable
@@ -116,6 +118,8 @@ public class SearchFilter implements Parcelable {
         ParcelIO.writeInteger(out, this.context);
 
         out.writeStringList(this.nonEmptyFields);
+
+        out.writeStringList(this.termAggregationFields);
     }
 
     /** Words that the fields in {@link #keywordFields} should contain. */
@@ -147,6 +151,8 @@ public class SearchFilter implements Parcelable {
     /** The order to sort results in. */
     private SortOrder sortOrder = SortOrder.Descending;
 
+    private ArrayList<String> termAggregationFields;
+
     /**
      * The mood results must have.
      *
@@ -168,7 +174,8 @@ public class SearchFilter implements Parcelable {
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields);
+                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields,
+                this.termAggregationFields);
     }
 
     /**
@@ -198,6 +205,38 @@ public class SearchFilter implements Parcelable {
             this.keywords = new ArrayList<String>();
 
         this.keywords.add(keyword);
+        return this;
+    }
+
+    /** Return whether this SearchFilter has term aggregation fields. */
+    public boolean hasTermAggregations() {
+
+        return !NullTools.allNullOrEmpty(this.termAggregationFields);
+    }
+
+    /**
+     * Add the given field to {@link #termAggregationFields}.
+     *
+     * @param fieldName the field to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addTermAggregation(String fieldName) {
+
+        if (this.termAggregationFields == null)
+            this.termAggregationFields = new ArrayList<String>();
+
+        this.termAggregationFields.add(fieldName);
+        return this;
+    }
+
+    public ArrayList<String> getTermAggregationFields() {
+
+        return this.termAggregationFields;
+    }
+
+    public SearchFilter setTermAggregationFields(ArrayList<String> termAggregationFields) {
+
+        this.termAggregationFields = termAggregationFields;
         return this;
     }
 

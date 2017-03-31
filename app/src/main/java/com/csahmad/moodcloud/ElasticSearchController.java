@@ -7,10 +7,8 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-//import java.util.Map;
-//mwschafe commented out unused import statements
-
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Count;
 import io.searchbox.core.CountResult;
@@ -20,6 +18,8 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.MetricAggregation;
+import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.Refresh;
@@ -355,6 +355,98 @@ public class ElasticSearchController {
             }
 
             return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For getting term aggregations (number of occurrences for terms) via elasticsearch.
+     */
+    public static class GetTermAggregations
+            extends AsyncTask<SearchFilter, Void, HashMap<String, HashMap<String, Long>>> {
+
+        private String typeName;
+
+        public String getTypeName() {
+
+            return this.typeName;
+        }
+
+        public void setTypeName(String typeName) {
+
+            this.typeName = typeName;
+        }
+
+        /**
+         * Gets term aggregations via elasticsearch.
+         *
+         * @param searchFilters only pass one search filter to restrict the search and determine
+         *                      which fields to aggregate
+         * @return the number of occurrences of each term in the same order that the term names are
+         *  stored in {@link SearchFilter#termAggregationFields}
+         */
+        @Override
+        protected HashMap<String, HashMap<String, Long>> doInBackground(SearchFilter... searchFilters) {
+
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
+            if (this.typeName == null) {
+
+                throw new IllegalStateException(
+                        "Cannot call doInBackground without setting typeName.");
+            }
+
+            HashMap<String, HashMap<String, Long>> results =
+                    new HashMap<String, HashMap<String, Long>>();
+
+            SearchFilter searchFilter = searchFilters[0];
+            String query = QueryBuilder.build(searchFilter, 0, 0);
+
+            Log.i("Query", "Query: " + query);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ElasticSearchController.index)
+                    .addType(this.typeName)
+                    .build();
+
+            try {
+
+                // Get the results of the query:
+
+                SearchResult result = ElasticSearchController.client.execute(search);
+
+                if (result.isSucceeded()) {
+
+                    ArrayList<String> fields = searchFilter.getTermAggregationFields();
+
+                    MetricAggregation aggregation = result.getAggregations();
+
+                    for (String field: fields) {
+
+                        HashMap<String, Long> fieldCounts = new HashMap<String, Long>();
+                        results.put(field, fieldCounts);
+
+                        List<TermsAggregation.Entry> buckets =
+                                aggregation.getTermsAggregation(field).getBuckets();
+
+                        int size = buckets.size();
+
+                        for (TermsAggregation.Entry bucket: buckets)
+                            fieldCounts.put(bucket.getKey(), bucket.getCount());
+                    }
+                }
+
+                else
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
+            }
+
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the" +
+                        "elasticsearch server!");
+            }
+
+            return results;
         }
     }
 
