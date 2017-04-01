@@ -39,6 +39,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private final static int REQUEST_GET_DATE = 3;
     private String image;
     private ImageView moodPhoto;
+    private TextView dateString;
     private Calendar date;
     private Bundle setDate;
     private int setDay;
@@ -68,7 +69,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 setDay = setDate.getInt("day");
                 setMonth = setDate.getInt("month");
                 setYear = setDate.getInt("year");
-                date = DateConverter.toDate(setYear,setMonth,setDay);
+                this.date = DateConverter.toDate(setYear,setMonth,setDay);
+
+
+
+                dateString.setText(DateConverter.dateToString(date));
+
+
                 //System.out.println(setDay + " " + setMonth + " " + setYear);
             }//else if (resultCode == RESULT_CANCELED)
                //date = Calendar.getInstance();
@@ -103,12 +110,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onCreate(Bundle savedInstanceState) {
 
-        super.onStart();
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
         moodPhoto = (ImageView) findViewById(R.id.moodPhoto);
+        dateString = (TextView) findViewById(R.id.postDate);
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -148,15 +156,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 //final EditText latitudetext = (EditText) findViewById(R.id.latitude);
                 //final EditText longitudetext = (EditText) findViewById(R.id.longitude);
                 //final EditText altitudetext = (EditText)findViewById(R.id.altitude);
-                final TextView dateString = (TextView) findViewById(R.id.postDate);
+
 
 
                 if (id == null) {
-                    if (date == null) {
-                        dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
-                    } else{
-                        dateString.setText(DateConverter.dateToString(date));
-                    }
+                    dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
                     //latitudetext.setText(Double.toString(locationArray[0]));
                     //longitudetext.setText(Double.toString(locationArray[1]));
                     //altitudetext.setText(Double.toString(locationArray[2]));
