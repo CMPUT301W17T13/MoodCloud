@@ -144,8 +144,8 @@ public class FollowController {
      * Add or update the given {@link Follow}s via elasticsearch.
      *
      * <p>
-     * If a {@link Follow} has a null {@link Follow#id}, add it. If a {@link Follow} has a
-     * non-null {@link Follow#id}, update it.
+     * If a {@link Follow} has a null id, add it. If a {@link Follow} has a
+     * non-null id, update it.
      *
      * @param follows the {@link Follow}s to add or update
      */

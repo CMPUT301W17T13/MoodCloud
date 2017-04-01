@@ -121,8 +121,8 @@ public class ProfileController {
      * Add or update the given {@link Profile}s via elasticsearch.
      *
      * <p>
-     * If a {@link Profile} has a null {@link Profile#id}, add it. If a {@link Profile} has a
-     * non-null {@link Profile#id}, update it.
+     * If a {@link Profile} has a null id, add it. If a {@link Profile} has a
+     * non-null id, update it.
      *
      * @param profiles the {@link Profile}s to add or update
      */

@@ -69,8 +69,8 @@ public class PostController {
      * Add or update the given {@link Post}s via elasticsearch.
      *
      * <p>
-     * If a {@link Post} has a null {@link Post#id}, add it. If a {@link Post} has a non-null
-     * {@link Post#id}, update it.
+     * If a {@link Post} has a null id, add it. If a {@link Post} has a non-null
+     * id, update it.
      *
      * @param posts the {@link Post}s to add or update
      */

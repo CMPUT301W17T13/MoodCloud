@@ -148,8 +148,8 @@ public class FollowRequestController {
      * Add or update the given {@link FollowRequest}s via elasticsearch.
      *
      * <p>
-     * If a {@link FollowRequest} has a null {@link FollowRequest#id}, add it. If a
-     * {@link FollowRequest} has a non-null {@link FollowRequest#id}, update it.
+     * If a {@link FollowRequest} has a null id, add it. If a
+     * {@link FollowRequest} has a non-null id, update it.
      *
      * @param followRequests the {@link FollowRequest}s to add or update
      */

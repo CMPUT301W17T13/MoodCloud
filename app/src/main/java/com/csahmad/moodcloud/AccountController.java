@@ -111,8 +111,8 @@ public class AccountController {
      * Add or update the given {@link Account}s via elasticsearch.
      *
      * <p>
-     * If an {@link Account} has a null {@link Account#id}, add it. If an {@link Account} has a
-     * non-null {@link Account#id}, update it.
+     * If an {@link Account} has a null id, add it. If an {@link Account} has a
+     * non-null id, update it.
      *
      * @param accounts the {@link Account}s to add or update
      */
