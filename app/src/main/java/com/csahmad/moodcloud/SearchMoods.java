@@ -35,6 +35,7 @@ public class SearchMoods extends AppCompatActivity {
     boolean locperm = FALSE;
     boolean near = FALSE;
     private static final int READ_LOCATION_REQUEST = 1;
+    private SearchFilter filter;
 
 
     //https://developer.android.com/guide/topics/ui/controls/checkbox.html
@@ -54,26 +55,31 @@ public class SearchMoods extends AppCompatActivity {
         }
     }
 
-    /**
-     * Return whether this app currently has permission to access location.
-     *
-     * @return whether this app currently has permission to access location
-     */
-    public boolean haveLocationPermission() {
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED)
-
-            return false;
-
-        return true;
-    }
-
     /** Request permission from the user to access location. */
     public void requestLocationPermission() {
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 READ_LOCATION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                              int[] grantResults) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            double altitude = location.getAltitude();
+            locperm = TRUE;
+            if (near == TRUE) {
+                this.filter.setMaxDistance(5.0d);
+                this.filter.setLocation(new SimpleLocation(latitude, longitude, altitude));
+            }
+        }
     }
 
     @Override
@@ -111,7 +117,7 @@ public class SearchMoods extends AppCompatActivity {
 
         Button searchButton = (Button) findViewById(R.id.searchButton);
 
-        final Context context = this;
+        final SearchMoods context = this;
 
 
 
@@ -126,6 +132,7 @@ public class SearchMoods extends AppCompatActivity {
                 String contextString = (String) contextSpinner.getSelectedItem();
 
                 SearchFilter filter = new SearchFilter();
+                context.filter = filter;
 
                 if (!keywordString.equals("")) {
                     filter.addKeywordField("triggerText");
@@ -146,24 +153,10 @@ public class SearchMoods extends AppCompatActivity {
                     filter.setMaxTimeUnitsAgo(1);
                 }
 
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
 
                     requestLocationPermission();
-                }
-
-                if (haveLocationPermission()) {
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    double altitude = location.getAltitude();
-                    locperm = TRUE;
-                    if (near == TRUE){
-                        filter.setMaxDistance(5.0d);
-                        filter.setLocation(new SimpleLocation(latitude,longitude,altitude));
-                    }
                 }
 
                 intent.putExtra("WHERE", where);
