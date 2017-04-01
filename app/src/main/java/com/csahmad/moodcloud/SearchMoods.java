@@ -77,13 +77,19 @@ public class SearchMoods extends AppCompatActivity {
 
             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            double altitude = location.getAltitude();
-            locperm = TRUE;
-            if (near == TRUE) {
-                this.filter.setMaxDistance(5.0d);
-                this.filter.setLocation(new SimpleLocation(latitude, longitude, altitude));
+
+            if (location != null) {
+
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                double altitude = location.getAltitude();
+
+                locperm = TRUE;
+
+                if (near == TRUE) {
+                    this.filter.setMaxDistance(5.0d);
+                    this.filter.setLocation(new SimpleLocation(latitude, longitude, altitude));
+                }
             }
         }
     }
