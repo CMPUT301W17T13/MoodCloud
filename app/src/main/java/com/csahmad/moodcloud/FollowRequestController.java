@@ -45,7 +45,7 @@ public class FollowRequestController {
      *
      * @param follower the follower in the {@link FollowRequest} relationship
      * @param followee the followee in the {@link FollowRequest} relationship
-     * @return
+     * @return whether the given {@link FollowRequest} relationship exists
      */
     public boolean requestExists(Profile follower, Profile followee) {
 

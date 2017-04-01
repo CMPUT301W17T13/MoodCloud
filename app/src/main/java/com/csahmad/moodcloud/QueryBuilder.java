@@ -184,7 +184,8 @@ public class QueryBuilder {
      * returned objects.
      *
      * @param fields the fields that should not be empty
-     * @return
+     * @return a portion of a query indicating that the given fields should not be empty in the
+     * returned objects
      */
     public static String buildNonEmptyFields(ArrayList<String> fields) {
 

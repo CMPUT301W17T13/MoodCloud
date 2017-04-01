@@ -19,7 +19,7 @@ public class SearchFilter implements Parcelable {
     // For creating the Parcel:
     // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
     // Accessed January 29, 2017
-    /** For creating the {@link Parcel}. */
+    /** For creating the Parcel. */
     public static final Parcelable.Creator<SearchFilter> CREATOR =
             new Parcelable.Creator<SearchFilter>() {
 
@@ -47,16 +47,16 @@ public class SearchFilter implements Parcelable {
     // Initialize SearchFilter from a SearchFilter Parcel:
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
-    /** Initialize SearchFilter from a SearchFilter {@link Parcel}. */
+    /** Initialize SearchFilter from a SearchFilter Parcel. */
     public SearchFilter(Parcel in) {
 
         this.readFromParcel(in);
     }
 
     /**
-     * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
+     * Read the values to assign to this SearchFilter's fields from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
+     * @param in the Parcel to read from
      */
     private void readFromParcel(Parcel in) {
 
@@ -90,9 +90,9 @@ public class SearchFilter implements Parcelable {
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
     /**
-     * Write this SearchFilter's fields to the given {@link Parcel}
+     * Write this SearchFilter's fields to the given Parcel
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      */
     @Override
     public void writeToParcel(Parcel out, int flags) {
