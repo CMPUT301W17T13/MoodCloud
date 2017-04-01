@@ -320,8 +320,6 @@ public class ElasticSearchController {
 
                 query = "";
 
-            // If keyword passed, make the query string (otherwise leave query as an empty string)
-            //if (!keywordString.equals("")) {
             else {
                 SearchFilter searchFilter = searchFilters[0];
                 query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize, 0);
@@ -397,11 +395,10 @@ public class ElasticSearchController {
             ElasticSearchController.setClient();        // Set up client if it is null
             ElasticSearchController.makeIndex();        // Make index if not exists
 
-            if (this.typeName == null) {
+            if (this.typeName == null)
 
                 throw new IllegalStateException(
                         "Cannot call doInBackground without setting typeName.");
-            }
 
             HashMap<String, HashMap<String, Long>> results =
                     new HashMap<String, HashMap<String, Long>>();
@@ -415,8 +412,6 @@ public class ElasticSearchController {
                     .build();
 
             try {
-
-                // Get the results of the query:
 
                 SearchResult result = ElasticSearchController.client.execute(search);
 
@@ -433,8 +428,6 @@ public class ElasticSearchController {
 
                         List<TermsAggregation.Entry> buckets =
                                 aggregation.getTermsAggregation(field).getBuckets();
-
-                        int size = buckets.size();
 
                         for (TermsAggregation.Entry bucket: buckets)
                             fieldCounts.put(bucket.getKey(), bucket.getCount());
@@ -538,19 +531,14 @@ public class ElasticSearchController {
                         "Cannot call doInBackground without setting type.");
             }
 
-            // Will store results (objects with the given keywords)
             ArrayList<T> results = new ArrayList<T>();
-
             String query;
 
-            // I
             if (searchFilters.length == 0 || searchFilters[0] == null ||
                     !searchFilters[0].hasRestrictions())
 
                 query = "";
 
-            // If keyword passed, make the query string (otherwise leave query as an empty string)
-            //if (!keywordString.equals("")) {
             else {
 
                 SearchFilter searchFilter = searchFilters[0];
@@ -567,8 +555,6 @@ public class ElasticSearchController {
                     .build();
 
             try {
-
-                // Get the results of the query:
 
                 SearchResult result = ElasticSearchController.client.execute(search);
 
