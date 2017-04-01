@@ -39,26 +39,87 @@
 
     <ImageView
         android:id="@+id/moodPhoto"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="100dp"
+        android:layout_height="99dp"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
         android:layout_below="@+id/body"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        android:layout_alignParentLeft="true"/>
+
+    <EditText
+        android:id="@+id/latitude"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:background="@android:color/background_light"
+        android:hint="Latitude"
+        android:layout_below="@+id/body"
+        android:layout_alignStart="@+id/longitude"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:text="Location:"
+        android:layout_below="@+id/body"
+        android:layout_alignStart="@+id/longitude"
+        android:textSize="18sp"
+        android:id="@+id/textView3" />
+    <EditText
+        android:id="@+id/longitude"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:background="@android:color/background_light"
+        android:hint="Longitude"
+        android:layout_below="@+id/latitude"
+        android:layout_alignStart="@+id/altitude" />
+
+    <ImageButton
+        android:id="@+id/datebutton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_action_date"
+        android:layout_above="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/altitude"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:layout_toEndOf="@+id/takephoto"
+        android:layout_below="@+id/longitude"
+        android:background="@android:color/background_light"
+        android:hint="Altitude"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="Posted on:"
+        android:textSize="15sp"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/latitude"
+        android:layout_alignEnd="@+id/trigger" />
+
+    <TextView
+        android:id="@+id/postDate"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:background="@android:color/background_light"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
 
     <TextView
         android:id="@+id/angry"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Angry"
         android:layout_toEndOf="@+id/angry_image"
 
         android:layout_below="@+id/takephoto"
-        android:textSize="25sp"/>
+        android:textSize="20sp"/>
 
     <ImageView
         android:id="@+id/angry_image"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/takephoto"
         android:layout_alignParentStart="true"
         android:src="@drawable/angry"
@@ -67,17 +128,17 @@
     <TextView
         android:id="@+id/confused"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Confused"
         android:layout_toEndOf="@+id/confused_image"
 
         android:layout_below="@+id/angry"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/confused_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/angry_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/confused"
@@ -86,17 +147,17 @@
     <TextView
         android:id="@+id/disgusted"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Disgusted"
         android:layout_toEndOf="@+id/disgusted_image"
 
         android:layout_below="@+id/confused"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/disgusted_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/confused_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/disgusted"
@@ -105,17 +166,17 @@
     <TextView
         android:id="@+id/scared"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Scared"
         android:layout_toEndOf="@+id/scared_image"
 
         android:layout_below="@+id/disgusted"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/scared_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/disgusted_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/fear"
@@ -124,17 +185,17 @@
     <TextView
         android:id="@+id/happy"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Happy"
         android:layout_toEndOf="@+id/happy_image"
 
         android:layout_below="@+id/scared"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/happy_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/scared_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/happy"
@@ -143,17 +204,17 @@
     <TextView
         android:id="@+id/sad"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Sad"
         android:layout_toEndOf="@+id/sad_image"
 
         android:layout_below="@+id/happy"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/sad_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/happy_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/sad"
@@ -162,17 +223,17 @@
     <TextView
         android:id="@+id/ashamed"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Ashamed"
         android:layout_toEndOf="@+id/ashamed_image"
 
         android:layout_below="@+id/sad"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/ashamed_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/sad_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/shame"
@@ -181,17 +242,17 @@
     <TextView
         android:id="@+id/surprised"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:text="Suprised"
         android:layout_toEndOf="@+id/surprised_image"
 
         android:layout_below="@+id/ashamed"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/surprised_image"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_below="@+id/ashamed_image"
         android:layout_alignParentStart="true"
         android:src="@drawable/suprised"
@@ -200,8 +261,8 @@
     <EditText
         android:id="@+id/trigger"
         android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/surprised"
+        android:layout_height="25dp"
+        android:layout_below="@+id/moodRadioGroup"
         android:layout_centerHorizontal="true"
         android:background="@android:color/background_light"
         android:hint="Trigger"/>
@@ -209,35 +270,36 @@
     <TextView
         android:id="@+id/alone"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:textSize="25sp"
+        android:layout_height="25dp"
+        android:textSize="20sp"
         android:layout_below="@+id/trigger"
         android:text="Alone"/>
 
     <TextView
         android:id="@+id/group"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:textSize="25sp"
+        android:layout_height="25dp"
+        android:textSize="20sp"
         android:layout_below="@+id/alone"
         android:text="With a Group"/>
 
     <TextView
         android:id="@+id/crowd"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:textSize="25sp"
+        android:layout_height="25dp"
+        android:textSize="20sp"
         android:layout_below="@+id/group"
         android:text="With a Crowd"/>
 
     <Button
         android:id="@+id/postButton"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:background="@color/colorPrimary"
         android:hint="Post"
-        android:layout_below="@+id/crowd"
-        android:layout_centerHorizontal="true" />
+
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
 
     <RadioGroup
         android:id="@+id/statusRadioGroup"
@@ -249,16 +311,16 @@
 
         <RadioButton
             android:id="@+id/alone_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
         <RadioButton
             android:id="@+id/group_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
         <RadioButton
             android:id="@+id/crowd_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
     </RadioGroup>
 
     <RadioGroup
@@ -271,43 +333,43 @@
 
         <RadioButton
             android:id="@+id/angry_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/confused_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/disgusted_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/scared_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/happy_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/sad_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/ashamed_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <RadioButton
             android:id="@+id/surprised_selected"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
 
     </RadioGroup>
@@ -321,11 +383,11 @@
         style="@android:style/Widget.Holo.Light.ImageButton"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
         android:tint="@android:color/background_light"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
+        app:srcCompat="?attr/actionModeCloseDrawable"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/sad" />
 
 
 
