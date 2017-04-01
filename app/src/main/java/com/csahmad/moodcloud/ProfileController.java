@@ -82,13 +82,13 @@ public class ProfileController {
     }
 
     /**
-     * Return the {@link Profile} that has the given id.
+     * Return the {@link Profile} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Profile} has the given id.
+     * Return null if no {@link Profile} has the given ID.
      *
-     * @param id the id of the desired {@link Profile}
-     * @return the {@link Profile} that has the given id
+     * @param id the ID of the desired {@link Profile}
+     * @return the {@link Profile} that has the given ID
      * @throws TimeoutException
      */
     public Profile getProfileFromID(String id) throws TimeoutException {
@@ -121,8 +121,8 @@ public class ProfileController {
      * Add or update the given {@link Profile}s via elasticsearch.
      *
      * <p>
-     * If a {@link Profile} has a null id, add it. If a {@link Profile} has a
-     * non-null id, update it.
+     * If a {@link Profile} has a null ID, add it. If a {@link Profile} has a
+     * non-null ID, update it.
      *
      * @param profiles the {@link Profile}s to add or update
      */

@@ -18,14 +18,14 @@ public abstract class ElasticSearchObject {
      *
      * <p>
      * This is used for situations like {@link Post}s with missing profiles ({@link Post}s with
-     * {@link Post#posterId}s that do not correspond to any existing profile) instead of letting
+     * poster IDs that do not correspond to any existing profile) instead of letting
      * the app crash.
      *
      * @see ElasticSearch#addOrUpdate(ElasticSearchObject[])
      * @see ElasticSearch#delete(ElasticSearchObject[])
      * @see ElasticSearchController.AddItems
      * @see ElasticSearchController.DeleteItems
-     * @see Post#posterId
+     * @see Post#getPosterId()
      */
     private boolean isDummy = false;
     public static final String dummyText = "[DUMMY]";

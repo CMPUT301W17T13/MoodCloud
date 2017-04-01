@@ -247,7 +247,7 @@ public class ElasticSearchController {
         /**
          * Returns the object with the given ID.
          *
-         * @param ids the first argument is the id of the object to get
+         * @param ids the first argument is the ID of the object to get
          * @return the object with the given ID
          */
         @Override
@@ -387,7 +387,11 @@ public class ElasticSearchController {
          * @param searchFilters only pass one search filter to restrict the search and determine
          *                      which fields to aggregate
          * @return the number of occurrences of each term in the same order that the term names are
-         *  stored in {@link SearchFilter#termAggregationFields}
+         *  stored in filter.termAggregationFields
+         * @see SearchFilter#addTermAggregation(String)
+         * @see SearchFilter#setTermAggregationFields(ArrayList)
+         * @see SearchFilter#getTermAggregationFields()
+         * @see SearchFilter#hasTermAggregations()
          */
         @Override
         protected HashMap<String, HashMap<String, Long>> doInBackground(SearchFilter... searchFilters) {

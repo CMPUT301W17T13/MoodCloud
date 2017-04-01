@@ -107,13 +107,13 @@ public class FollowController {
     }
 
     /**
-     * Return the {@link Follow} that has the given id.
+     * Return the {@link Follow} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Follow} has the given id.
+     * Return null if no {@link Follow} has the given ID.
      *
-     * @param id the id of the desired {@link Follow}
-     * @return the {@link Follow} that has the given id
+     * @param id the ID of the desired {@link Follow}
+     * @return the {@link Follow} that has the given ID
      * @throws TimeoutException
      */
     public Follow getFollowFromID(String id) throws TimeoutException {
@@ -144,8 +144,8 @@ public class FollowController {
      * Add or update the given {@link Follow}s via elasticsearch.
      *
      * <p>
-     * If a {@link Follow} has a null id, add it. If a {@link Follow} has a
-     * non-null id, update it.
+     * If a {@link Follow} has a null ID, add it. If a {@link Follow} has a
+     * non-null ID, update it.
      *
      * @param follows the {@link Follow}s to add or update
      */

@@ -35,7 +35,8 @@ public class PostController {
      *
      * @param filter restrictions for which posts to count
      * @return the number of occurrences of each mood
-     * @see Post#mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
      */
     public HashMap<Integer, Long> getMoodCounts(SearchFilter filter) throws TimeoutException {
 
@@ -69,8 +70,8 @@ public class PostController {
      * Add or update the given {@link Post}s via elasticsearch.
      *
      * <p>
-     * If a {@link Post} has a null id, add it. If a {@link Post} has a non-null
-     * id, update it.
+     * If a {@link Post} has a null ID, add it. If a {@link Post} has a non-null
+     * ID, update it.
      *
      * @param posts the {@link Post}s to add or update
      */
@@ -92,13 +93,13 @@ public class PostController {
     }
 
     /**
-     * Return the {@link Post} that has the given id.
+     * Return the {@link Post} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Post} has the given id.
+     * Return null if no {@link Post} has the given ID.
      *
-     * @param id the id of the desired {@link Post}
-     * @return the {@link Post} that has the given id
+     * @param id the ID of the desired {@link Post}
+     * @return the {@link Post} that has the given ID
      * @throws TimeoutException
      */
     public Post getPostFromId(String id) throws TimeoutException {
