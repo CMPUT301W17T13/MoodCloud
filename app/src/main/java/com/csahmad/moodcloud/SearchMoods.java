@@ -66,6 +66,12 @@ public class SearchMoods extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                               int[] grantResults) {
 
+        if (requestCode == READ_LOCATION_REQUEST)
+            this.setFilterLocation();
+    }
+
+    private void setFilterLocation() {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
 
@@ -158,6 +164,9 @@ public class SearchMoods extends AppCompatActivity {
 
                     requestLocationPermission();
                 }
+
+                else
+                    setFilterLocation();
 
                 intent.putExtra("WHERE", where);
                 intent.putExtra("FILTER", filter);
