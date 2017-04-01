@@ -201,6 +201,7 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return this.getNext(from, false);
     }
 
+    // TODO: 2017-03-31 Maybe make a new class and return objects of that type
     /**
      * Return the number of occurrences of each value for each field in
      * {@link #filter}.{@link SearchFilter#termAggregationFields}.
