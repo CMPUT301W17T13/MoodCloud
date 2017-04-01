@@ -86,7 +86,6 @@ public class QueryBuilder {
         }
 
         query += "\n}";
-        Log.i("Before", query);
         // TODO: 2017-03-30 Gross
         return query.replace("\"query\": {\n\n},", "");
     }

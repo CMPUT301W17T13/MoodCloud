@@ -192,19 +192,15 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
 
-                        if (isNew) {
+                        if (isNew)
                             item.setId(result.getId());
-                            Log.i("ID", "New id: " + item.getId());
-                        }
 
                         else if (item.getId() != result.getId())
                             throw new RuntimeException("Them IDs should be equal.");
                     }
 
-                    else {
+                    else
                         Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
-                        item.setId("Barbie");
-                    }
                 }
 
                 catch (Exception e) {
@@ -274,10 +270,8 @@ public class ElasticSearchController {
                     return resultObject;
                 }
 
-                else {
+                else
                     Log.i("Error", "Elasticsearch died (get by ID): " + result.getErrorMessage());
-                    Log.i("Error", "died type: " + this.getTypeName());
-                }
             }
 
             catch (IOException e) {
@@ -402,8 +396,6 @@ public class ElasticSearchController {
 
             SearchFilter searchFilter = searchFilters[0];
             String query = QueryBuilder.build(searchFilter, 0, 0);
-
-            Log.i("Query", "Query: " + query);
 
             Search search = new Search.Builder(query)
                     .addIndex(ElasticSearchController.index)
@@ -541,11 +533,9 @@ public class ElasticSearchController {
 
             // I
             if (searchFilters.length == 0 || searchFilters[0] == null ||
-                    !searchFilters[0].hasRestrictions()) {
+                    !searchFilters[0].hasRestrictions())
 
                 query = "";
-                Log.i("Conditional", "If I'm here, should be NO searchFilter.");
-            }
 
             // If keyword passed, make the query string (otherwise leave query as an empty string)
             //if (!keywordString.equals("")) {
@@ -557,11 +547,7 @@ public class ElasticSearchController {
                 if (this.singleResult) resultSize = 1;
 
                 query = QueryBuilder.build(searchFilter, resultSize, this.from);
-
-                Log.i("Conditional", "If I'm here, should be a searchFilter.");
             }
-
-            Log.i("Query", "Query: " + query);
 
             Search search = new Search.Builder(query)
                     .addIndex(ElasticSearchController.index)
@@ -577,7 +563,6 @@ public class ElasticSearchController {
                 if (result.isSucceeded()) {
 
                     List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
-                    Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
 
                     for (SearchResult.Hit<T, Void> hit: hits) {
 
@@ -585,7 +570,7 @@ public class ElasticSearchController {
                         object.setId(hit.id);
 
                         if (object.getId() == null)
-                            Log.i("Error", "ID should not be null!");
+                            throw new RuntimeException("ID should not be null!");
 
                         results.add(object);
                     }

@@ -243,10 +243,6 @@ public class PostController {
 
         Post result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
-
-        if (result == null)
-            Log.i("Theprofile", profile.toString());
-
         return result;
     }
 
