@@ -72,7 +72,7 @@ public class SearchMoods extends AppCompatActivity {
 
     private void setFilterLocation() {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
 
             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -92,6 +92,11 @@ public class SearchMoods extends AppCompatActivity {
                 }
             }
         }
+
+        else
+
+            Toast.makeText(getApplicationContext(), "Location permission denied",
+                    Toast.LENGTH_LONG).show();
     }
 
     @Override
