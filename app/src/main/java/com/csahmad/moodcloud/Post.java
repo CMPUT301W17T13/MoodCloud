@@ -2,11 +2,10 @@ package com.csahmad.moodcloud;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-//mwschafe commented unused import statement
-//import io.searchbox.annotations.JestId;
+
+// TODO: 2017-03-31 Use SimpleLocation instead of double[]
 
 /** A mood event. */
 public class Post extends ElasticSearchObject implements Parcelable {
@@ -14,7 +13,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
     // For creating the Parcel:
     // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
     // Accessed January 29, 2017
-    /** For creating the {@link Parcel}. */
+    /** For creating the Parcel. */
     public static final Parcelable.Creator<Post> CREATOR =
             new Parcelable.Creator<Post>() {
 
@@ -42,16 +41,16 @@ public class Post extends ElasticSearchObject implements Parcelable {
     // Initialize Post from a SearchFilter Parcel:
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
-    /** Initialize Post from a Post {@link Parcel}. */
+    /** Initialize Post from a Post Parcel. */
     public Post(Parcel in) {
 
         this.readFromParcel(in);
     }
 
     /**
-     * Read the values to assign to this Post's fields from the given {@link Parcel}.
+     * Read the values to assign to this Post's fields from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
+     * @param in the Parcel to read from
      */
     private void readFromParcel(Parcel in) {
 
@@ -72,9 +71,9 @@ public class Post extends ElasticSearchObject implements Parcelable {
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
     /**
-     * Write this Post's fields to the given {@link Parcel}
+     * Write this Post's fields to the given Parcel
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      */
     @Override
     public void writeToParcel(Parcel out, int flags) {

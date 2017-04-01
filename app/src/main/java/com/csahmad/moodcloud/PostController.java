@@ -1,9 +1,8 @@
 package com.csahmad.moodcloud;
 
 import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -28,11 +27,51 @@ public class PostController {
     }
 
     /**
+     * Return the number of occurrences of each mood for all posts matching the restrictions in the
+     * given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @return the number of occurrences of each mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
+     */
+    public HashMap<Integer, Long> getMoodCounts(SearchFilter filter) throws TimeoutException {
+
+        int[] moods = {Mood.ANGRY, Mood.CONFUSED, Mood.DISGUSTED, Mood.SCARED, Mood.HAPPY,
+            Mood.SAD, Mood.ASHAMED, Mood.SURPRISED};
+
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.addTermAggregation("mood");
+        this.elasticSearch.setFilter(filter);
+
+        HashMap<String, Long> countsStringKeys = this.elasticSearch.getTermCounts().get("mood");
+        HashMap<Integer, Long> counts = new HashMap<Integer, Long>();
+
+        for (String stringKey: countsStringKeys.keySet())
+            counts.put(Integer.parseInt(stringKey), countsStringKeys.get(stringKey));
+
+        for (int mood: moods) {
+
+            if (!counts.containsKey(mood))
+                counts.put(mood, 0l);
+        }
+
+        this.elasticSearch.setFilter(null);
+
+        return counts;
+    }
+
+    /**
      * Add or update the given {@link Post}s via elasticsearch.
      *
      * <p>
-     * If a {@link Post} has a null {@link Post#id}, add it. If a {@link Post} has a non-null
-     * {@link Post#id}, update it.
+     * If a {@link Post} has a null ID, add it. If a {@link Post} has a non-null
+     * ID, update it.
      *
      * @param posts the {@link Post}s to add or update
      */
@@ -54,13 +93,13 @@ public class PostController {
     }
 
     /**
-     * Return the {@link Post} that has the given id.
+     * Return the {@link Post} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Post} has the given id.
+     * Return null if no {@link Post} has the given ID.
      *
-     * @param id the id of the desired {@link Post}
-     * @return the {@link Post} that has the given id
+     * @param id the ID of the desired {@link Post}
+     * @return the {@link Post} that has the given ID
      * @throws TimeoutException
      */
     public Post getPostFromId(String id) throws TimeoutException {
@@ -205,10 +244,6 @@ public class PostController {
 
         Post result = this.elasticSearch.getSingleResult();
         this.elasticSearch.setFilter(null);
-
-        if (result == null)
-            Log.i("Theprofile", profile.toString());
-
         return result;
     }
 

@@ -5,7 +5,6 @@
         <item>Everyone</item>
         <item>Following</item>
         <item>My Moods</item>
-        <item>Recent Week</item>
     </string-array>
     <string-array name="moodsArray">
         <item>Any</item>

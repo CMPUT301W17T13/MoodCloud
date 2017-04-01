@@ -19,7 +19,7 @@ public class SearchFilter implements Parcelable {
     // For creating the Parcel:
     // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
     // Accessed January 29, 2017
-    /** For creating the {@link Parcel}. */
+    /** For creating the Parcel. */
     public static final Parcelable.Creator<SearchFilter> CREATOR =
             new Parcelable.Creator<SearchFilter>() {
 
@@ -47,16 +47,16 @@ public class SearchFilter implements Parcelable {
     // Initialize SearchFilter from a SearchFilter Parcel:
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
-    /** Initialize SearchFilter from a SearchFilter {@link Parcel}. */
+    /** Initialize SearchFilter from a SearchFilter Parcel. */
     public SearchFilter(Parcel in) {
 
         this.readFromParcel(in);
     }
 
     /**
-     * Read the values to assign to this SearchFilter's fields from the given {@link Parcel}.
+     * Read the values to assign to this SearchFilter's fields from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
+     * @param in the Parcel to read from
      */
     private void readFromParcel(Parcel in) {
 
@@ -81,6 +81,8 @@ public class SearchFilter implements Parcelable {
         this.context = ParcelIO.readInteger(in);
 
         this.nonEmptyFields = ParcelIO.readStringList(in);
+
+        this.termAggregationFields = ParcelIO.readStringList(in);
     }
 
     // For Parcelable
@@ -88,9 +90,9 @@ public class SearchFilter implements Parcelable {
     // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
     // Accessed January 29, 2017
     /**
-     * Write this SearchFilter's fields to the given {@link Parcel}
+     * Write this SearchFilter's fields to the given Parcel
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      */
     @Override
     public void writeToParcel(Parcel out, int flags) {
@@ -116,6 +118,8 @@ public class SearchFilter implements Parcelable {
         ParcelIO.writeInteger(out, this.context);
 
         out.writeStringList(this.nonEmptyFields);
+
+        out.writeStringList(this.termAggregationFields);
     }
 
     /** Words that the fields in {@link #keywordFields} should contain. */
@@ -147,6 +151,8 @@ public class SearchFilter implements Parcelable {
     /** The order to sort results in. */
     private SortOrder sortOrder = SortOrder.Descending;
 
+    private ArrayList<String> termAggregationFields;
+
     /**
      * The mood results must have.
      *
@@ -168,7 +174,8 @@ public class SearchFilter implements Parcelable {
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields);
+                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields,
+                this.termAggregationFields);
     }
 
     /**
@@ -198,6 +205,38 @@ public class SearchFilter implements Parcelable {
             this.keywords = new ArrayList<String>();
 
         this.keywords.add(keyword);
+        return this;
+    }
+
+    /** Return whether this SearchFilter has term aggregation fields. */
+    public boolean hasTermAggregations() {
+
+        return !NullTools.allNullOrEmpty(this.termAggregationFields);
+    }
+
+    /**
+     * Add the given field to {@link #termAggregationFields}.
+     *
+     * @param fieldName the field to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addTermAggregation(String fieldName) {
+
+        if (this.termAggregationFields == null)
+            this.termAggregationFields = new ArrayList<String>();
+
+        this.termAggregationFields.add(fieldName);
+        return this;
+    }
+
+    public ArrayList<String> getTermAggregationFields() {
+
+        return this.termAggregationFields;
+    }
+
+    public SearchFilter setTermAggregationFields(ArrayList<String> termAggregationFields) {
+
+        this.termAggregationFields = termAggregationFields;
         return this;
     }
 

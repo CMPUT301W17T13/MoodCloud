@@ -38,7 +38,7 @@ public class ParcelIO {
      * Read and return a {@link GeoPoint} from the given {@link Parcel}.
      *
      * @param in the {@link Parcel} to read from
-     * @return
+     * @return the {@link GeoPoint} read from the given {@link Parcel}
      */
     public static GeoPoint readGeoPoint(Parcel in) {
 

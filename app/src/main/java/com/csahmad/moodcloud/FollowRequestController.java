@@ -45,7 +45,7 @@ public class FollowRequestController {
      *
      * @param follower the follower in the {@link FollowRequest} relationship
      * @param followee the followee in the {@link FollowRequest} relationship
-     * @return
+     * @return whether the given {@link FollowRequest} relationship exists
      */
     public boolean requestExists(Profile follower, Profile followee) {
 
@@ -110,13 +110,13 @@ public class FollowRequestController {
     }
 
     /**
-     * Return the {@link FollowRequest} that has the given id.
+     * Return the {@link FollowRequest} that has the given ID.
      *
      * <p>
-     * Return null if no {@link FollowRequest} has the given id.
+     * Return null if no {@link FollowRequest} has the given ID.
      *
-     * @param id the id of the desired {@link FollowRequest}
-     * @return the {@link FollowRequest} that has the given id
+     * @param id the ID of the desired {@link FollowRequest}
+     * @return the {@link FollowRequest} that has the given ID
      * @throws TimeoutException
      */
     public FollowRequest getFollowRequestFromID(String id) throws TimeoutException {
@@ -148,8 +148,8 @@ public class FollowRequestController {
      * Add or update the given {@link FollowRequest}s via elasticsearch.
      *
      * <p>
-     * If a {@link FollowRequest} has a null {@link FollowRequest#id}, add it. If a
-     * {@link FollowRequest} has a non-null {@link FollowRequest#id}, update it.
+     * If a {@link FollowRequest} has a null ID, add it. If a
+     * {@link FollowRequest} has a non-null ID, update it.
      *
      * @param followRequests the {@link FollowRequest}s to add or update
      */

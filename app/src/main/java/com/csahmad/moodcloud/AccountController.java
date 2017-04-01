@@ -49,13 +49,13 @@ public class AccountController {
     }
 
     /**
-     * Return the {@link Account} that has the given id.
+     * Return the {@link Account} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Account} has the given id.
+     * Return null if no {@link Account} has the given ID.
      *
-     * @param id the id of the desired {@link Account}
-     * @return the {@link Account} that has the given id
+     * @param id the ID of the desired {@link Account}
+     * @return the {@link Account} that has the given ID
      * @throws TimeoutException
      */
     public Account getAccountFromId(String id) throws TimeoutException {
@@ -111,8 +111,8 @@ public class AccountController {
      * Add or update the given {@link Account}s via elasticsearch.
      *
      * <p>
-     * If an {@link Account} has a null {@link Account#id}, add it. If an {@link Account} has a
-     * non-null {@link Account#id}, update it.
+     * If an {@link Account} has a null ID, add it. If an {@link Account} has a
+     * non-null ID, update it.
      *
      * @param accounts the {@link Account}s to add or update
      */

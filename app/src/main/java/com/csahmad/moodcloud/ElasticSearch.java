@@ -2,13 +2,15 @@ package com.csahmad.moodcloud;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: 2017-03-08 Handle exceptions better
+// TODO: 2017-03-31 Refactor controller classes that use this class to reduce repeated code
+// - Maybe refactor this class too
 
 /**
  * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
@@ -197,6 +199,43 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     public ArrayList<T> getNext(int from) throws TimeoutException {
 
         return this.getNext(from, false);
+    }
+
+    // TODO: 2017-03-31 Maybe make a new class and return objects of that type
+    /**
+     * Return the number of occurrences of each value for each field in
+     * {@link #filter}.{@link SearchFilter#termAggregationFields}.
+     *
+     * @return the number of occurrences of each value for the fields in {@link #filter}
+     * @throws TimeoutException
+     */
+    public HashMap<String, HashMap<String, Long>> getTermCounts() throws TimeoutException {
+
+        ElasticSearchController.GetTermAggregations controller =
+                new ElasticSearchController.GetTermAggregations();
+
+        this.lastTask = controller;
+        controller.setTypeName(this.typeName);
+        controller.execute(this.filter);
+
+        try {
+
+            if (this.timeout == null)
+                return controller.get();
+
+            else
+                return controller.get(this.timeout, TimeUnit.MILLISECONDS);
+        }
+
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**

@@ -7,10 +7,8 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-//import java.util.Map;
-//mwschafe commented out unused import statements
-
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Count;
 import io.searchbox.core.CountResult;
@@ -20,12 +18,15 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.MetricAggregation;
+import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.Refresh;
 import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
+// TODO: 2017-03-31 Refactor to reduce repeated code
 
 /**
  * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
@@ -192,19 +193,15 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
 
-                        if (isNew) {
+                        if (isNew)
                             item.setId(result.getId());
-                            Log.i("ID", "New id: " + item.getId());
-                        }
 
                         else if (item.getId() != result.getId())
                             throw new RuntimeException("Them IDs should be equal.");
                     }
 
-                    else {
+                    else
                         Log.i("Error", "Elasticsearch died: " + result.getErrorMessage());
-                        item.setId("Barbie");
-                    }
                 }
 
                 catch (Exception e) {
@@ -250,7 +247,7 @@ public class ElasticSearchController {
         /**
          * Returns the object with the given ID.
          *
-         * @param ids the first argument is the id of the object to get
+         * @param ids the first argument is the ID of the object to get
          * @return the object with the given ID
          */
         @Override
@@ -274,10 +271,8 @@ public class ElasticSearchController {
                     return resultObject;
                 }
 
-                else {
+                else
                     Log.i("Error", "Elasticsearch died (get by ID): " + result.getErrorMessage());
-                    Log.i("Error", "died type: " + this.getTypeName());
-                }
             }
 
             catch (IOException e) {
@@ -325,8 +320,6 @@ public class ElasticSearchController {
 
                 query = "";
 
-            // If keyword passed, make the query string (otherwise leave query as an empty string)
-            //if (!keywordString.equals("")) {
             else {
                 SearchFilter searchFilter = searchFilters[0];
                 query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize, 0);
@@ -355,6 +348,106 @@ public class ElasticSearchController {
             }
 
             return null;
+        }
+    }
+
+    // AsyncTask<Params, Progress, Result>
+    /**
+     * For getting term aggregations (number of occurrences for terms) via elasticsearch.
+     */
+    public static class GetTermAggregations
+            extends AsyncTask<SearchFilter, Void, HashMap<String, HashMap<String, Long>>> {
+
+        private String typeName;
+        private int resultSize = 8;
+
+        public String getTypeName() {
+
+            return this.typeName;
+        }
+
+        public void setTypeName(String typeName) {
+
+            this.typeName = typeName;
+        }
+
+        public int getResultSize() {
+
+            return this.resultSize;
+        }
+
+        public void setResultSize(int resultSize) {
+
+            this.resultSize = resultSize;
+        }
+
+        /**
+         * Gets term aggregations via elasticsearch.
+         *
+         * @param searchFilters only pass one search filter to restrict the search and determine
+         *                      which fields to aggregate
+         * @return the number of occurrences of each term in the same order that the term names are
+         *  stored in filter.termAggregationFields
+         * @see SearchFilter#addTermAggregation(String)
+         * @see SearchFilter#setTermAggregationFields(ArrayList)
+         * @see SearchFilter#getTermAggregationFields()
+         * @see SearchFilter#hasTermAggregations()
+         */
+        @Override
+        protected HashMap<String, HashMap<String, Long>> doInBackground(SearchFilter... searchFilters) {
+
+            ElasticSearchController.setClient();        // Set up client if it is null
+            ElasticSearchController.makeIndex();        // Make index if not exists
+
+            if (this.typeName == null)
+
+                throw new IllegalStateException(
+                        "Cannot call doInBackground without setting typeName.");
+
+            HashMap<String, HashMap<String, Long>> results =
+                    new HashMap<String, HashMap<String, Long>>();
+
+            SearchFilter searchFilter = searchFilters[0];
+            String query = QueryBuilder.build(searchFilter, this.resultSize, 0);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ElasticSearchController.index)
+                    .addType(this.typeName)
+                    .build();
+
+            try {
+
+                SearchResult result = ElasticSearchController.client.execute(search);
+
+                if (result.isSucceeded()) {
+
+                    ArrayList<String> fields = searchFilter.getTermAggregationFields();
+
+                    MetricAggregation aggregation = result.getAggregations();
+
+                    for (String field: fields) {
+
+                        HashMap<String, Long> fieldCounts = new HashMap<String, Long>();
+                        results.put(field, fieldCounts);
+
+                        List<TermsAggregation.Entry> buckets =
+                                aggregation.getTermsAggregation(field).getBuckets();
+
+                        for (TermsAggregation.Entry bucket: buckets)
+                            fieldCounts.put(bucket.getKey(), bucket.getCount());
+                    }
+                }
+
+                else
+                    Log.i("Error", "Elasticsearch died with: " + result.getErrorMessage());
+            }
+
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the" +
+                        "elasticsearch server!");
+            }
+
+            return results;
         }
     }
 
@@ -442,21 +535,14 @@ public class ElasticSearchController {
                         "Cannot call doInBackground without setting type.");
             }
 
-            // Will store results (objects with the given keywords)
             ArrayList<T> results = new ArrayList<T>();
-
             String query;
 
-            // I
             if (searchFilters.length == 0 || searchFilters[0] == null ||
-                    !searchFilters[0].hasRestrictions()) {
+                    !searchFilters[0].hasRestrictions())
 
                 query = "";
-                Log.i("Conditional", "If I'm here, should be NO searchFilter.");
-            }
 
-            // If keyword passed, make the query string (otherwise leave query as an empty string)
-            //if (!keywordString.equals("")) {
             else {
 
                 SearchFilter searchFilter = searchFilters[0];
@@ -465,11 +551,7 @@ public class ElasticSearchController {
                 if (this.singleResult) resultSize = 1;
 
                 query = QueryBuilder.build(searchFilter, resultSize, this.from);
-
-                Log.i("Conditional", "If I'm here, should be a searchFilter.");
             }
-
-            Log.i("Query", "Query: " + query);
 
             Search search = new Search.Builder(query)
                     .addIndex(ElasticSearchController.index)
@@ -478,14 +560,11 @@ public class ElasticSearchController {
 
             try {
 
-                // Get the results of the query:
-
                 SearchResult result = ElasticSearchController.client.execute(search);
 
                 if (result.isSucceeded()) {
 
                     List<SearchResult.Hit<T, Void>> hits = result.getHits(this.type);
-                    Log.i("ListSize", "Result size: " + Integer.toString(hits.size()));
 
                     for (SearchResult.Hit<T, Void> hit: hits) {
 
@@ -493,7 +572,7 @@ public class ElasticSearchController {
                         object.setId(hit.id);
 
                         if (object.getId() == null)
-                            Log.i("Error", "ID should not be null!");
+                            throw new RuntimeException("ID should not be null!");
 
                         results.add(object);
                     }
