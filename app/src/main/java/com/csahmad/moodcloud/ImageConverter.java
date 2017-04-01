@@ -25,6 +25,7 @@ public class ImageConverter {
      */
     public static String toString(Bitmap image) {
 
+        if (image == null) return null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -46,6 +47,8 @@ public class ImageConverter {
      * @return the converted image
      */
     public static Bitmap toBitmap(String imageBase64) {
+
+        if (imageBase64 == null) return null;
 
         try {
             byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
