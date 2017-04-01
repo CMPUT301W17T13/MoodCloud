@@ -48,14 +48,22 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
         } catch (TimeoutException e){}
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
+
         try {
+
             final ArrayList<Post> mDataset = postController.getPosts(profile,moods,0);
             mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
-            double lat = mDataset.get(0).getLocation()[0];
-            double lo = mDataset.get(0).getLocation()[1];
-            LatLng Mood = new LatLng(lat,lo);
-            String text = mDataset.get(0).getText().toString();
-            setMap(Mood,googleMap,text);
+
+            double[] location = mDataset.get(0).getLocation();
+
+            if (location != null) {
+                double lat = location[0];
+                double lo = location[1];
+                LatLng mood = new LatLng(lat,lo);
+                String text = mDataset.get(0).getText().toString();
+                setMap(mood,googleMap,text);
+            }
+
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.addOnItemTouchListener(new ViewProfileActivity.RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ViewProfileActivity.ClickListener() {
                 @Override
@@ -80,10 +88,11 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
     public void setMap(LatLng latLng,GoogleMap googleMap,String text){
-        LatLng mood = latLng;
-        googleMap.addMarker(new MarkerOptions().position(mood)
+
+        if (latLng == null) return;
+        googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title(text));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mood));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     public void onMapReady(GoogleMap googleMap) {
