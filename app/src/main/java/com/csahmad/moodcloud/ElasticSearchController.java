@@ -360,6 +360,7 @@ public class ElasticSearchController {
             extends AsyncTask<SearchFilter, Void, HashMap<String, HashMap<String, Long>>> {
 
         private String typeName;
+        private int resultSize = 8;
 
         public String getTypeName() {
 
@@ -369,6 +370,16 @@ public class ElasticSearchController {
         public void setTypeName(String typeName) {
 
             this.typeName = typeName;
+        }
+
+        public int getResultSize() {
+
+            return this.resultSize;
+        }
+
+        public void setResultSize(int resultSize) {
+
+            this.resultSize = resultSize;
         }
 
         /**
@@ -395,7 +406,7 @@ public class ElasticSearchController {
                     new HashMap<String, HashMap<String, Long>>();
 
             SearchFilter searchFilter = searchFilters[0];
-            String query = QueryBuilder.build(searchFilter, 0, 0);
+            String query = QueryBuilder.build(searchFilter, this.resultSize, 0);
 
             Search search = new Search.Builder(query)
                     .addIndex(ElasticSearchController.index)
