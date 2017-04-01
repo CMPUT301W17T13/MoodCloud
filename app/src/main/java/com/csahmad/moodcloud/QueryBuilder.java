@@ -23,9 +23,9 @@ public class QueryBuilder {
         int objectResultSize = resultSize;
         if (hasTermAggregations) objectResultSize = 0;
 
-        String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
-        query += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
-        query += "\"query\": {\n";
+        String query;
+        String startQuery = "{\n\"from\": " + Integer.toString(from) + ",\n";
+        startQuery += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
 
         ArrayList<String> components = new ArrayList<String>();
 
@@ -57,42 +57,45 @@ public class QueryBuilder {
         String joined = TextUtils.join("},\n{", components);
 
         if (!joined.equals("")) {
-            query += "\"bool\": {\n" +
+            query = "\"query\": {\n" +
+                "\"bool\": {\n" +
                 "\"must\": [\n" +
                 "{\n" +
                 joined + "\n" +
                 "}\n" +
                 "]\n" +
+                "}\n" +
                 "}";
+            components.clear();
+            components.add(query);
         }
 
-        query += "\n}";
+        else
+            components.clear();
 
         if (filter.hasMaxDistance()) {
-            query += ",\n";
-            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+            query = QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
                     filter.getLocationField(), filter.getDistanceUnits());
+            components.add(query);
         }
 
         if (filter.hasNonEmptyFields()) {
-            query += ",\n";
-            query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
+            query = QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
+            components.add(query);
         }
 
         if (filter.hasSortByFields()) {
-            query += ",\n";
-            query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
+            query = QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
+            components.add(query);
         }
 
         if (hasTermAggregations) {
-            query += ",\n";
-            query += QueryBuilder.buildTermAggregations(filter.getTermAggregationFields(),
+            query = QueryBuilder.buildTermAggregations(filter.getTermAggregationFields(),
                     resultSize);
+            components.add(query);
         }
 
-        query += "\n}";
-        // TODO: 2017-03-30 Gross
-        return query.replace("\"query\": {\n\n},", "");
+        return startQuery + TextUtils.join(",\n", components) + "\n}";
     }
 
     /**
