@@ -26,6 +26,7 @@ import io.searchbox.indices.Refresh;
 import io.searchbox.indices.mapping.PutMapping;
 
 // TODO: 2017-03-08 Handle exceptions better
+// TODO: 2017-03-31 Refactor to reduce repeated code
 
 /**
  * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s

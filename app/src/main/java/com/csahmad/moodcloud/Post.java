@@ -2,11 +2,10 @@ package com.csahmad.moodcloud;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-//mwschafe commented unused import statement
-//import io.searchbox.annotations.JestId;
+
+// TODO: 2017-03-31 Use SimpleLocation instead of double[]
 
 /** A mood event. */
 public class Post extends ElasticSearchObject implements Parcelable {
