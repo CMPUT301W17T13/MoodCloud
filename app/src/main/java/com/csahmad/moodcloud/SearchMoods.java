@@ -133,10 +133,56 @@ public class SearchMoods extends AppCompatActivity {
         contextSpinner.setAdapter(contextAdapter);
 
         Button searchButton = (Button) findViewById(R.id.searchButton);
+        Button mapButton = (Button) findViewById(R.id.button2);
 
         final SearchMoods context = this;
 
+        mapButton.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keywordString = findText.getText().toString().trim();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+                context.filter = filter;
+
+                if (!keywordString.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any"))
+                    filter.setMood(Mood.fromString(moodString));
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, ShowMapActivity.class);
+
+                if (recent == TRUE) {
+                    filter.setMaxTimeUnitsAgo(1);
+                }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
+
+                intent.putExtra("WHERE", where);
+                intent.putExtra("FILTER", filter);
+                startActivity(intent);
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
 
