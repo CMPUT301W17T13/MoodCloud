@@ -10,13 +10,13 @@ import java.util.List;
 public class ParcelIO {
 
     /**
-     * What to replace null values with when writing {@link Integer}s to Parcel (and what to
-     * interpret as null values when reading {@link int}s from Parcel).
+     * What to replace null values with when writing Integers to Parcel (and what to
+     * interpret as null values when reading ints from Parcel).
      */
     private static int nullIntParcelValue = -1;
     /**
-     * What to replace null values with when writing {@link Double}s to Parcel (and what to
-     * interpret as null values when reading {@link double}s from Parcel).
+     * What to replace null values with when writing Doubles to Parcel (and what to
+     * interpret as null values when reading doubles from Parcel).
      */
     private static double nullDoubleParcelValue = -200.0d;
 
@@ -162,10 +162,10 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link Integer} to the given Parcel.
+     * Write the given Integer to the given Parcel.
      *
      * @param out the Parcel to write to
-     * @param integer the {@link Integer} to write
+     * @param integer the Integer to write
      */
     public static void writeInteger(Parcel out, Integer integer) {
 
@@ -177,13 +177,13 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an {@link Integer} value from the given Parcel.
+     * Read and return an Integer value from the given Parcel.
      *
      * <p>
-     * If the read integer equals {@link #nullIntParcelValue}, return null.
+     * If the read integer equals nullIntParcelValue, return null.
      *
      * @param in the Parcel to read from
-     * @return the {@link Integer} read from the given Parcel
+     * @return the Integer read from the given Parcel
      */
     public static Integer readInteger(Parcel in) {
 
@@ -193,10 +193,10 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link Double} to the given Parcel.
+     * Write the given Double to the given Parcel.
      *
      * @param out the Parcel to write to
-     * @param doubleValue the {@link Double} to write
+     * @param doubleValue the Double to write
      */
     public static void writeDouble(Parcel out, Double doubleValue) {
 
@@ -208,13 +208,13 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an {@link Double} value from the given Parcel.
+     * Read and return an Double value from the given Parcel.
      *
      * <p>
-     * If the read double equals {@link #nullDoubleParcelValue}, return null.
+     * If the read double equals nullDoubleParcelValue, return null.
      *
      * @param in the Parcel to read from
-     * @return the {@link Double} read from the given Parcel
+     * @return the Double read from the given Parcel
      */
     public static Double readDouble(Parcel in) {
 
