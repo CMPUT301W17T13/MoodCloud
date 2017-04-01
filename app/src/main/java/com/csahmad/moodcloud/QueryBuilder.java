@@ -19,8 +19,12 @@ public class QueryBuilder {
      */
     public static String build(SearchFilter filter, int resultSize, int from) {
 
+        boolean hasTermAggregations = filter.hasTermAggregations();
+        int objectResultSize = resultSize;
+        if (hasTermAggregations) objectResultSize = 0;
+
         String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
-        query += "\"size\": " + Integer.toString(resultSize) + ",\n";
+        query += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
         query += "\"query\": {\n";
 
         ArrayList<String> components = new ArrayList<String>();
@@ -80,9 +84,10 @@ public class QueryBuilder {
             query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
         }
 
-        if (filter.hasTermAggregations()) {
+        if (hasTermAggregations) {
             query += ",\n";
-            query += QueryBuilder.buildTermAggregations(filter.getTermAggregationFields());
+            query += QueryBuilder.buildTermAggregations(filter.getTermAggregationFields(),
+                    resultSize);
         }
 
         query += "\n}";
@@ -94,9 +99,10 @@ public class QueryBuilder {
      * Return a portion of a query indicating the terms in the given fields should be counted.
      *
      * @param fields the names of the fields to aggregate
+     * @param resultSize how many values to return the counts of
      * @return a portion of a query indicating the terms in the given fields should be counted
      */
-    public static String buildTermAggregations(ArrayList<String> fields) {
+    public static String buildTermAggregations(ArrayList<String> fields, int resultSize) {
 
         if (fields == null)
             throw new IllegalArgumentException("Cannot pass null value.");
@@ -106,7 +112,7 @@ public class QueryBuilder {
         ArrayList<String> components = new ArrayList<String>();
 
         for (String field: fields)
-            components.add(QueryBuilder.buildTermAggregation(field));
+            components.add(QueryBuilder.buildTermAggregation(field, resultSize));
 
         query += TextUtils.join(",\n", components);
 
@@ -117,15 +123,16 @@ public class QueryBuilder {
      * Return a portion of a query indicating the terms in the given field should be counted.
      *
      * @param field the name of the field to aggregate
+     * @param resultSize how many values to return the counts of
      * @return a portion of a query indicating the terms in the given field should be counted
      */
-    private static String buildTermAggregation(String field) {
+    private static String buildTermAggregation(String field, int resultSize) {
 
         if (field == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
         return "\"" + field + "\": {\n" +
-                "\"terms\": {" + "\"field\": \"" + field + "\"}\n" +
+                "\"terms\": {" + "\"field\": \"" + field + "\", \"size\": " + resultSize + "},\n" +
                 "}";
     }
 
