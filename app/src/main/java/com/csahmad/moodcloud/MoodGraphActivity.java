@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 public class MoodGraphActivity extends AppCompatActivity {
 
@@ -43,18 +45,6 @@ public class MoodGraphActivity extends AppCompatActivity {
                 this.scaredCount + this.happyCount + this.sadCount + this.ashamedCount +
                 this.surprisedCount;
 
-        LinearLayout angryBar = (LinearLayout) this.findViewById(R.id.angryBar);
-        LinearLayout confusedBar = (LinearLayout) this.findViewById(R.id.confusedBar);
-        LinearLayout disgustedBar = (LinearLayout) this.findViewById(R.id.disgustedBar);
-        LinearLayout scaredBar = (LinearLayout) this.findViewById(R.id.scaredBar);
-        LinearLayout happyBar = (LinearLayout) this.findViewById(R.id.happyBar);
-        LinearLayout sadBar = (LinearLayout) this.findViewById(R.id.sadBar);
-        LinearLayout ashamedBar = (LinearLayout) this.findViewById(R.id.ashamedBar);
-        LinearLayout surprisedBar = (LinearLayout) this.findViewById(R.id.surprisedBar);
-
-        LinearLayout parent = (LinearLayout) angryBar.getParent();
-        this.maxHeight = parent.getLayoutParams().height;
-
         TextView angryCountView = (TextView) this.findViewById(R.id.angryCount);
         TextView confusedCountView = (TextView) this.findViewById(R.id.confusedCount);
         TextView disgustedCountView = (TextView) this.findViewById(R.id.disgustedCount);
@@ -64,14 +54,14 @@ public class MoodGraphActivity extends AppCompatActivity {
         TextView ashamedCountView = (TextView) this.findViewById(R.id.ashamedCount);
         TextView surprisedCountView = (TextView) this.findViewById(R.id.surprisedCount);
 
-        double angryPercent = (double) this.angryCount / totalCount;
-        double confusedPercent = (double) this.confusedCount / totalCount;
-        double disgustedPercent = (double) this.disgustedCount / totalCount;
-        double scaredPercent = (double) this.scaredCount / totalCount;
-        double happyPercent = (double) this.happyCount / totalCount;
-        double sadPercent = (double) this.sadCount / totalCount;
-        double ashamedPercent = (double) this.ashamedCount / totalCount;
-        double surprisedPercent = (double) this.surprisedCount / totalCount;
+        final double angryPercent = (double) this.angryCount / totalCount;
+        final double confusedPercent = (double) this.confusedCount / totalCount;
+        final double disgustedPercent = (double) this.disgustedCount / totalCount;
+        final double scaredPercent = (double) this.scaredCount / totalCount;
+        final double happyPercent = (double) this.happyCount / totalCount;
+        final double sadPercent = (double) this.sadCount / totalCount;
+        final double ashamedPercent = (double) this.ashamedCount / totalCount;
+        final double surprisedPercent = (double) this.surprisedCount / totalCount;
 
         angryCountView.setText(Double.toString(angryPercent * 100.0d) + "%");
         confusedCountView.setText(Double.toString(confusedPercent * 100.0d) + "%");
@@ -82,14 +72,40 @@ public class MoodGraphActivity extends AppCompatActivity {
         ashamedCountView.setText(Double.toString(ashamedPercent * 100.0d) + "%");
         surprisedCountView.setText(Double.toString(surprisedPercent * 100.0d) + "%");
 
-        this.setBarHeight(angryBar, angryPercent);
-        this.setBarHeight(confusedBar, confusedPercent);
-        this.setBarHeight(disgustedBar, disgustedPercent);
-        this.setBarHeight(scaredBar, scaredPercent);
-        this.setBarHeight(happyBar, happyPercent);
-        this.setBarHeight(sadBar, sadPercent);
-        this.setBarHeight(ashamedBar, ashamedPercent);
-        this.setBarHeight(surprisedBar, surprisedPercent);
+        final LinearLayout parent = (LinearLayout) this.findViewById(R.id.barParent);
+
+        ViewTreeObserver observer = parent.getViewTreeObserver();
+
+        final MoodGraphActivity activity = this;
+
+        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+            @Override
+            public boolean onPreDraw() {
+
+                activity.maxHeight = parent.getHeight();
+
+                LinearLayout angryBar = (LinearLayout) activity.findViewById(R.id.angryBar);
+                LinearLayout confusedBar = (LinearLayout) activity.findViewById(R.id.confusedBar);
+                LinearLayout disgustedBar = (LinearLayout) activity.findViewById(R.id.disgustedBar);
+                LinearLayout scaredBar = (LinearLayout) activity.findViewById(R.id.scaredBar);
+                LinearLayout happyBar = (LinearLayout) activity.findViewById(R.id.happyBar);
+                LinearLayout sadBar = (LinearLayout) activity.findViewById(R.id.sadBar);
+                LinearLayout ashamedBar = (LinearLayout) activity.findViewById(R.id.ashamedBar);
+                LinearLayout surprisedBar = (LinearLayout) activity.findViewById(R.id.surprisedBar);
+
+                activity.setBarHeight(angryBar, angryPercent);
+                activity.setBarHeight(confusedBar, confusedPercent);
+                activity.setBarHeight(disgustedBar, disgustedPercent);
+                activity.setBarHeight(scaredBar, scaredPercent);
+                activity.setBarHeight(happyBar, happyPercent);
+                activity.setBarHeight(sadBar, sadPercent);
+                activity.setBarHeight(ashamedBar, ashamedPercent);
+                activity.setBarHeight(surprisedBar, surprisedPercent);
+
+                return true;
+            }
+        });
     }
     
     public void onAngryClicked(View v) {
@@ -145,11 +161,10 @@ public class MoodGraphActivity extends AppCompatActivity {
 
     private void setBarHeight(LinearLayout bar, double percent) {
 
-        Log.i("Percent", Double.toString(percent));
         if (percent < minHeightPercent) percent = minHeightPercent;
-        Log.i("Percent after", Double.toString(percent));
-        Log.i("Height", Integer.toString(bar.getLayoutParams().height));
-        bar.getLayoutParams().height = (int) (percent * this.maxHeight);
+        LayoutParams params = bar.getLayoutParams();
+        params.height = (int) (percent * (double) this.maxHeight);
+        bar.setLayoutParams(params);
         Log.i("Height after", Integer.toString(bar.getLayoutParams().height));
     }
 }
