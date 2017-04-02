@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-
 /**
  * Get {@link Follow} objects from elastic search or add/update {@link Follow} objects using
  * elasticsearch.
@@ -52,12 +49,12 @@ public class FollowController {
             ArrayList<Follow> followers = getFollowers(followee, 0);
             for (int i=0; i<followers.size(); i++){
                 if (follower.equals(followers.get(i).getFollower())){
-                    return TRUE;
+                    return true;
                 }
             }
-            return FALSE;
+            return false;
         } catch (TimeoutException e){}
-        return FALSE;
+        return false;
     }
 
     /**
