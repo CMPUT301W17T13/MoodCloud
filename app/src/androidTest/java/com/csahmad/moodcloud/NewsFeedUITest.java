@@ -7,10 +7,14 @@ package com.csahmad.moodcloud;
         import android.support.test.filters.LargeTest;
         import android.support.test.rule.ActivityTestRule;
         import android.support.test.runner.AndroidJUnit4;
+        import android.util.Log;
 
         import org.junit.Rule;
         import org.junit.Test;
         import org.junit.runner.RunWith;
+
+        import java.util.ArrayList;
+        import java.util.concurrent.TimeoutException;
 
         import static android.support.test.espresso.Espresso.closeSoftKeyboard;
         import static android.support.test.espresso.Espresso.onData;
@@ -35,14 +39,12 @@ public class NewsFeedUITest {
     private Profile followedProfile1;
     private Profile followedProfile2;
     private Profile followedProfile3;
-    private Profile unfollowedProfile;
 
     //declare accounts
     private Account testAccount;
     private Account followedAccount1;
     private Account followedAccount2;
     private Account followedAccount3;
-    private Account unfollowedAccount;
 
     //declare follows
     private Follow follow1;
@@ -63,48 +65,97 @@ public class NewsFeedUITest {
         @Override
         public void beforeActivityLaunched(){
             Context targetContext = InstrumentationRegistry.getTargetContext();
+            LocalData.store((Profile) null, targetContext);
+            //delete any testing profiles if they exist
+
+            try{
+                //get objects from elasticsearch to be cleared
+                Profile deleteProfile1 = prc.getProfileFromID("JohnID");
+                Profile deleteProfile2 = prc.getProfileFromID("EdID");
+                Profile deleteProfile3 = prc.getProfileFromID("RandyID");
+                Profile deleteProfile4 = prc.getProfileFromID("BobID");
+
+                Account deleteAccount1 = acc.getAccountFromId("JohnID");
+                Account deleteAccount2 = acc.getAccountFromId("EdID");
+                Account deleteAccount3 = acc.getAccountFromId("RandyID");
+                Account deleteAccount4 = acc.getAccountFromId("BobID");
+
+                ArrayList<Follow> deleteFollows = fc.getFollowees(deleteProfile1, 0);
+
+                //delete objects from elasticsearch
+                if(deleteProfile1 != null){prc.deleteProfiles(deleteProfile1);}
+                if(deleteProfile2 != null){prc.deleteProfiles(deleteProfile2);}
+                if(deleteProfile3 != null){prc.deleteProfiles(deleteProfile3);}
+                if(deleteProfile4 != null){prc.deleteProfiles(deleteProfile4);}
+
+                if(deleteAccount1 != null){acc.deleteAccounts(deleteAccount1);}
+                if(deleteAccount2 != null){acc.deleteAccounts(deleteAccount2);}
+                if(deleteAccount3 != null){acc.deleteAccounts(deleteAccount3);}
+                if(deleteAccount4 != null){acc.deleteAccounts(deleteAccount4);}
+
+                for (int i = 0; i < deleteFollows.size(); i++) {
+                    fc.deleteFollows(deleteFollows.get(i));
+                }
+            } catch (TimeoutException e) {
+                Log.i("error", "controller timeout");
+            }
 
             testProfile = new Profile("JohnSmith");
             followedProfile1 = new Profile("EdJohnson");
             followedProfile2 = new Profile("RandyCarlisle");
             followedProfile3 = new Profile("BobMcElroy");
-            unfollowedProfile = new Profile("JoshApplegate");
 
             //instantiate Accounts
             Account testAccount = new Account("JohnSmith","123456",testProfile);
             Account followedAccount1 = new Account("EdJohnson", "password1", followedProfile1);
             Account followedAccount2 = new Account("RandyCarlisle", "password2", followedProfile2);
             Account followedAccount3 = new Account("BobMcElroy", "password3", followedProfile3);
-            Account unfollowedAccount = new Account("JoshApplegate", "unknown", unfollowedProfile);
 
             //set profile IDs
             testProfile.setId("JohnID");
             followedProfile1.setId("EdID");
             followedProfile2.setId("RandyID");
             followedProfile3.setId("BobID");
-            unfollowedProfile.setId("JoshID");
 
             //instantiate follows
             Follow follow1 = new Follow(testProfile, followedProfile1);
             Follow follow2 = new Follow(testProfile, followedProfile2);
             Follow follow3 = new Follow(testProfile, followedProfile3);
 
-            //add objects to elasticsearch
-            prc.addOrUpdateProfiles(testProfile, followedProfile1, followedProfile2, followedProfile3, unfollowedProfile);
-            acc.addOrUpdateAccounts(testAccount, followedAccount1, followedAccount2, followedAccount3, unfollowedAccount);
-            fc.addOrUpdateFollows(follow1, follow2,follow3);
-
-            //set up follows
-
-
-            //set testProfile in localdata
+            //add objects to elasticsearch/LocalData
+            prc.addOrUpdateProfiles(testProfile, followedProfile1, followedProfile2, followedProfile3);
+            acc.addOrUpdateAccounts(testAccount, followedAccount1, followedAccount2, followedAccount3);
             LocalData.store(testProfile, targetContext);
-
+            fc.addOrUpdateFollows(follow1, follow2,follow3);
         }
 
         @Override
-        public void afterActivityFinished(){
+        public void afterActivityFinished() {
+            try {
+                //get objects from elasticsearch to be cleared
+                Profile deleteProfile1 = prc.getProfileFromID("JohnID");
+                Profile deleteProfile2 = prc.getProfileFromID("EdID");
+                Profile deleteProfile3 = prc.getProfileFromID("RandyID");
+                Profile deleteProfile4 = prc.getProfileFromID("BobID");
 
+                Account deleteAccount1 = acc.getAccountFromId("JohnID");
+                Account deleteAccount2 = acc.getAccountFromId("EdID");
+                Account deleteAccount3 = acc.getAccountFromId("RandyID");
+                Account deleteAccount4 = acc.getAccountFromId("BobID");
+
+                ArrayList<Follow> deleteFollows = fc.getFollowees(deleteProfile1, 0);
+
+                LocalData.store((Profile) null, InstrumentationRegistry.getTargetContext());
+
+                //delete objects from elasticsearch
+                prc.deleteProfiles(deleteProfile1, deleteProfile2, deleteProfile3, deleteProfile4);
+                acc.deleteAccounts(deleteAccount1, deleteAccount2, deleteAccount3, deleteAccount4);
+                for (int i = 0; i < deleteFollows.size(); i++) {
+                    fc.deleteFollows(deleteFollows.get(i));
+                }
+            } catch (TimeoutException e) {
+                Log.i("error", "controller timeout");
+            }
         }
     };
 
