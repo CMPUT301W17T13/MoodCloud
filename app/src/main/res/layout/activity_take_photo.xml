@@ -12,7 +12,7 @@
         android:id="@+id/take"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_name"
+        android:src="@drawable/ic_action_takephoto"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/photo"
          />

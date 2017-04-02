@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,14 +22,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 
-import android.location.Location;
 import android.location.LocationManager;
-
-import org.w3c.dom.Text;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
@@ -39,13 +36,14 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private static final int READ_LOCATION_REQUEST = 1;
     private final static int REQUEST_GET_DATE = 3;
     private String image;
-    private ImageView moodPhoto;
+    private ImageButton moodPhoto;
     private TextView dateString;
     private Calendar date;
     private Bundle setDate;
     private int setDay;
     private int setMonth;
     private int setYear;
+    private ImageButton deletePhoto;
 
 
 
@@ -58,6 +56,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 this.image = intent.getStringExtra("IMAGE");
                 Bitmap bitmap = intent.getParcelableExtra("BITMAP");
                 this.moodPhoto.setImageBitmap(bitmap);
+                deletePhoto.setVisibility(View.VISIBLE);
             } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
             else
@@ -116,8 +115,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
-        moodPhoto = (ImageView) findViewById(R.id.moodPhoto);
+        moodPhoto = (ImageButton) findViewById(R.id.moodPhoto);
         dateString = (TextView) findViewById(R.id.postDate);
+        deletePhoto = (ImageButton) findViewById(R.id.delimage);
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -165,8 +165,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     //latitudetext.setText(Double.toString(locationArray[0]));
                     //longitudetext.setText(Double.toString(locationArray[1]));
                     //altitudetext.setText(Double.toString(locationArray[2]));
-                    ImageButton photoButton = (ImageButton) findViewById(R.id.takephoto);
-                    photoButton.setOnClickListener(new View.OnClickListener() {
+
+                    moodButtons.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
@@ -181,6 +181,14 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Context context = view.getContext();
                             Intent intent = new Intent(context, SelectDateActivity.class);
                             startActivityForResult(intent,REQUEST_GET_DATE);
+                        }
+                    });
+                    final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
+                    deletePhoto.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            moodPhoto.setImageBitmap(null);
+                            deletePhoto.setVisibility(View.INVISIBLE);
                         }
                     });
 
@@ -214,8 +222,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                     });
                 } else {
-                    ImageButton photoButton = (ImageButton) findViewById(R.id.takephoto);
-                    photoButton.setOnClickListener(new View.OnClickListener() {
+
+                    moodPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
@@ -230,15 +238,26 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Context context = view.getContext();
                             Intent intent = new Intent(context, SelectDateActivity.class);
                             startActivityForResult(intent,REQUEST_GET_DATE);
-                            //if (!(date == null)){
-                                //dateString.setText(date.toString());
-                            //}
 
+                        }
+                    });
+                    final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
+                    deletePhoto.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            moodPhoto.setImageBitmap(null);
+                            deletePhoto.setVisibility(View.INVISIBLE);
                         }
                     });
 
                     final Post oldPost = postController.getPostFromId(id);
-                    this.moodPhoto.setImageBitmap(ImageConverter.toBitmap(oldPost.getTriggerImage()));
+
+                    if (oldPost.getTriggerImage() != null) {
+                        Bitmap bitmap = ImageConverter.toBitmap(oldPost.getTriggerImage());
+                        this.moodPhoto.setImageBitmap(bitmap);
+                        deletePhoto.setVisibility(View.VISIBLE);
+                    }
+
                     String oldExplannation = oldPost.getText();
                     String oldTrigger = oldPost.getTriggerText();
                     int oldmood = oldPost.getMood();

@@ -30,18 +30,20 @@
         android:layout_alignParentStart="true" />
 
     <ImageButton
-        android:id="@+id/takephoto"
+        android:id="@+id/delimage"
+        android:visibility="invisible"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_action_name"
         android:layout_alignBottom="@+id/moodPhoto"
         android:layout_toEndOf="@+id/moodPhoto" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/moodPhoto"
         android:layout_width="100dp"
         android:layout_height="99dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:scaleType="fitCenter"
         android:layout_below="@+id/body"
         android:layout_alignParentLeft="true"/>
 
@@ -84,7 +86,7 @@
         android:id="@+id/altitude"
         android:layout_width="120dp"
         android:layout_height="20dp"
-        android:layout_toEndOf="@+id/takephoto"
+        android:layout_toEndOf="@+id/delimage"
         android:layout_below="@+id/longitude"
         android:background="@android:color/background_light"
         android:hint="Altitude"
@@ -114,14 +116,14 @@
         android:text="Angry"
         android:layout_toEndOf="@+id/angry_image"
 
-        android:layout_below="@+id/takephoto"
+        android:layout_below="@+id/delimage"
         android:textSize="20sp"/>
 
     <ImageView
         android:id="@+id/angry_image"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_below="@+id/takephoto"
+        android:layout_below="@+id/delimage"
         android:layout_alignParentStart="true"
         android:src="@drawable/angry"
         android:layout_alignBottom="@+id/angry" />
@@ -333,7 +335,7 @@
         android:id="@+id/moodRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/takephoto"
+        android:layout_below="@+id/delimage"
         android:orientation="vertical"
         android:layout_alignParentEnd="true">
 
