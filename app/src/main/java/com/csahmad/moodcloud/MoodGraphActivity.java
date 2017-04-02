@@ -1,10 +1,12 @@
 package com.csahmad.moodcloud;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,14 @@ public class MoodGraphActivity extends AppCompatActivity {
         this.sadCount = intent.getLongExtra("SAD_COUNT", -1l);
         this.ashamedCount = intent.getLongExtra("ASHAMED_COUNT", -1l);
         this.surprisedCount = intent.getLongExtra("SURPRISED_COUNT", -1l);
+
+        ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                finish();
+            }}
+        );
 
         List<Long> counts = Arrays.asList(this.angryCount, this.confusedCount, this.disgustedCount,
                 this.scaredCount, this.happyCount, this.sadCount, this.ashamedCount,
