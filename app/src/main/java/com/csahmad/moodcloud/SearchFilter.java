@@ -83,8 +83,6 @@ public class SearchFilter implements Parcelable {
         this.mood = ParcelIO.readInteger(in);
         this.context = ParcelIO.readInteger(in);
 
-        this.nonEmptyFields = ParcelIO.readStringList(in);
-
         this.termAggregationFields = ParcelIO.readStringList(in);
     }
 
@@ -120,8 +118,6 @@ public class SearchFilter implements Parcelable {
 
         ParcelIO.writeInteger(out, this.mood);
         ParcelIO.writeInteger(out, this.context);
-
-        out.writeStringList(this.nonEmptyFields);
 
         out.writeStringList(this.termAggregationFields);
     }
@@ -172,15 +168,12 @@ public class SearchFilter implements Parcelable {
      */
     private Integer context;
 
-    /** Results must have a (non-empty) value for all of these fields. */
-    private ArrayList<String> nonEmptyFields;
-
     // TODO: 2017-03-30 Maybe just check if a SearchFilter is null instead of having this method.
     /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields,
+                this.maxDistance, this.sortByFields, this.mood, this.context,
                 this.termAggregationFields, this.fieldValueRanges);
     }
 
@@ -337,11 +330,6 @@ public class SearchFilter implements Parcelable {
         return this;
     }
 
-    public boolean hasNonEmptyFields() {
-
-        return !NullTools.allNullOrEmpty(this.nonEmptyFields);
-    }
-
     public boolean hasKeywords() {
 
         return !NullTools.allNullOrEmpty(this.keywords);
@@ -355,17 +343,6 @@ public class SearchFilter implements Parcelable {
     public boolean hasMaxDistance() {
 
         return !NullTools.allNullOrEmpty(this.maxDistance);
-    }
-
-    public ArrayList<String> getNonEmptyFields() {
-
-        return this.nonEmptyFields;
-    }
-
-    public SearchFilter setNonEmptyFields(ArrayList<String> fields) {
-
-        this.nonEmptyFields = fields;
-        return this;
     }
 
     public ArrayList<String> getKeywords() {
@@ -414,22 +391,6 @@ public class SearchFilter implements Parcelable {
         }
 
         this.fieldValues.add(fieldValue);
-        return this;
-    }
-
-    /**
-     * Add a field to {@link #nonEmptyFields}.
-     *
-     * @param field the field to add
-     * @return this SearchFilter
-     */
-    public SearchFilter addNonEmptyField(String field) {
-
-        if (this.nonEmptyFields == null) {
-            this.nonEmptyFields = new ArrayList<String>();
-        }
-
-        this.nonEmptyFields.add(field);
         return this;
     }
 

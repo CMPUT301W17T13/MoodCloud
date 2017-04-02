@@ -80,11 +80,6 @@ public class QueryBuilder {
             components.add(query);
         }
 
-        if (filter.hasNonEmptyFields()) {
-            query = QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
-            components.add(query);
-        }
-
         if (filter.hasSortByFields() && objectResultSize > 0) {
             query = QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
             components.add(query);
@@ -180,33 +175,6 @@ public class QueryBuilder {
         query += TextUtils.join(",\n", sortByList);
 
         query += " ]";
-        return query;
-    }
-
-    /**
-     * Return a portion of a query indicating that the given fields should not be empty in the
-     * returned objects.
-     *
-     * @param fields the fields that should not be empty
-     * @return a portion of a query indicating that the given fields should not be empty in the
-     * returned objects
-     */
-    public static String buildNonEmptyFields(ArrayList<String> fields) {
-
-        if (fields == null)
-            throw new IllegalArgumentException("Cannot pass null value.");
-
-        String query = "\"filter\": {" +
-                "\"exists\": {";
-
-        int lastIndex = fields.size() - 1;
-
-        for (int i = 0; i < fields.size(); i++) {
-            query += "\"field\": \"" + fields.get(i) + "\"";
-            if (i < lastIndex) query += ", ";
-        }
-
-        query += "}\n}";
         return query;
     }
 
