@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -144,7 +145,11 @@ public class MoodGraphActivity extends AppCompatActivity {
 
     private void setBarHeight(LinearLayout bar, double percent) {
 
+        Log.i("Percent", Double.toString(percent));
         if (percent < minHeightPercent) percent = minHeightPercent;
+        Log.i("Percent after", Double.toString(percent));
+        Log.i("Height", Integer.toString(bar.getLayoutParams().height));
         bar.getLayoutParams().height = (int) (percent * this.maxHeight);
+        Log.i("Height after", Integer.toString(bar.getLayoutParams().height));
     }
 }
