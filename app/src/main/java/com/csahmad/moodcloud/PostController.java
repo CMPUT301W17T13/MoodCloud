@@ -62,7 +62,7 @@ public class PostController {
         }
 
         this.elasticSearch.setFilter(null);
-        filter.clearTermAggregations();
+        filter.removeTermAggregation("mood");
 
         return counts;
     }
