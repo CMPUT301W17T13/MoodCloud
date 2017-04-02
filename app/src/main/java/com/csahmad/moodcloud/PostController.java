@@ -196,7 +196,9 @@ public class PostController {
         if (filter == null)
             filter = new SearchFilter();
 
-        filter.addFieldValueRange(new FieldValues("posterId", followeeIds));
+        filter.addFieldValueRange(new FieldValues("posterId", followeeIds))
+            .sortByDate();
+
         return this.getPosts(filter, from);
     }
 
