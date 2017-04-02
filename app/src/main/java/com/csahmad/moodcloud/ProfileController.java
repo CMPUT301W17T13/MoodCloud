@@ -46,14 +46,14 @@ public class ProfileController {
     public ArrayList<String> getAllFolloweeIds(Profile profile) throws TimeoutException {
 
         ArrayList<String> ids = new ArrayList<String>();
-        ArrayList<Profile> profiles = new ArrayList<Profile>();
+        ArrayList<Profile> profiles;
         int from = 0;
 
         do {
 
             profiles = this.getFollowees(profile, from);
             for (Profile p: profiles) ids.add(p.getId());
-            from += ElasticSearchController.getResultSize();
+            from += ElasticSearchController.getResultSize() - 1;
 
         } while (profiles.size() >= ElasticSearchController.getResultSize());
 
