@@ -35,6 +35,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by Erick on 3/28/2017.
+ *
+ * Tests UI functionality related to viewing Profile, viewing/adding/editing mood events, and follow requests
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -74,16 +76,17 @@ public class ViewProfileUITest {
             frc = new FollowRequestController();
             testProfile = new Profile("JohnSmith");
             testFollower = new Profile("EdJohnson");
-            FollowRequest fr = new FollowRequest(testFollower, testProfile);
-
 
             testProfile.setId("JohnID");
             testFollower.setId("EdID");
             prc.addOrUpdateProfiles(testProfile, testFollower);
+            Follow follow = new Follow(testFollower, testProfile);
+            FollowRequest fr = new FollowRequest(testFollower, testProfile);
             frc.addOrUpdateFollows(fr);
 
             double[] location = {0.0d, 0.0d, 0.0d};
             Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            LocalData.store(testProfile, targetContext);
 
             testPost1 = new Post(
                     "Testing the UI :D",
@@ -133,6 +136,15 @@ public class ViewProfileUITest {
          */
         @Override
         protected void afterActivityFinished(){
+            try{
+                ArrayList<FollowRequest> followRequests = frc.getFollowRequests(testProfile, 0);
+                for(int i = 0; i<followRequests.size()-1; i++) {
+                    frc.deleteFollowRequests(followRequests.get(0));
+                    followRequests.remove(0);
+                }
+            }
+            catch(TimeoutException e){}
+
             prc.deleteProfiles(testProfile, testFollower);
             psc.deletePosts(testPost1, testPost2);
             try{
@@ -159,10 +171,18 @@ public class ViewProfileUITest {
      */
     @Test
     public void editPostTest(){
-        onView(withId(R.id.profilePostList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(withId(R.id.profilePostList)).perform(RecyclerViewActions.actionOnItemAtPosition(2,click()));
         onView(withId(R.id.button)).perform(click());
+        try{
+            Thread.sleep(500);
+        }
+        catch(InterruptedException e){}
         onView(withId(R.id.body)).perform(replaceText("So much UI testing :|"));
         onView(withId(R.id.postButton)).perform(click());
+        try{
+            Thread.sleep(500);
+        }
+        catch(InterruptedException e){}
         onView(withId(R.id.textText)).check(matches(withText("So much UI testing :|")));
     }
 
