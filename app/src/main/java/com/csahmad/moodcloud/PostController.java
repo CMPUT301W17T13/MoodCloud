@@ -27,6 +27,27 @@ public class PostController {
     }
 
     /**
+     * Return the number of occurrences of each mood for all posts by the given poster matching the
+     * restrictions in the given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @param poster the poster to restrict posts to
+     * @return the number of occurrences of each mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
+     */
+    public HashMap<Integer, Long> getMoodCounts(SearchFilter filter,
+                                                Profile poster) throws TimeoutException {
+
+        if (filter == null) filter = new SearchFilter();
+        filter.addFieldValue(new FieldValue("posterId", poster.getId()));
+        return this.getMoodCounts(filter);
+    }
+
+    /**
      * Return the number of occurrences of each mood for all posts matching the restrictions in the
      * given {@link SearchFilter}.
      *
