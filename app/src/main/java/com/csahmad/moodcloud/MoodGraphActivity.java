@@ -3,14 +3,13 @@ package com.csahmad.moodcloud;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.ViewGroup.LayoutParams;
-
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -82,14 +81,16 @@ public class MoodGraphActivity extends AppCompatActivity {
         final double ashamedPercentOfMax = (double) this.ashamedCount / maxCount;
         final double surprisedPercentOfMax = (double) this.surprisedCount / maxCount;
 
-        angryCountView.setText(Double.toString(angryPercent * 100.0d) + "%");
-        confusedCountView.setText(Double.toString(confusedPercent * 100.0d) + "%");
-        disgustedCountView.setText(Double.toString(disgustedPercent * 100.0d) + "%");
-        scaredCountView.setText(Double.toString(scaredPercent * 100.0d) + "%");
-        happyCountView.setText(Double.toString(happyPercent * 100.0d) + "%");
-        sadCountView.setText(Double.toString(sadPercent * 100.0d) + "%");
-        ashamedCountView.setText(Double.toString(ashamedPercent * 100.0d) + "%");
-        surprisedCountView.setText(Double.toString(surprisedPercent * 100.0d) + "%");
+        DecimalFormat format = new DecimalFormat("#.#");
+
+        angryCountView.setText(format.format(angryPercent * 100.0d) + "%");
+        confusedCountView.setText(format.format(confusedPercent * 100.0d) + "%");
+        disgustedCountView.setText(format.format(disgustedPercent * 100.0d) + "%");
+        scaredCountView.setText(format.format(scaredPercent * 100.0d) + "%");
+        happyCountView.setText(format.format(happyPercent * 100.0d) + "%");
+        sadCountView.setText(format.format(sadPercent * 100.0d) + "%");
+        ashamedCountView.setText(format.format(ashamedPercent * 100.0d) + "%");
+        surprisedCountView.setText(format.format(surprisedPercent * 100.0d) + "%");
 
         final LinearLayout parent = (LinearLayout) this.findViewById(R.id.barParent);
 
@@ -184,6 +185,5 @@ public class MoodGraphActivity extends AppCompatActivity {
         LayoutParams params = bar.getLayoutParams();
         params.height = (int) (percent * (double) this.maxHeight);
         bar.setLayoutParams(params);
-        Log.i("Height after", Integer.toString(bar.getLayoutParams().height));
     }
 }
