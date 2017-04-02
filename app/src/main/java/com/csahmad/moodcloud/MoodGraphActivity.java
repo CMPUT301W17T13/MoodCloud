@@ -64,13 +64,13 @@ public class MoodGraphActivity extends AppCompatActivity {
         TextView surprisedCountView = (TextView) this.findViewById(R.id.surprisedCount);
 
         double angryPercent = (double) this.angryCount / totalCount;
-        double confusedPercent = (double) this.angryCount / totalCount;
-        double disgustedPercent = (double) this.angryCount / totalCount;
-        double scaredPercent = (double) this.angryCount / totalCount;
-        double happyPercent = (double) this.angryCount / totalCount;
-        double sadPercent = (double) this.angryCount / totalCount;
-        double ashamedPercent = (double) this.angryCount / totalCount;
-        double surprisedPercent = (double) this.angryCount / totalCount;
+        double confusedPercent = (double) this.confusedCount / totalCount;
+        double disgustedPercent = (double) this.disgustedCount / totalCount;
+        double scaredPercent = (double) this.scaredCount / totalCount;
+        double happyPercent = (double) this.happyCount / totalCount;
+        double sadPercent = (double) this.sadCount / totalCount;
+        double ashamedPercent = (double) this.ashamedCount / totalCount;
+        double surprisedPercent = (double) this.surprisedCount / totalCount;
 
         angryCountView.setText(Double.toString(angryPercent * 100.0d) + "%");
         confusedCountView.setText(Double.toString(confusedPercent * 100.0d) + "%");
