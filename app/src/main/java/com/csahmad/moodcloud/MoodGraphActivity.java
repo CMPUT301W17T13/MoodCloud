@@ -3,8 +3,10 @@ package com.csahmad.moodcloud;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MoodGraphActivity extends AppCompatActivity {
 
@@ -87,6 +89,57 @@ public class MoodGraphActivity extends AppCompatActivity {
         this.setBarHeight(sadBar, sadPercent);
         this.setBarHeight(ashamedBar, ashamedPercent);
         this.setBarHeight(surprisedBar, surprisedPercent);
+    }
+    
+    public void onAngryClicked(View v) {
+
+        this.showCountString("Angry", this.angryCount);
+    }
+
+    public void onConfusedClicked(View v) {
+
+        this.showCountString("Confused", this.confusedCount);
+    }
+
+    public void onDisgustedClicked(View v) {
+
+        this.showCountString("Disgusted", this.disgustedCount);
+    }
+
+    public void onScaredClicked(View v) {
+
+        this.showCountString("Scared", this.scaredCount);
+    }
+
+    public void onHappyClicked(View v) {
+
+        this.showCountString("Happy", this.happyCount);
+    }
+
+    public void onSadClicked(View v) {
+
+        this.showCountString("Sad", this.sadCount);
+    }
+
+    public void onAshamedClicked(View v) {
+
+        this.showCountString("Ashamed", this.ashamedCount);
+    }
+
+    public void onSurprisedClicked(View v) {
+
+        this.showCountString("Surprised", this.surprisedCount);
+    }
+    
+    private void showCountString(String label, long count) {
+
+        Toast.makeText(getApplicationContext(), countString(label, count),
+                Toast.LENGTH_LONG).show();
+    }
+    
+    private static String countString(String label, long count) {
+        
+        return label + " - " + Long.toString(count);
     }
 
     private void setBarHeight(LinearLayout bar, double percent) {

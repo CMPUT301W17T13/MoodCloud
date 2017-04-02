@@ -22,6 +22,8 @@
 
         <LinearLayout
             android:id="@+id/angryBar"
+            android:onClick="onAngryClicked"
+            android:clickable="true"
             android:background="#DA2F47"
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -41,6 +43,8 @@
 
         <LinearLayout
                 android:id="@+id/confusedBar"
+                android:onClick="onConfusedClicked"
+            android:clickable="true"
                 android:background="#2BDCEB"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -60,6 +64,8 @@
 
             <LinearLayout
                 android:id="@+id/disgustedBar"
+                android:onClick="onDisgustedClicked"
+                android:clickable="true"
                 android:background="#2BEB34"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -79,6 +85,8 @@
 
             <LinearLayout
                 android:id="@+id/scaredBar"
+                android:onClick="onScaredClicked"
+                android:clickable="true"
                 android:background="#F6B543"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -98,6 +106,8 @@
 
             <LinearLayout
                 android:id="@+id/happyBar"
+                android:onClick="onHappyClicked"
+                android:clickable="true"
                 android:background="#FFD600"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -117,6 +127,8 @@
 
             <LinearLayout
                 android:id="@+id/sadBar"
+                android:onClick="onSadClicked"
+                android:clickable="true"
                 android:background="#7237D3"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -136,6 +148,8 @@
 
             <LinearLayout
                 android:id="@+id/ashamedBar"
+                android:onClick="onAshamedClicked"
+                android:clickable="true"
                 android:background="#A99E91"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -155,6 +169,8 @@
 
             <LinearLayout
                 android:id="@+id/surprisedBar"
+                android:onClick="onSurprisedClicked"
+                android:clickable="true"
                 android:background="#EC43F6"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -189,6 +205,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onAngryClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/angry" />
 
             </FrameLayout>
@@ -201,6 +219,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onConfusedClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/confused" />
 
             </FrameLayout>
@@ -213,6 +233,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onDisgustedClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/disgusted" />
 
             </FrameLayout>
@@ -225,6 +247,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onScaredClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/fear" />
 
             </FrameLayout>
@@ -237,6 +261,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onHappyClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/happy" />
 
             </FrameLayout>
@@ -249,6 +275,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:onClick="onSadClicked"
+                    android:clickable="true"
                     app:srcCompat="@drawable/sad" />
 
             </FrameLayout>
@@ -261,6 +289,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onAshamedClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/shame" />
 
             </FrameLayout>
@@ -273,6 +303,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onSurprisedClicked"
+                android:clickable="true"
                 app:srcCompat="@drawable/suprised" />
 
             </FrameLayout>
