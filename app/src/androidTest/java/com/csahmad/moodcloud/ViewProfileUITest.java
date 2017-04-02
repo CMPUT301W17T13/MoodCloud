@@ -46,8 +46,11 @@ public class ViewProfileUITest {
     private ProfileController prc;
     private PostController psc;
     private FollowRequestController frc;
+    private AccountController acc;
     private Profile testProfile;
     private Profile testFollower;
+    private Account userAccount;
+    private Account followerAccount;
     private Post testPost1;
     private Post testPost2;
     private Post testPost3;
@@ -74,18 +77,24 @@ public class ViewProfileUITest {
             prc = new ProfileController();
             psc = new PostController();
             frc = new FollowRequestController();
+            acc = new AccountController();
             testProfile = new Profile("JohnSmith");
             testFollower = new Profile("EdJohnson");
+            userAccount = new Account("JohnSmith", "123456", testProfile);
+            followerAccount = new Account("EdJohnson", "password1", testFollower);
 
             testProfile.setId("JohnID");
             testFollower.setId("EdID");
             prc.addOrUpdateProfiles(testProfile, testFollower);
-            Follow follow = new Follow(testFollower, testProfile);
+            acc.addOrUpdateAccounts(userAccount, followerAccount);
+
+            //Follow follow = new Follow(testFollower, testProfile);
             FollowRequest fr = new FollowRequest(testFollower, testProfile);
             frc.addOrUpdateFollows(fr);
 
             double[] location = {0.0d, 0.0d, 0.0d};
             Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            LocalData.store((Profile) null, targetContext);
             LocalData.store(testProfile, targetContext);
 
             testPost1 = new Post(
@@ -138,21 +147,27 @@ public class ViewProfileUITest {
         protected void afterActivityFinished(){
             try{
                 ArrayList<FollowRequest> followRequests = frc.getFollowRequests(testProfile, 0);
-                for(int i = 0; i<followRequests.size()-1; i++) {
-                    frc.deleteFollowRequests(followRequests.get(0));
-                    followRequests.remove(0);
+                for(int i = 0; i<followRequests.size(); i++) {
+                    frc.deleteFollowRequests(followRequests.get(i));
                 }
+                ArrayList<Post> userPosts = psc.getPosts(testProfile, null, 0);
+                for(int i=0; i<userPosts.size(); i++){
+                    psc.deletePosts(userPosts.get(i));
+                }
+
             }
             catch(TimeoutException e){}
 
             prc.deleteProfiles(testProfile, testFollower);
             psc.deletePosts(testPost1, testPost2);
+            acc.deleteAccounts(userAccount, followerAccount);
             try{
                 if(psc.getPostFromId("testPost3Id") != null){
                     psc.deletePosts(testPost3);
                 }
             }
             catch(TimeoutException e){}
+            LocalData.store((Profile) null, InstrumentationRegistry.getTargetContext());
         }
     };
 

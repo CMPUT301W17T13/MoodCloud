@@ -7,10 +7,14 @@ package com.csahmad.moodcloud;
         import android.support.test.filters.LargeTest;
         import android.support.test.rule.ActivityTestRule;
         import android.support.test.runner.AndroidJUnit4;
+        import android.util.Log;
 
         import org.junit.Rule;
         import org.junit.Test;
         import org.junit.runner.RunWith;
+
+        import java.util.ArrayList;
+        import java.util.concurrent.TimeoutException;
 
         import static android.support.test.espresso.Espresso.closeSoftKeyboard;
         import static android.support.test.espresso.Espresso.onData;
@@ -53,6 +57,7 @@ public class NewsFeedUITest {
     private FollowController fc = new FollowController();
     private ProfileController prc = new ProfileController();
     private AccountController acc = new AccountController();
+    private PostController pc = new PostController();
 
 
 
@@ -63,26 +68,24 @@ public class NewsFeedUITest {
         @Override
         public void beforeActivityLaunched(){
             Context targetContext = InstrumentationRegistry.getTargetContext();
+            LocalData.store((Profile) null, targetContext);
 
             testProfile = new Profile("JohnSmith");
             followedProfile1 = new Profile("EdJohnson");
             followedProfile2 = new Profile("RandyCarlisle");
             followedProfile3 = new Profile("BobMcElroy");
-            unfollowedProfile = new Profile("JoshApplegate");
 
             //instantiate Accounts
             Account testAccount = new Account("JohnSmith","123456",testProfile);
             Account followedAccount1 = new Account("EdJohnson", "password1", followedProfile1);
             Account followedAccount2 = new Account("RandyCarlisle", "password2", followedProfile2);
             Account followedAccount3 = new Account("BobMcElroy", "password3", followedProfile3);
-            Account unfollowedAccount = new Account("JoshApplegate", "unknown", unfollowedProfile);
 
             //set profile IDs
             testProfile.setId("JohnID");
             followedProfile1.setId("EdID");
             followedProfile2.setId("RandyID");
             followedProfile3.setId("BobID");
-            unfollowedProfile.setId("JoshID");
 
             //instantiate follows
             Follow follow1 = new Follow(testProfile, followedProfile1);
@@ -90,21 +93,46 @@ public class NewsFeedUITest {
             Follow follow3 = new Follow(testProfile, followedProfile3);
 
             //add objects to elasticsearch
-            prc.addOrUpdateProfiles(testProfile, followedProfile1, followedProfile2, followedProfile3, unfollowedProfile);
-            acc.addOrUpdateAccounts(testAccount, followedAccount1, followedAccount2, followedAccount3, unfollowedAccount);
-            fc.addOrUpdateFollows(follow1, follow2,follow3);
-
-            //set up follows
-
-
-            //set testProfile in localdata
+            prc.addOrUpdateProfiles(testProfile, followedProfile1, followedProfile2, followedProfile3);
+            acc.addOrUpdateAccounts(testAccount, followedAccount1, followedAccount2, followedAccount3);
             LocalData.store(testProfile, targetContext);
-
+            fc.addOrUpdateFollows(follow1, follow2,follow3);
         }
 
         @Override
         public void afterActivityFinished(){
+            try {
 
+                //delete profiles
+                Profile deleteProfile1 = prc.getProfileFromID("JohnID");
+                Profile deleteProfile2 = prc.getProfileFromID("EdID");
+                Profile deleteProfile3 = prc.getProfileFromID("RandyID");
+                Profile deleteProfile4 = prc.getProfileFromID("BobID");
+
+                ArrayList<Follow> follows = fc.getFollowees(deleteProfile1, 0);
+                for(int i = 0; i<follows.size();i++){
+                    fc.deleteFollows(follows.get(i));
+                }
+
+                ArrayList<Post> posts = pc.getPosts(deleteProfile1, null, 0);
+                for(int i=0; i<posts.size()-1; i++){
+                    pc.deletePosts(posts.get(i));
+                }
+
+                prc.deleteProfiles(deleteProfile1, deleteProfile2, deleteProfile3, deleteProfile4);
+
+                //delete accounts
+                Account deleteAccount1 = acc.getAccountFromUsername("JohnSmith");
+                Account deleteAccount2 = acc.getAccountFromUsername("EdJohnson");
+                Account deleteAccount3 = acc.getAccountFromUsername("RandyCarlisle");
+                Account deleteAccount4 = acc.getAccountFromUsername("BobMcElroy");
+                acc.deleteAccounts(deleteAccount1, deleteAccount2, deleteAccount3, deleteAccount4);
+            }
+            catch(TimeoutException e){
+                Log.i("error", "controller timeout");
+            }
+
+            LocalData.store((Profile) null, InstrumentationRegistry.getTargetContext());
         }
     };
 
@@ -155,7 +183,7 @@ public class NewsFeedUITest {
      public void goToAddPostTest(){
         onView(withId(R.id.addPost)).perform(click());
 
-        onView(withId(R.id.title)).check(matches(withText("New Post")));
+        onView(withId(R.id.title)).check(matches(withText("Post")));
      }
 
      /**
@@ -169,6 +197,10 @@ public class NewsFeedUITest {
          onView(withId(R.id.happy_selected)).perform(click());
          onView(withId(R.id.trigger)).perform(typeText("Having a lot of fun"), ViewActions.closeSoftKeyboard());
          onView(withId(R.id.group_selected)).perform(click());
+         try{
+             Thread.sleep(500);
+         }
+         catch(InterruptedException e){}
          onView(withId(R.id.postButton)).perform(click());
 
          onView(withId(R.id.profileButton)).perform(click());
@@ -186,13 +218,13 @@ public class NewsFeedUITest {
             Thread.sleep(500);
         }
         catch(InterruptedException e){}
-        onView(withId(R.id.findUser)).perform(typeText("JoshApplegate"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.findUser)).perform(typeText("EdJohnson"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.searchUsers)).perform(click());
         /*try{
             Thread.sleep(1000);
         }
         catch(InterruptedException e){}*/
-        onView(withId(R.id.profileName)).check(matches(withText("Name: JoshApplegate")));
+        onView(withId(R.id.profileName)).check(matches(withText("Name: EdJohnson")));
     }
 
     /**
