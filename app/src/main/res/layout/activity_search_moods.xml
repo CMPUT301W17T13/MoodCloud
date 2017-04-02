@@ -64,10 +64,10 @@
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/textView"
             android:layout_alignBottom="@+id/textView"
             android:layout_alignTop="@+id/textView"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@+id/textView" />
 
         <Spinner
             android:id="@+id/spinner3"
@@ -75,17 +75,17 @@
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/textView2"
             android:layout_alignEnd="@+id/spinner2"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_alignTop="@+id/textView2" />
+            android:layout_alignTop="@+id/textView2"
+            android:layout_toRightOf="@+id/textView2" />
 
         <Spinner
+            android:id="@+id/spinner1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/spinner1"
             android:layout_alignBottom="@+id/whereText"
             android:layout_alignEnd="@+id/spinner2"
-            android:layout_toRightOf="@+id/whereText"
-            android:layout_alignTop="@+id/whereText"/>
+            android:layout_alignTop="@+id/whereText"
+            android:layout_toRightOf="@+id/whereText" />
 
         <EditText
             android:id="@+id/findUser"
@@ -114,13 +114,13 @@
         <Button
             android:id="@+id/searchButton"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/findUser"
-            android:layout_below="@+id/recentBox"
-            android:layout_marginTop="16dp"
+            android:layout_width="90dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="19dp"
             android:hint="Search"
-            android:text="Search" />
+            android:text="Search"
+            android:layout_below="@+id/recentBox"
+            android:layout_alignStart="@+id/recentBox" />
 
         <ImageButton
             android:id="@+id/backButton"
@@ -149,30 +149,38 @@
             android:id="@+id/recentBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Only Recent Week"
-            android:onClick="onCheckboxClicked"
-            android:layout_marginTop="16dp"
+            android:layout_alignStart="@+id/findText"
             android:layout_below="@+id/findText"
-            android:layout_alignStart="@+id/findText" />
+            android:layout_marginTop="16dp"
+            android:onClick="onCheckboxClicked"
+            android:text="Only Recent Week" />
 
         <CheckBox
             android:id="@+id/nearBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Within 5km"
             android:onClick="onCheckboxClicked"
-            android:layout_above="@+id/searchButton"
-            android:layout_alignStart="@+id/button2" />
+            android:text="Within 5km"
+            android:layout_toEndOf="@+id/findText"
+            android:layout_alignBottom="@+id/recentBox" />
 
         <Button
             android:id="@+id/button2"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/searchButton"
-            android:layout_marginStart="22dp"
-            android:layout_toEndOf="@+id/searchButton"
-            android:text="Show Map" />
+            android:text="Show Map"
+            android:layout_above="@+id/findUser"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/spinner3"
+            android:layout_alignTop="@+id/button2"
+            android:text="Show Graph" />
 
 
     </RelativeLayout>
