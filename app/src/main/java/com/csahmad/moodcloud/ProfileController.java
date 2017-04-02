@@ -36,6 +36,54 @@ public class ProfileController {
         this.elasticSearch.waitForTask();
     }
 
+    /**
+     * Return the ID of every person the given {@link Profile} follows.
+     *
+     * @param profile the follower
+     * @return the ID of every person the given {@link Profile} follows
+     * @see Follow
+     */
+    public ArrayList<String> getAllFolloweeIds(Profile profile) throws TimeoutException {
+
+        ArrayList<String> ids = new ArrayList<String>();
+        ArrayList<Profile> profiles = new ArrayList<Profile>();
+        int from = 0;
+
+        do {
+
+            profiles = this.getFollowees(profile, from);
+            for (Profile p: profiles) ids.add(p.getId());
+            from += ElasticSearchController.getResultSize();
+
+        } while (profiles.size() >= ElasticSearchController.getResultSize());
+
+        return ids;
+    }
+
+    /**
+     * Return the ID of every person that follows the given {@link Profile}.
+     *
+     * @param profile the followee
+     * @return the ID of every person the given {@link Profile} follows
+     * @see Follow
+     */
+    public ArrayList<String> getAllFollowerIds(Profile profile) throws TimeoutException {
+
+        ArrayList<String> ids = new ArrayList<String>();
+        ArrayList<Profile> profiles = new ArrayList<Profile>();
+        int from = 0;
+
+        do {
+
+            profiles = this.getFollowers(profile, from);
+            for (Profile p: profiles) ids.add(p.getId());
+            from += ElasticSearchController.getResultSize();
+
+        } while (profiles.size() >= ElasticSearchController.getResultSize());
+
+        return ids;
+    }
+
     public Profile getProfileFromUsername(String username) throws TimeoutException {
 
         AccountController controller = new AccountController();

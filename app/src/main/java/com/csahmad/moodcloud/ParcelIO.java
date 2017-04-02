@@ -254,23 +254,6 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an ArrayList of Strings from the given Parcel.
-     *
-     * <p>
-     * If the read ArrayList is empty, return null.
-     *
-     * @param in the Parcel to read from
-     * @return the ArrayList read from the given Parcel
-     */
-    public static ArrayList<String> readStringList(Parcel in) {
-
-        ArrayList<String> list = new ArrayList<String>();
-        in.readStringList(list);
-        if (list.size() == 0) return null;
-        return list;
-    }
-
-    /**
      * Read and return {@link FieldValue}s from the given Parcel.
      *
      * @param in the Parcel to read from
@@ -292,5 +275,22 @@ public class ParcelIO {
 
         if (fieldValues.size() == 0) return null;
         return fieldValues;
+    }
+
+    /**
+     * Read and return an ArrayList of Strings from the given Parcel.
+     *
+     * <p>
+     * If the read ArrayList is empty, return null.
+     *
+     * @param in the Parcel to read from
+     * @return the ArrayList read from the given Parcel
+     */
+    public static ArrayList<String> readStringList(Parcel in) {
+
+        ArrayList<String> list = new ArrayList<String>();
+        in.readStringList(list);
+        if (list.size() == 0) return null;
+        return list;
     }
 }

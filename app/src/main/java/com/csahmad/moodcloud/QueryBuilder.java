@@ -49,6 +49,9 @@ public class QueryBuilder {
             components.add(QueryBuilder.buildExactFieldValues(fieldValues));
         }
 
+        if (filter.hasFieldValueRanges())
+            components.add(QueryBuilder.buildFieldValueRanges(filter.getFieldValueRanges()));
+
         if (filter.hasTimeUnitsAgo())
             components.add(
                     QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
@@ -210,6 +213,30 @@ public class QueryBuilder {
     }
 
     /**
+     * Return a portion of a query indicating that certain fields should have any of a list of
+     * values.
+     *
+     * @param ranges a list of field: [values] restrictions
+     * @return a portion of a query indicating that certain fields should have any of a list of
+     *  values
+     */
+    public static String buildFieldValueRanges(ArrayList<FieldValues> ranges) {
+
+        if (ranges == null)
+            throw new IllegalArgumentException("Cannot pass null value.");
+
+        ArrayList<String> rangeStrings = new ArrayList<String>();
+        String rangeString;
+
+        for (FieldValues range: ranges) {
+            rangeString = QueryBuilder.buildFieldRange(range.getFieldName(), range.getValues());
+            rangeStrings.add(rangeString);
+        }
+
+        return TextUtils.join("},\n{", rangeStrings);
+    }
+
+    /**
      * Return a portion of a query indicating that certain fields should have certain values.
      *
      * @param fieldValues a list of field: value restrictions
@@ -235,21 +262,38 @@ public class QueryBuilder {
     }
 
     /**
+     * Return a portion of a query indicating that the given field should have any of the given
+     * values.
+     *
+     * @param field the field to restrict the value of
+     * @param values the values the given field can be
+     * @return a portion of a query indicating that the given field should have any of the given
+     *  values
+     */
+    private static String buildFieldRange(String field, ArrayList<String> values) {
+
+        if (field == null || values == null)
+            throw new IllegalArgumentException("Cannot pass null values.");
+
+        return "\"terms\": {\n" +
+                "\"" + field + "\": " + QueryBuilder.buildStringList(values) + "\n" +
+                "}";
+    }
+
+    /**
      * Return a portion of a query indicating that the given field should have the given value.
      *
      * @param field the field to restrict the value of
      * @param value the value the given field should be
      * @return a portion of a query indicating that the given field should have the given value
      */
-    private static String buildExactFieldValue(String field, Object value) {
+    private static String buildExactFieldValue(String field, String value) {
 
         if (field == null || value == null)
             throw new IllegalArgumentException("Cannot pass null values.");
 
-        String stringValue = value.toString();
-
         return "\"term\": {\n" +
-                "\"" + field + "\": " + stringValue + "\n" +
+                "\"" + field + "\": " + value + "\n" +
                 "}";
     }
 

@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // Parcelable so can pass between activities with Intents:
 // https://developer.android.com/reference/android/os/Parcelable.html
@@ -64,6 +65,8 @@ public class SearchFilter implements Parcelable {
         this.keywordFields = ParcelIO.readStringList(in);
 
         this.fieldValues = ParcelIO.readFieldValues(in);
+        FieldValues[] fieldRanges = (FieldValues[]) in.readParcelableArray(null);
+        this.fieldValueRanges = new ArrayList<FieldValues>(Arrays.asList(fieldRanges));
 
         this.maxTimeUnitsAgo = ParcelIO.readInteger(in);
         this.timeUnits = in.readString();
@@ -101,6 +104,7 @@ public class SearchFilter implements Parcelable {
         out.writeStringList(this.keywordFields);
 
         ParcelIO.writeFieldValues(out, this.fieldValues);
+        out.writeParcelableArray((FieldValues[]) this.fieldValueRanges.toArray(), 0);
 
         ParcelIO.writeInteger(out, this.maxTimeUnitsAgo);
         out.writeString(this.timeUnits);
@@ -129,6 +133,8 @@ public class SearchFilter implements Parcelable {
 
     /** Restrict certain fields to exact values. */
     private ArrayList<FieldValue> fieldValues;
+    /** Restrict certain fields to a range of possible values. */
+    private ArrayList<FieldValues> fieldValueRanges;
 
     /** The maximum number of {@link #timeUnits} ago a result can be dated at. */
     private Integer maxTimeUnitsAgo;
@@ -175,7 +181,7 @@ public class SearchFilter implements Parcelable {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
                 this.maxDistance, this.sortByFields, this.mood, this.context, this.nonEmptyFields,
-                this.termAggregationFields);
+                this.termAggregationFields, this.fieldValueRanges);
     }
 
     /**
@@ -440,7 +446,31 @@ public class SearchFilter implements Parcelable {
 
     public boolean hasFieldValues() {
 
-        return this.fieldValues != null;
+        return !NullTools.allNullOrEmpty(this.fieldValues);
+    }
+
+    public SearchFilter addFieldValueRange(FieldValues fieldValues) {
+
+        if (this.fieldValueRanges == null)
+            this.fieldValueRanges = new ArrayList<FieldValues>();
+
+        this.fieldValueRanges.add(fieldValues);
+        return this;
+    }
+
+    public ArrayList<FieldValues> getFieldValueRanges() {
+
+        return this.fieldValueRanges;
+    }
+
+    public void setFieldValueRanges(ArrayList<FieldValues> fieldValueRanges) {
+
+        this.fieldValueRanges = fieldValueRanges;
+    }
+
+    public boolean hasFieldValueRanges() {
+
+        return !NullTools.allNullOrEmpty(this.fieldValueRanges);
     }
 
     public ArrayList<String> getKeywordFields() {

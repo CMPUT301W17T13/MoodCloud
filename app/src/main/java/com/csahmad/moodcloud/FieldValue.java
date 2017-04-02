@@ -24,11 +24,11 @@ public class FieldValue {
     }
 
     /**
-     * If the given value is a {@link String}, add double quotation marks around it and set
-     * {@link #value} to the result. If the given value is not a {@link String}, call
-     * {@link Object#toString()} on it and set {@link #value} to the result.
+     * If the given value is a String, add double quotation marks around it and set this.value to
+     * the result. If the given value is not a String, call Object.toString() on it and set
+     * this.value to the result.
      *
-     * @param value
+     * @param value the value to set this.value to
      */
     private void setValue(Object value) {
 
