@@ -60,8 +60,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
             TextView triggerText = (TextView) findViewById(R.id.triggerText);
             triggerText.setText("Trigger: " + post.getTriggerText());
-            int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
-            R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+            int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
             ImageView triggerImage = (ImageView) findViewById(R.id.triggerImage);
             triggerImage.setImageBitmap(ImageConverter.toBitmap(post.getTriggerImage()));
