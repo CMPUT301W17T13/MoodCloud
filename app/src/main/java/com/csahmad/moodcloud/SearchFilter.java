@@ -102,7 +102,12 @@ public class SearchFilter implements Parcelable {
         out.writeStringList(this.keywordFields);
 
         ParcelIO.writeFieldValues(out, this.fieldValues);
-        out.writeParcelableArray((FieldValues[]) this.fieldValueRanges.toArray(), 0);
+
+        if (this.fieldValueRanges == null)
+            out.writeParcelableArray(null, 0);
+
+        else
+            out.writeParcelableArray((FieldValues[]) this.fieldValueRanges.toArray(), 0);
 
         ParcelIO.writeInteger(out, this.maxTimeUnitsAgo);
         out.writeString(this.timeUnits);
