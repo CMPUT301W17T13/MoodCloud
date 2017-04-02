@@ -1,6 +1,5 @@
 package com.csahmad.moodcloud;
 
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -227,56 +226,6 @@ public class PostController {
         ArrayList<Post> result = this.elasticSearch.getNext(0);
         this.elasticSearch.setFilter(null);
 
-        return result;
-    }
-
-    /**
-     * Return the latest {@link Post} of each of the given profiles.
-     *
-     * @param profiles the {@link Profile}s with the posts to return
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @return the latest {@link Post} posted by each profile
-     * @throws TimeoutException
-     */
-    public ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter)
-        throws TimeoutException{
-
-        ArrayList<Post> latestPosts = new ArrayList<Post>();
-        Post post;
-
-        for (Profile profile: profiles) {
-            post = this.getLatestPost(profile, filter);
-            if (post != null) latestPosts.add(post);
-        }
-
-        return latestPosts;
-    }
-
-    /**
-     * Return the latest {@link Post} posted by the given profile.
-     *
-     * <p>
-     * If there are no posts to return, return null.
-     *
-     * @param profile the poster of the post to return
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @return the latest {@link Post} posted by the given profile
-     * @throws TimeoutException
-     */
-    public Post getLatestPost(Profile profile, SearchFilter filter) throws TimeoutException {
-
-        if (filter == null)
-            filter = new SearchFilter();
-
-        this.elasticSearch.setFilter(filter);
-        filter.removeFieldValue("posterId");
-        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
-                .sortByDate();
-
-        Post result = this.elasticSearch.getSingleResult();
-        this.elasticSearch.setFilter(null);
         return result;
     }
 

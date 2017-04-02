@@ -1,8 +1,6 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /** Build query strings to be used in elasticsearch queries. */
