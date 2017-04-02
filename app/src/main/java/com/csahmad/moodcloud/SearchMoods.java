@@ -128,7 +128,7 @@ public class SearchMoods extends AppCompatActivity {
         ArrayAdapter<CharSequence> contextAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groupSoloArray, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
-        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contextAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         contextSpinner.setAdapter(contextAdapter);
 
