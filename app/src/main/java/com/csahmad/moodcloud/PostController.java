@@ -27,6 +27,28 @@ public class PostController {
     }
 
     /**
+     * Return the number of occurrences of each mood for all posts by the followees of the given
+     * poster matching the restrictions in the given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @param follower the follower of the followees to restrict posts to
+     * @return the number of occurrences of each mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
+     */
+    public HashMap<Integer, Long> getFolloweeMoodCounts(SearchFilter filter,
+                                                Profile follower) throws TimeoutException {
+
+        if (filter == null) filter = new SearchFilter();
+        ArrayList<String> followeeIds = new ProfileController().getAllFolloweeIds(follower);
+        filter.addFieldValueRange(new FieldValues("posterId", followeeIds));
+        return this.getMoodCounts(filter);
+    }
+
+    /**
      * Return the number of occurrences of each mood for all posts by the given poster matching the
      * restrictions in the given {@link SearchFilter}.
      *
@@ -176,24 +198,6 @@ public class PostController {
 
         filter.addFieldValueRange(new FieldValues("posterId", followeeIds));
         return this.getPosts(filter, from);
-    }
-
-    /**
-     * Return the latest {@link Post} of each follower of the given followee.
-     *
-     * @param followee the followee of the followers with the desired posts
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @param from set to 0 to get the first x number of results, set to x to get the next x number
-     *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return the latest {@link Post} of each follower of the given followee
-     * @throws TimeoutException
-     */
-    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
-                                                   int from) throws TimeoutException {
-
-        ProfileController controller = new ProfileController();
-        return this.getLatestPosts(controller.getFollowers(followee, from), filter);
     }
 
     /**
