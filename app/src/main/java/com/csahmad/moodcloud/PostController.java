@@ -169,10 +169,16 @@ public class PostController {
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
-        //ArrayList<String> followerIds = new ProfileController().getAllFolloweeIds(follower);
+        ArrayList<String> followeeIds = new ProfileController().getAllFolloweeIds(follower);
 
-        ProfileController controller = new ProfileController();
-        return this.getLatestPosts(controller.getFollowees(follower, from), filter);
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.addFieldValueRange(new FieldValues("followeeId", followeeIds));
+        return this.getPosts(filter, from);
+
+        //ProfileController controller = new ProfileController();
+        //return this.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
     /**

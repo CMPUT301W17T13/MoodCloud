@@ -83,32 +83,17 @@ public class FieldValues implements Parcelable {
     private String fieldName;
     private ArrayList<String> values;
 
-    public FieldValues(String fieldName, ArrayList<Object> values) {
+    public FieldValues(String fieldName, ArrayList<String> values) {
 
         if (fieldName == null || values == null)
             throw new IllegalArgumentException("Cannot pass null values.");
 
         this.fieldName = fieldName;
-        this.setValues(values);
-    }
 
-    /**
-     * For each value, if the given value is a String, add double quotation marks around it and add
-     * the result to this.values. If the value is not a String, call Object.toString() on it and add
-     * the result to this.values.
-     *
-     * @param values the values to add to this.values
-     */
-    private void setValues(ArrayList<Object> values) {
+        for (int i = 0; i < values.size(); i++)
+            values.set(i, "\"" + values.get(i) + "\"");
 
-        for (Object value: values) {
-
-            if (value instanceof String)
-                this.values.add("\"" + value + "\"");
-
-            else
-                this.values.add(value.toString());
-        }
+        this.values = values;
     }
 
     public String getFieldName() {
