@@ -208,6 +208,12 @@ public class SearchFilter implements Parcelable {
         return this;
     }
 
+    /** Clear the term aggregation fields. */
+    public void clearTermAggregations() {
+
+        this.termAggregationFields.clear();
+    }
+
     /** Return whether this SearchFilter has term aggregation fields. */
     public boolean hasTermAggregations() {
 
