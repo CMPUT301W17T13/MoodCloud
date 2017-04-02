@@ -246,17 +246,17 @@
                 android:layout_height="125dp"
                 android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/sad" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/sad" />
+
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
                 android:layout_weight="1">
-
-            </FrameLayout>
 
             <ImageView
                 android:layout_width="match_parent"
