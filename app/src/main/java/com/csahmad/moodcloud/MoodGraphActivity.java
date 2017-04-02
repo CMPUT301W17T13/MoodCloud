@@ -11,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.ViewGroup.LayoutParams;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class MoodGraphActivity extends AppCompatActivity {
 
     private static final double minHeightPercent = 0.05d;
@@ -41,6 +45,12 @@ public class MoodGraphActivity extends AppCompatActivity {
         this.ashamedCount = intent.getLongExtra("ASHAMED_COUNT", -1l);
         this.surprisedCount = intent.getLongExtra("SURPRISED_COUNT", -1l);
 
+        List<Long> counts = Arrays.asList(this.angryCount, this.confusedCount, this.disgustedCount,
+                this.scaredCount, this.happyCount, this.sadCount, this.ashamedCount,
+                this.surprisedCount);
+
+        double maxCount = Collections.max(counts);
+
         double totalCount = this.angryCount + this.confusedCount + this.disgustedCount +
                 this.scaredCount + this.happyCount + this.sadCount + this.ashamedCount +
                 this.surprisedCount;
@@ -54,14 +64,23 @@ public class MoodGraphActivity extends AppCompatActivity {
         TextView ashamedCountView = (TextView) this.findViewById(R.id.ashamedCount);
         TextView surprisedCountView = (TextView) this.findViewById(R.id.surprisedCount);
 
-        final double angryPercent = (double) this.angryCount / totalCount;
-        final double confusedPercent = (double) this.confusedCount / totalCount;
-        final double disgustedPercent = (double) this.disgustedCount / totalCount;
-        final double scaredPercent = (double) this.scaredCount / totalCount;
-        final double happyPercent = (double) this.happyCount / totalCount;
-        final double sadPercent = (double) this.sadCount / totalCount;
-        final double ashamedPercent = (double) this.ashamedCount / totalCount;
-        final double surprisedPercent = (double) this.surprisedCount / totalCount;
+        double angryPercent = (double) this.angryCount / totalCount;
+        double confusedPercent = (double) this.confusedCount / totalCount;
+        double disgustedPercent = (double) this.disgustedCount / totalCount;
+        double scaredPercent = (double) this.scaredCount / totalCount;
+        double happyPercent = (double) this.happyCount / totalCount;
+        double sadPercent = (double) this.sadCount / totalCount;
+        double ashamedPercent = (double) this.ashamedCount / totalCount;
+        double surprisedPercent = (double) this.surprisedCount / totalCount;
+
+        final double angryPercentOfMax = (double) this.angryCount / maxCount;
+        final double confusedPercentOfMax = (double) this.confusedCount / maxCount;
+        final double disgustedPercentOfMax = (double) this.disgustedCount / maxCount;
+        final double scaredPercentOfMax = (double) this.scaredCount / maxCount;
+        final double happyPercentOfMax = (double) this.happyCount / maxCount;
+        final double sadPercentOfMax = (double) this.sadCount / maxCount;
+        final double ashamedPercentOfMax = (double) this.ashamedCount / maxCount;
+        final double surprisedPercentOfMax = (double) this.surprisedCount / maxCount;
 
         angryCountView.setText(Double.toString(angryPercent * 100.0d) + "%");
         confusedCountView.setText(Double.toString(confusedPercent * 100.0d) + "%");
@@ -94,14 +113,14 @@ public class MoodGraphActivity extends AppCompatActivity {
                 LinearLayout ashamedBar = (LinearLayout) activity.findViewById(R.id.ashamedBar);
                 LinearLayout surprisedBar = (LinearLayout) activity.findViewById(R.id.surprisedBar);
 
-                activity.setBarHeight(angryBar, angryPercent);
-                activity.setBarHeight(confusedBar, confusedPercent);
-                activity.setBarHeight(disgustedBar, disgustedPercent);
-                activity.setBarHeight(scaredBar, scaredPercent);
-                activity.setBarHeight(happyBar, happyPercent);
-                activity.setBarHeight(sadBar, sadPercent);
-                activity.setBarHeight(ashamedBar, ashamedPercent);
-                activity.setBarHeight(surprisedBar, surprisedPercent);
+                activity.setBarHeight(angryBar, angryPercentOfMax);
+                activity.setBarHeight(confusedBar, confusedPercentOfMax);
+                activity.setBarHeight(disgustedBar, disgustedPercentOfMax);
+                activity.setBarHeight(scaredBar, scaredPercentOfMax);
+                activity.setBarHeight(happyBar, happyPercentOfMax);
+                activity.setBarHeight(sadBar, sadPercentOfMax);
+                activity.setBarHeight(ashamedBar, ashamedPercentOfMax);
+                activity.setBarHeight(surprisedBar, surprisedPercentOfMax);
 
                 return true;
             }
