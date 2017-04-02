@@ -34,6 +34,19 @@ public class LocalData {
     private static final String POSTSAVE = "posts.sav";
 
     /**
+     * Used to access the {@link Account} of the current signed in user
+     *
+     * If no account is currently stored, returns null
+     *
+     * @param context
+     * @return the current stored account.
+     */
+    public static Account getSignedInAccount(Context context){
+        LocalData.tryReadProfile(context);
+        return LocalData.signedInAccount;
+    }
+
+    /**
      * gets profile of stored account
      *
      * Returns null if no account is found in memory
