@@ -16,10 +16,17 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:title="Search Moods"
-            app:titleMarginStart="120dp"
-            app:titleTextColor="@android:color/background_light" />
+            android:theme="?attr/actionBarTheme" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/whereText"
+            android:layout_centerHorizontal="true"
+            android:text="Search"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@android:color/primary_text_dark" />
 
         <TextView
             android:id="@+id/whereText"
@@ -28,7 +35,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/toolbar3"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Where"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -39,7 +46,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/whereText"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="By Mood"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -49,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Groups/Solo"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -57,10 +64,10 @@
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/textView"
             android:layout_alignBottom="@+id/textView"
             android:layout_alignTop="@+id/textView"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@+id/textView" />
 
         <Spinner
             android:id="@+id/spinner3"
@@ -68,17 +75,17 @@
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/textView2"
             android:layout_alignEnd="@+id/spinner2"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_alignTop="@+id/textView2" />
+            android:layout_alignTop="@+id/textView2"
+            android:layout_toRightOf="@+id/textView2" />
 
         <Spinner
+            android:id="@+id/spinner1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/spinner1"
             android:layout_alignBottom="@+id/whereText"
             android:layout_alignEnd="@+id/spinner2"
-            android:layout_toRightOf="@+id/whereText"
-            android:layout_alignTop="@+id/whereText"/>
+            android:layout_alignTop="@+id/whereText"
+            android:layout_toRightOf="@+id/whereText" />
 
         <EditText
             android:id="@+id/findUser"
@@ -88,8 +95,9 @@
             android:layout_below="@+id/searchButton"
             android:layout_marginTop="24dp"
             android:ems="10"
+            android:hint="Find user"
             android:inputType="textPersonName"
-            android:hint="Find user" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <EditText
             android:id="@+id/findText"
@@ -99,18 +107,20 @@
             android:layout_below="@+id/textView2"
             android:layout_marginTop="24dp"
             android:ems="10"
+            android:hint="Find Text"
             android:inputType="textPersonName"
-            android:hint="Find Text" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         <Button
             android:id="@+id/searchButton"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/findText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:hint="Search" />
+            android:layout_width="90dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="19dp"
+            android:hint="Search"
+            android:text="Search"
+            android:layout_below="@+id/recentBox"
+            android:layout_alignStart="@+id/recentBox" />
 
         <ImageButton
             android:id="@+id/backButton"
@@ -132,7 +142,45 @@
             android:layout_below="@+id/findUser"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:hint="Search Users" />
+            android:hint="Search Users"
+            android:text="Search Users" />
+
+        <CheckBox
+            android:id="@+id/recentBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/findText"
+            android:layout_below="@+id/findText"
+            android:layout_marginTop="16dp"
+            android:onClick="onCheckboxClicked"
+            android:text="Only Recent Week" />
+
+        <CheckBox
+            android:id="@+id/nearBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCheckboxClicked"
+            android:text="Within 5km"
+            android:layout_toEndOf="@+id/findText"
+            android:layout_alignBottom="@+id/recentBox" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Show Map"
+            android:layout_above="@+id/findUser"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/spinner3"
+            android:layout_alignTop="@+id/button2"
+            android:text="Show Graph" />
 
 
     </RelativeLayout>

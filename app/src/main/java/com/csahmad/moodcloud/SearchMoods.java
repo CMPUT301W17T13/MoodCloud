@@ -1,25 +1,105 @@
 package com.csahmad.moodcloud;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class SearchMoods extends AppCompatActivity {
+
+    boolean recent = FALSE;
+    boolean locperm = FALSE;
+    boolean near = FALSE;
+    private static final int READ_LOCATION_REQUEST = 1;
+    private SearchFilter filter;
+
+
+    //https://developer.android.com/guide/topics/ui/controls/checkbox.html
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.recentBox:
+                if (checked){
+                    recent = TRUE;
+                }
+                break;
+            case R.id.nearBox:
+                if (checked) {
+                    recent = TRUE;
+                }
+                break;
+        }
+    }
+
+    /** Request permission from the user to access location. */
+    public void requestLocationPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                READ_LOCATION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                              int[] grantResults) {
+
+        if (requestCode == READ_LOCATION_REQUEST)
+            this.setFilterLocation();
+    }
+
+    private void setFilterLocation() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            if (location != null) {
+
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                double altitude = location.getAltitude();
+
+                locperm = TRUE;
+
+                if (near == TRUE) {
+                    this.filter.setMaxDistance(5.0d);
+                    this.filter.setLocation(new SimpleLocation(latitude, longitude, altitude));
+                }
+            }
+        }
+
+        else
+
+            Toast.makeText(getApplicationContext(), "Location permission denied",
+                    Toast.LENGTH_LONG).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +116,8 @@ public class SearchMoods extends AppCompatActivity {
         topAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         topSpinner.setAdapter(topAdapter);
 
+        final Button graphButton = (Button) findViewById(R.id.button3);
+
         final Spinner moodSpinner = (Spinner) findViewById(R.id.spinner2);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> moodAdapter = ArrayAdapter.createFromResource(this,
@@ -44,19 +126,156 @@ public class SearchMoods extends AppCompatActivity {
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         moodSpinner.setAdapter(moodAdapter);
+        moodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    graphButton.setVisibility(View.VISIBLE);
+                } else {
+                    graphButton.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+                // sometimes you need nothing here
+            }
+        });
         final Spinner contextSpinner = (Spinner) findViewById(R.id.spinner3);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> contextAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groupSoloArray, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
-        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contextAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         contextSpinner.setAdapter(contextAdapter);
 
         Button searchButton = (Button) findViewById(R.id.searchButton);
+        Button mapButton = (Button) findViewById(R.id.button2);
 
-        final Context context = this;
+        final SearchMoods context = this;
+
+        String moodString = (String) moodSpinner.getSelectedItem();
+        if (!moodString.equals("Any")) {
+            graphButton.setVisibility(View.GONE);
+        }
+
+        graphButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keywordString = findText.getText().toString().trim();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+                context.filter = filter;
+
+                if (!keywordString.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any")) {
+                    filter.setMood(Mood.fromString(moodString));
+                }
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, MoodGraphActivity.class);
+
+                if (recent == TRUE) {
+                    filter.setMaxTimeUnitsAgo(1);
+                }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
+
+                PostController postController = new PostController();
+                HashMap<Integer, Long> moodCounts;
+                try {
+                    if (where.equals("Following")) {
+                        moodCounts = postController.getFolloweeMoodCounts(
+                                filter, LocalData.getSignedInProfile(getApplicationContext()));
+                    } else {
+                        if (where.equals("My Moods")) {
+                            moodCounts = postController.getMoodCounts(filter,
+                                    LocalData.getSignedInProfile(getApplicationContext()));
+                        } else {
+                            moodCounts = postController.getMoodCounts(filter);
+                        }
+                    }
+                    intent.putExtra("ANGRY_COUNT",moodCounts.get(0));
+                    intent.putExtra("CONFUSED_COUNT",moodCounts.get(1));
+                    intent.putExtra("DISGUSTED_COUNT",moodCounts.get(2));
+                    intent.putExtra("SCARED_COUNT",moodCounts.get(3));
+                    intent.putExtra("HAPPY_COUNT",moodCounts.get(4));
+                    intent.putExtra("SAD_COUNT",moodCounts.get(5));
+                    intent.putExtra("ASHAMED_COUNT",moodCounts.get(6));
+                    intent.putExtra("SURPRISED_COUNT",moodCounts.get(7));
+                }catch (TimeoutException e) {}
+                startActivity(intent);
+            }
+        });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keywordString = findText.getText().toString().trim();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+                context.filter = filter;
+
+                if (!keywordString.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any")) {
+                    filter.setMood(Mood.fromString(moodString));
+                }
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, ShowMapActivity.class);
+
+                if (recent == TRUE) {
+                    filter.setMaxTimeUnitsAgo(1);
+                }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
+
+                intent.putExtra("WHERE", where);
+                intent.putExtra("FILTER", filter);
+                startActivity(intent);
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
 
@@ -69,6 +288,7 @@ public class SearchMoods extends AppCompatActivity {
                 String contextString = (String) contextSpinner.getSelectedItem();
 
                 SearchFilter filter = new SearchFilter();
+                context.filter = filter;
 
                 if (!keywordString.equals("")) {
                     filter.addKeywordField("triggerText");
@@ -85,10 +305,18 @@ public class SearchMoods extends AppCompatActivity {
 
                 Intent intent = new Intent(context, SearchResultsActivity.class);
 
-                if (where == "Recent Week") {
+                if (recent == TRUE) {
                     filter.setMaxTimeUnitsAgo(1);
-                    where = "Everyone";
                 }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
 
                 intent.putExtra("WHERE", where);
                 intent.putExtra("FILTER", filter);

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,16 +15,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 
 public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCallback{
+
     private PostController postController = new PostController();
     private ProfileController profileController = new ProfileController();
     private Profile profile;
-    private SearchFilter moods;
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutMananger;
@@ -40,24 +40,74 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("ID");
-        try {
+        //String id = intent.getStringExtra("ID");
+        String where = intent.getStringExtra("WHERE");
+        final SearchFilter filter = intent.getParcelableExtra("FILTER");
+        /**try {
             profile = profileController.getProfileFromID(id);
 
             if (profile.getId() == null)
                 throw new RuntimeException("Oh noes ID is null");
 
-        } catch (TimeoutException e){}
+        } catch (TimeoutException e){}*/
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
+
+        ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                finish();
+            }}
+        );
+
+        ImageButton addPost = (ImageButton) findViewById(R.id.addPost);
+        addPost.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                startActivity(intent);
+            }
+        });
+        ImageButton searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SearchMoods.class);
+                startActivity(intent);
+            }}
+        );
+
         try {
-            final ArrayList<Post> mDataset = postController.getPosts(profile,moods,0);
+
+            final ArrayList<Post> mDataset;
+            if (where.equals("Following")) {
+                mDataset = postController.getFolloweePosts(
+                        LocalData.getSignedInProfile(getApplicationContext()),
+                        filter, 0);
+            } else {
+                if (where.equals("My Moods")) {
+                    mDataset = postController.getPosts(
+                            LocalData.getSignedInProfile(getApplicationContext()),
+                            filter, 0);
+                } else {
+                    mDataset = postController.getPosts(filter, 0);
+                }
+            }
             mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
-            double lat = mDataset.get(0).getLat();
-            double lo = mDataset.get(0).getLo();
-            LatLng Mood = new LatLng(lat,lo);
-            String text = mDataset.get(0).getText().toString();
-            setMap(Mood,googleMap,text);
+
+            double[] location = mDataset.get(0).getLocation();
+
+            if (location != null) {
+                double lat = location[0];
+                double lo = location[1];
+                LatLng mood = new LatLng(lat,lo);
+                String text = mDataset.get(0).getText().toString();
+                setMap(mood,googleMap,text);
+            }
+
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.addOnItemTouchListener(new ViewProfileActivity.RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ViewProfileActivity.ClickListener() {
                 @Override
@@ -82,10 +132,11 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
     public void setMap(LatLng latLng,GoogleMap googleMap,String text){
-        LatLng mood = latLng;
-        googleMap.addMarker(new MarkerOptions().position(mood)
+
+        if (latLng == null) return;
+        googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title(text));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mood));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     public void onMapReady(GoogleMap googleMap) {

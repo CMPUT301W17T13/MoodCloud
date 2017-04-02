@@ -2,13 +2,15 @@ package com.csahmad.moodcloud;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: 2017-03-08 Handle exceptions better
+// TODO: 2017-03-31 Refactor controller classes that use this class to reduce repeated code
+// - Maybe refactor this class too
 
 /**
  * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
@@ -134,13 +136,13 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return only one object that matches {@link #filter}.
+     * Return only one object that matches filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return any object. If no object matches
-     * {@link #filter} or no objects exist yet, return null.
+     * If filter is null or has no restrictions, return any object. If no object matches
+     * filter or no objects exist yet, return null.
      *
-     * @return an object that matches {@link #filter}
+     * @return an object that matches filter
      * @throws TimeoutException
      */
     public T getSingleResult() throws TimeoutException {
@@ -151,9 +153,9 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return the number of objects matching the restrictions in {@link #filter}.
+     * Return the number of objects matching the restrictions in filter.
      *
-     * @return the number of objects matching the restrictions in {@link #filter}
+     * @return the number of objects matching the restrictions in filter
      * @throws TimeoutException
      */
     public Double getCount() throws TimeoutException {
@@ -184,14 +186,14 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return objects that match {@link #filter}.
+     * Return objects that match filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return all objects.
+     * If filter is null or has no restrictions, return all objects.
      *
      * @param from set to 0 to get the first x number of results, set to x to get the next x number
      *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return objects that match {@link #filter}
+     * @return objects that match filter
      * @throws TimeoutException
      */
     public ArrayList<T> getNext(int from) throws TimeoutException {
@@ -199,17 +201,57 @@ public class ElasticSearch<T extends ElasticSearchObject> {
         return this.getNext(from, false);
     }
 
+    // TODO: 2017-03-31 Maybe make a new class and return objects of that type
     /**
-     * Return objects that match {@link #filter}.
+     * Return the number of occurrences of each value for each field in
+     * filter.termAggregationFields.
+     *
+     * @return the number of occurrences of each value for the fields in filter
+     * @throws TimeoutException
+     * @see SearchFilter#addTermAggregation(String)
+     * @see SearchFilter#setTermAggregationFields(ArrayList)
+     * @see SearchFilter#getTermAggregationFields()
+     */
+    public HashMap<String, HashMap<String, Long>> getTermCounts() throws TimeoutException {
+
+        ElasticSearchController.GetTermAggregations controller =
+                new ElasticSearchController.GetTermAggregations();
+
+        this.lastTask = controller;
+        controller.setTypeName(this.typeName);
+        controller.execute(this.filter);
+
+        try {
+
+            if (this.timeout == null)
+                return controller.get();
+
+            else
+                return controller.get(this.timeout, TimeUnit.MILLISECONDS);
+        }
+
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Return objects that match filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return all objects.
+     * If filter is null or has no restrictions, return all objects.
      *
      * @param from set to 0 to get the first x number of results, set to x to get the next x number
      *             of results, set to 2x to get the next x number of results after that, and so on
      * @param singleResult whether to only return one object (or zero if there are no objects to
      *                     return)
-     * @return objects that match {@link #filter}
+     * @return objects that match filter
      * @throws TimeoutException
      */
     private ArrayList<T> getNext(int from, boolean singleResult) throws TimeoutException {

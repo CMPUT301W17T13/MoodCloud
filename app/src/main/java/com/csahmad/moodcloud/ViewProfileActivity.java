@@ -82,7 +82,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
             //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
             //Button button = (Button) findViewById(R.id.followeditbutton);
+            FollowRequestController followRequestController = new FollowRequestController();
+            try {
+                Double count = followRequestController.getFollowRequestCount(profile);
+
             followeditbutton.setText("See Follow Requests");
+            if (count != null){
+                followeditbutton.setText("See Follow Requests (" + Double.toString(count) + ")");
+            }
+            } catch (TimeoutException e) {}
             followeditbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view){
@@ -190,15 +198,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, NewsFeedActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button mapButton = (Button) findViewById(R.id.mapButton);
-        mapButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, ShowMapActivity.class);
                 startActivity(intent);
             }
         });

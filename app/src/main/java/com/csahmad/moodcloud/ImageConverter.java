@@ -10,7 +10,7 @@ import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 
-/** Convert between {@link Bitmap}s and {@link String}s. */
+/** Convert between Bitmaps and Strings. */
 public class ImageConverter {
 
     // Taken from:
@@ -18,13 +18,17 @@ public class ImageConverter {
     // (StackOverflow user jeet, edited by Graeme)
     // Accessed March 30, 2017
     /**
-     * Convert the given {@link Bitmap} image to a {@link String} in base64 format.
+     * Convert the given Bitmap image to a String in base64 format.
+     * 
+     * <p>
+     * If the given image is null, return null.
      *
      * @param image the image to convert
-     * @return the image in base64 format as a {@link String}
+     * @return the image in base64 format as a String
      */
     public static String toString(Bitmap image) {
 
+        if (image == null) return null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -37,15 +41,17 @@ public class ImageConverter {
     // (StackOverflow user user432209)
     // Accessed March 30, 2017
     /**
-     * Convert the given {@link String} to a {@link Bitmap} image.
+     * Convert the given String to a Bitmap image.
      *
      * <p>
-     * Return null if the {@link String} could not be converted.
+     * Return null if the String is null or could not be converted.
      *
-     * @param imageBase64 the image in base64 format as a {@link String}
+     * @param imageBase64 the image in base64 format as a String
      * @return the converted image
      */
     public static Bitmap toBitmap(String imageBase64) {
+
+        if (imageBase64 == null) return null;
 
         try {
             byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);

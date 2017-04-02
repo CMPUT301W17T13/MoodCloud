@@ -20,7 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 /**
  * Created by Taylor on 2017-03-29.
@@ -48,6 +54,36 @@ public class SearchResultsActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "filter null", Toast.LENGTH_LONG).show();
 
         PostController postController = new PostController();
+        TextView maxMood = (TextView) findViewById(R.id.maxMood);
+        HashMap<Integer, Long> moodCounts;
+        try {
+            if (where.equals("Following")){
+                moodCounts = postController.getFolloweeMoodCounts(
+                        filter, LocalData.getSignedInProfile(getApplicationContext()));
+            } else {
+                if (where.equals("My Moods")) {
+                    moodCounts = postController.getMoodCounts(filter,
+                            LocalData.getSignedInProfile(getApplicationContext()));
+                } else {
+                    moodCounts = postController.getMoodCounts(filter);
+                }
+            }
+            if (filter.hasMood() == FALSE) {
+                Long maxCount = (Collections.max(moodCounts.values()));
+                for (Map.Entry<Integer, Long> entry : moodCounts.entrySet()) {
+                    if (entry.getValue() == maxCount){
+                        String[] draws = new String[]{"Angry","Confused","Disgusted",
+                                "Embarassed","Fear","Happy","Sad","Shame","Suprised"};
+                        maxMood.setText(draws[entry.getKey()] + " is the Most Common Mood");
+                        break;
+                    }
+                }
+            }
+            if (filter.hasMood() == TRUE){
+                String count = moodCounts.get(filter.getMood()).toString();
+                maxMood.setText(count + " Posts");
+            }
+        }catch (TimeoutException e) {}
         final ArrayList<Post> mDataset;
         try {
             if (where.equals("Following")) {

@@ -45,6 +45,14 @@ public class TakePhotoActivity extends Activity {
                 takeAPhoto();
             }
         });
+        ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+
+                finish();
+            }}
+        );
     }
     /**
      * Return whether this app currently has permission to use the camera.
@@ -91,7 +99,9 @@ public class TakePhotoActivity extends Activity {
                 returnIntent.putExtra("IMAGE", ImageConverter.toString(imageBitmap));
                 returnIntent.putExtra("BITMAP", imageBitmap);
                 setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+
+
+                //finish();
 
             }
             else

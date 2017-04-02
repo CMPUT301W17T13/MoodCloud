@@ -1,44 +1,260 @@
 package com.csahmad.moodcloud;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+// Parcelable so can pass between activities with Intents:
+// https://developer.android.com/reference/android/os/Parcelable.html
+// Accessed January 29, 2017
 /**
  * Defines restrictions on elasticsearch queries.
  *
  * @see ElasticSearch
  */
-public class SearchFilter {
+public class SearchFilter implements Parcelable {
 
+    public SearchFilter() {}
+
+    // For creating the Parcel:
+    // https://developer.android.com/reference/android/os/Parcelable.html#describeContents()
+    // Accessed January 29, 2017
+    /** For creating the Parcel. */
+    public static final Parcelable.Creator<SearchFilter> CREATOR =
+            new Parcelable.Creator<SearchFilter>() {
+
+        public SearchFilter createFromParcel(Parcel in) {
+
+            return new SearchFilter(in);
+        }
+
+        public SearchFilter[] newArray(int size) {
+
+            return new SearchFilter[size];
+        }
+    };
+
+    // For Parcelable
+    // 0 because no special objects to handle:
+    // https://developer.android.com/reference/android/os/Parcelable.html
+    // Accessed January 29, 2017
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    // Initialize SearchFilter from a SearchFilter Parcel:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /** Initialize SearchFilter from a SearchFilter Parcel. */
+    public SearchFilter(Parcel in) {
+
+        this.readFromParcel(in);
+    }
+
+    /**
+     * Read the values to assign to this SearchFilter's fields from the given Parcel.
+     *
+     * @param in the Parcel to read from
+     */
+    private void readFromParcel(Parcel in) {
+
+        this.keywords = ParcelIO.readStringList(in);
+        this.keywordFields = ParcelIO.readStringList(in);
+
+        this.fieldValues = ParcelIO.readFieldValues(in);
+
+        FieldValues[] fieldRanges = (FieldValues[]) in.readParcelableArray(null);
+
+        if (fieldRanges != null)
+            this.fieldValueRanges = new ArrayList<FieldValues>(Arrays.asList(fieldRanges));
+
+        this.maxTimeUnitsAgo = ParcelIO.readInteger(in);
+        this.timeUnits = in.readString();
+        this.dateField = in.readString();
+
+        this.maxDistance = ParcelIO.readDouble(in);
+        this.location = ParcelIO.readLocation(in);
+        this.distanceUnits = in.readString();
+        this.locationField = in.readString();
+
+        this.sortByFields = ParcelIO.readStringList(in);
+        this.sortOrder = ParcelIO.readSortOrder(in);
+
+        this.mood = ParcelIO.readInteger(in);
+        this.context = ParcelIO.readInteger(in);
+
+        this.termAggregationFields = ParcelIO.readStringList(in);
+    }
+
+    // For Parcelable
+    // Write the fields:
+    // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android/6923794#6923794
+    // Accessed January 29, 2017
+    /**
+     * Write this SearchFilter's fields to the given Parcel
+     *
+     * @param out the Parcel to write to
+     */
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+
+        out.writeStringList(this.keywords);
+        out.writeStringList(this.keywordFields);
+
+        ParcelIO.writeFieldValues(out, this.fieldValues);
+
+        if (this.fieldValueRanges == null)
+            out.writeParcelableArray(null, 0);
+
+        else
+            out.writeParcelableArray((FieldValues[]) this.fieldValueRanges.toArray(), 0);
+
+        ParcelIO.writeInteger(out, this.maxTimeUnitsAgo);
+        out.writeString(this.timeUnits);
+        out.writeString(this.dateField);
+
+        ParcelIO.writeDouble(out, this.maxDistance);
+        ParcelIO.writeLocation(out, this.location);
+        out.writeString(this.distanceUnits);
+        out.writeString(this.locationField);
+
+        out.writeStringList(this.sortByFields);
+        ParcelIO.writeSortOrder(out, this.sortOrder);
+
+        ParcelIO.writeInteger(out, this.mood);
+        ParcelIO.writeInteger(out, this.context);
+
+        out.writeStringList(this.termAggregationFields);
+    }
+
+    /** Words that the fields in {@link #keywordFields} should contain. */
     private ArrayList<String> keywords;
+    /** Fields that should contain the words in {@link #keywords}. */
     private ArrayList<String> keywordFields;
 
+    /** Restrict certain fields to exact values. */
     private ArrayList<FieldValue> fieldValues;
+    /** Restrict certain fields to a range of possible values. */
+    private ArrayList<FieldValues> fieldValueRanges;
 
+    /** The maximum number of {@link #timeUnits} ago a result can be dated at. */
     private Integer maxTimeUnitsAgo;
+    /** The units of time to use (eg. "w" for weeks). */
     private String timeUnits = "w";
+    /** The field to determine an object's date by. */
     private String dateField = "dateString";
 
+    /** The maximum distance a result can be from {@link #location}. */
     private Double maxDistance;
+    /** The location to measure distance from. */
     private SimpleLocation location;
+    /** The units of distance to use (eg. "km") */
     private String distanceUnits = "km";
-    private String locationField = "location";
+    /** The field that contains the object's distance. */
+    private String locationField = "geoPoint";
 
+    /** The fields to sort results by. */
     private ArrayList<String> sortByFields;
+    /** The order to sort results in. */
     private SortOrder sortOrder = SortOrder.Descending;
 
+    private ArrayList<String> termAggregationFields;
+
+    /**
+     * The mood results must have.
+     *
+     * @see Post
+     */
     private Integer mood;
+    /**
+     * The social context results must have.
+     *
+     * @see Post
+     */
     private Integer context;
 
-    private Double lat;
-    private Double lo;
-
-    // Results must not have an empty list for any of these fields
-    private ArrayList<String> nonEmptyFields;
-
+    // TODO: 2017-03-30 Maybe just check if a SearchFilter is null instead of having this method.
+    /** Return whether any restrictions are set on this SearchFilter. */
     public boolean hasRestrictions() {
 
         return !NullTools.allNullOrEmpty(this.keywords, this.fieldValues, this.maxTimeUnitsAgo,
-                this.maxDistance, nonEmptyFields);
+                this.maxDistance, this.sortByFields, this.mood, this.context,
+                this.termAggregationFields, this.fieldValueRanges);
+    }
+
+    /**
+     * Add the given field name to {@link #keywordFields}.
+     *
+     * @param field the field to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addKeywordField(String field) {
+
+        if (this.keywordFields == null)
+            this.keywordFields = new ArrayList<String>();
+
+        this.keywordFields.add(field);
+        return this;
+    }
+
+    /**
+     * Add the given keyword to {@link #keywords}.
+     *
+     * @param keyword the keyword to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addKeyword(String keyword) {
+
+        if (this.keywords == null)
+            this.keywords = new ArrayList<String>();
+
+        this.keywords.add(keyword);
+        return this;
+    }
+
+    /**
+     * Remove the given field name from termAggregationFields.
+     *
+     * @param fieldName the field name to remove
+     */
+    public void removeTermAggregation(String fieldName) {
+
+        this.termAggregationFields.remove(fieldName);
+    }
+
+    /** Return whether this SearchFilter has term aggregation fields. */
+    public boolean hasTermAggregations() {
+
+        return !NullTools.allNullOrEmpty(this.termAggregationFields);
+    }
+
+    /**
+     * Add the given field to {@link #termAggregationFields}.
+     *
+     * @param fieldName the field to add
+     * @return this SearchFilter
+     */
+    public SearchFilter addTermAggregation(String fieldName) {
+
+        if (this.termAggregationFields == null)
+            this.termAggregationFields = new ArrayList<String>();
+
+        this.termAggregationFields.add(fieldName);
+        return this;
+    }
+
+    public ArrayList<String> getTermAggregationFields() {
+
+        return this.termAggregationFields;
+    }
+
+    public SearchFilter setTermAggregationFields(ArrayList<String> termAggregationFields) {
+
+        this.termAggregationFields = termAggregationFields;
+        return this;
     }
 
     public boolean hasContext() {
@@ -46,7 +262,7 @@ public class SearchFilter {
         return this.context != null;
     }
 
-    public int getContext() {
+    public Integer getContext() {
 
         return this.context;
     }
@@ -62,7 +278,7 @@ public class SearchFilter {
         return this.mood != null;
     }
 
-    public int getMood() {
+    public Integer getMood() {
 
         return this.mood;
     }
@@ -73,6 +289,11 @@ public class SearchFilter {
         return this;
     }
 
+    /**
+     * Make this SearchFilter sort by date (making certain assumptions about how date is stored).
+     *
+     * @return this SearchFilter
+     */
     public SearchFilter sortByDate() {
 
         ArrayList<String> dateFields = new ArrayList<String>();
@@ -117,11 +338,6 @@ public class SearchFilter {
         return this;
     }
 
-    public boolean hasNonEmptyFields() {
-
-        return !NullTools.allNullOrEmpty(this.nonEmptyFields);
-    }
-
     public boolean hasKeywords() {
 
         return !NullTools.allNullOrEmpty(this.keywords);
@@ -137,17 +353,6 @@ public class SearchFilter {
         return !NullTools.allNullOrEmpty(this.maxDistance);
     }
 
-    public ArrayList<String> getNonEmptyFields() {
-
-        return this.nonEmptyFields;
-    }
-
-    public SearchFilter setNonEmptyFields(ArrayList<String> fields) {
-
-        this.nonEmptyFields = fields;
-        return this;
-    }
-
     public ArrayList<String> getKeywords() {
         
         return this.keywords;
@@ -159,6 +364,34 @@ public class SearchFilter {
         return this;
     }
 
+    /**
+     * Remove the {@link FieldValue} with the given field name (if it exists).
+     *
+     * @param field the field name of the field value to remove
+     */
+    public void removeFieldValue(String field) {
+
+        if (this.fieldValues == null) return;
+
+        FieldValue fieldValue;
+
+        for (int i = 0; i < this.fieldValues.size(); i++) {
+
+            fieldValue = this.fieldValues.get(i);
+
+            if (fieldValue.getFieldName() == field) {
+                this.fieldValues.remove(i);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Add a {@link FieldValue} to {@link #fieldValues}.
+     *
+     * @param fieldValue the {@link FieldValue} to add
+     * @return this SearchFilter
+     */
     public SearchFilter addFieldValue(FieldValue fieldValue) {
 
         if (this.fieldValues == null) {
@@ -166,16 +399,6 @@ public class SearchFilter {
         }
 
         this.fieldValues.add(fieldValue);
-        return this;
-    }
-
-    public SearchFilter addNonEmptyField(String field) {
-
-        if (this.nonEmptyFields == null) {
-            this.nonEmptyFields = new ArrayList<String>();
-        }
-
-        this.nonEmptyFields.add(field);
         return this;
     }
 
@@ -192,7 +415,31 @@ public class SearchFilter {
 
     public boolean hasFieldValues() {
 
-        return this.fieldValues != null;
+        return !NullTools.allNullOrEmpty(this.fieldValues);
+    }
+
+    public SearchFilter addFieldValueRange(FieldValues fieldValues) {
+
+        if (this.fieldValueRanges == null)
+            this.fieldValueRanges = new ArrayList<FieldValues>();
+
+        this.fieldValueRanges.add(fieldValues);
+        return this;
+    }
+
+    public ArrayList<FieldValues> getFieldValueRanges() {
+
+        return this.fieldValueRanges;
+    }
+
+    public void setFieldValueRanges(ArrayList<FieldValues> fieldValueRanges) {
+
+        this.fieldValueRanges = fieldValueRanges;
+    }
+
+    public boolean hasFieldValueRanges() {
+
+        return !NullTools.allNullOrEmpty(this.fieldValueRanges);
     }
 
     public ArrayList<String> getKeywordFields() {
@@ -275,24 +522,6 @@ public class SearchFilter {
         
         return this.locationField;
     }
-
-    public Double getLat(){
-        return this.lat;
-    }
-
-    public Double getLo(){
-        return this.lo;
-    }
-    public SearchFilter setLat(){
-        this.lat = lat;
-        return this;
-    }
-
-    public SearchFilter setLo(){
-        this.lo = lo;
-        return this;
-    }
-
 
     public SearchFilter setLocationField(String locationField) {
         

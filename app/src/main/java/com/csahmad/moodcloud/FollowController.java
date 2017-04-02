@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-
 /**
  * Get {@link Follow} objects from elastic search or add/update {@link Follow} objects using
  * elasticsearch.
@@ -45,19 +42,19 @@ public class FollowController {
      *
      * @param follower the follower in the {@link Follow} relationship
      * @param followee the followee in the {@link Follow} relationship
-     * @return
+     * @return whether the given {@link Follow} relationship exists
      */
     public boolean followExists(Profile follower, Profile followee) {
         try {
             ArrayList<Follow> followers = getFollowers(followee, 0);
             for (int i=0; i<followers.size(); i++){
                 if (follower.equals(followers.get(i).getFollower())){
-                    return TRUE;
+                    return true;
                 }
             }
-            return FALSE;
+            return false;
         } catch (TimeoutException e){}
-        return FALSE;
+        return false;
     }
 
     /**
@@ -107,13 +104,13 @@ public class FollowController {
     }
 
     /**
-     * Return the {@link Follow} that has the given id.
+     * Return the {@link Follow} that has the given ID.
      *
      * <p>
-     * Return null if no {@link Follow} has the given id.
+     * Return null if no {@link Follow} has the given ID.
      *
-     * @param id the id of the desired {@link Follow}
-     * @return the {@link Follow} that has the given id
+     * @param id the ID of the desired {@link Follow}
+     * @return the {@link Follow} that has the given ID
      * @throws TimeoutException
      */
     public Follow getFollowFromID(String id) throws TimeoutException {
@@ -144,8 +141,8 @@ public class FollowController {
      * Add or update the given {@link Follow}s via elasticsearch.
      *
      * <p>
-     * If a {@link Follow} has a null {@link Follow#id}, add it. If a {@link Follow} has a
-     * non-null {@link Follow#id}, update it.
+     * If a {@link Follow} has a null ID, add it. If a {@link Follow} has a
+     * non-null ID, update it.
      *
      * @param follows the {@link Follow}s to add or update
      */

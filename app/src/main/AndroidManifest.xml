@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csahmad.moodcloud">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -68,10 +69,18 @@
         <activity
             android:name=".SearchMoods"
             android:label="@string/title_activity_search_moods"
-            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".TakePhotoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MoodGraphActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".TakePhotoActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".SelectDateActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

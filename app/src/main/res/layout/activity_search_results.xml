@@ -32,18 +32,28 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/resultList"
+        android:layout_above="@+id/maxMood"
         android:layout_centerHorizontal="true"
         android:text="Search Results"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/primary_text_dark" />
+
+
+    <TextView
+        android:id="@+id/maxMood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar2"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/resultList"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar2">
+        android:layout_below="@+id/maxMood">
 
     </android.support.v7.widget.RecyclerView>
 

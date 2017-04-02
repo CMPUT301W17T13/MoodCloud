@@ -1,146 +1,145 @@
 package com.csahmad.moodcloud;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-//import android.provider.MediaStore;
-<<<<<<< HEAD
-import android.location.Location;
-import android.location.LocationManager;
-=======
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
->>>>>>> aaron
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-//import android.support.v7.widget.Toolbar;
-//mwschafe commented out unused import statements
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
+
+import android.location.Location;
+import android.location.LocationManager;
+
+import org.w3c.dom.Text;
 
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
+
     private static final int TAKE_IMAGE_REQUEST = 0;
+    private static final int READ_LOCATION_REQUEST = 1;
+    private final static int REQUEST_GET_DATE = 3;
     private String image;
     private ImageView moodPhoto;
-    Uri imageFileUri;
+    private TextView dateString;
+    private Calendar date;
+    private Bundle setDate;
+    private int setDay;
+    private int setMonth;
+    private int setYear;
+
+
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        if (requestCode == TAKE_IMAGE_REQUEST){
+        if (requestCode == TAKE_IMAGE_REQUEST) {
 
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 this.image = intent.getStringExtra("IMAGE");
                 Bitmap bitmap = intent.getParcelableExtra("BITMAP");
                 this.moodPhoto.setImageBitmap(bitmap);
-            }
-            else if (resultCode == RESULT_CANCELED)
+            } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
         }
+
+        if (requestCode == REQUEST_GET_DATE){
+            if(resultCode == RESULT_OK){
+                setDate = intent.getBundleExtra("set_date");
+                setDay = setDate.getInt("day");
+                setMonth = setDate.getInt("month");
+                setYear = setDate.getInt("year");
+                this.date = DateConverter.toDate(setYear,setMonth,setDay);
+
+
+
+                dateString.setText(DateConverter.dateToString(date));
+
+
+                //System.out.println(setDay + " " + setMonth + " " + setYear);
+            }//else if (resultCode == RESULT_CANCELED)
+            //date = Calendar.getInstance();
+            //Toast.makeText(getApplicationContext(), "Use the current date", Toast.LENGTH_LONG).show();
+            //finish();
+
+
+        }
+    }
+
+    /** Request permission from the user to access location. */
+    public void requestLocationPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                READ_LOCATION_REQUEST);
+    }
+
+    /**
+     * Return whether this app currently has permission to access location.
+     *
+     * @return whether this app currently has permission to access location
+     */
+    public boolean haveLocationPermission() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED)
+
+            return false;
+
+        return true;
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
-<<<<<<< HEAD
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("POST_ID");
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        final double longitude = location.getLongitude();
-        final double latitude = location.getLatitude();
+        moodPhoto = (ImageView) findViewById(R.id.moodPhoto);
+        dateString = (TextView) findViewById(R.id.postDate);
 
-        try {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-            final EditText textExplanation = (EditText) findViewById(R.id.body);
-            final EditText textTrigger = (EditText) findViewById(R.id.trigger);
+        // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
 
-            final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
-            final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+            requestLocationPermission();
+        }
 
-            if (id == null) {
+        final double[] locationArray;
 
-                Button postButton = (Button) findViewById(R.id.postButton);
-                postButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                        Post post = new Post(textExplanation.getText().toString(),onRadioButtonClicked(moodButtons),
-                                textTrigger.getText().toString(),null,onStatusButtonClicked(statusButtons),
-                                profile.getId() ,null, Calendar.getInstance(), latitude, longitude);
-                        PostController postController = new PostController();
-                        postController.addOrUpdatePosts(post);
-                        ProfileController profileController = new ProfileController();
-                        profileController.addOrUpdateProfiles(profile);
+        //if (haveLocationPermission()) {
+         // Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+          //  double latitude = location.getLatitude();
+           // double longitude = location.getLongitude();
+           // double altitude = location.getAltitude();
+           // locationArray = new double[]{latitude, longitude, altitude};
+        //}
 
-                        //Context context = v.getContext();
-                        finish();
-                    }
-
-                });
-            } else{
-                final Post oldPost = postController.getPostFromId(id);
-                String oldExplannation = oldPost.getText();
-                String oldTrigger = oldPost.getTriggerText();
-                int oldmood = oldPost.getMood();
-                int oldcontext = oldPost.getContext();
-
-                textTrigger.setText(oldTrigger);
-                textExplanation.setText(oldExplannation);
-                moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
-                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
-                Button postButton = (Button) findViewById(R.id.postButton);
-                postButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        //Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                        oldPost.setMood(onRadioButtonClicked(moodButtons));
-                        oldPost.setContext(onStatusButtonClicked(statusButtons));
-                        oldPost.setText(textExplanation.getText().toString());
-                        oldPost.setTriggerText(textTrigger.getText().toString());
-                        oldPost.setDate(Calendar.getInstance());
-                        PostController postController = new PostController();
-                        postController.addOrUpdatePosts(oldPost);
-
-
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ViewPostActivity.class);
-
-                        intent.putExtra("POST_ID",oldPost.getId());
-                        startActivity(intent);
-
-                    }
-
-                });
-=======
-        moodPhoto = (ImageView)findViewById(R.id.moodPhoto);
+       // else
+         //locationArray = null;
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
@@ -155,10 +154,17 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
                 final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+                //final EditText latitudetext = (EditText) findViewById(R.id.latitude);
+                //final EditText longitudetext = (EditText) findViewById(R.id.longitude);
+                //final EditText altitudetext = (EditText)findViewById(R.id.altitude);
 
 
 
                 if (id == null) {
+                    dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
+                    //latitudetext.setText(Double.toString(locationArray[0]));
+                    //longitudetext.setText(Double.toString(locationArray[1]));
+                    //altitudetext.setText(Double.toString(locationArray[2]));
                     ImageButton photoButton = (ImageButton) findViewById(R.id.takephoto);
                     photoButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -168,6 +174,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             startActivityForResult(intent,TAKE_IMAGE_REQUEST);
                         }
                     });
+                    ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
+                    dateButton.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            Context context = view.getContext();
+                            Intent intent = new Intent(context, SelectDateActivity.class);
+                            startActivityForResult(intent,REQUEST_GET_DATE);
+                        }
+                    });
+
                     Button postButton = (Button) findViewById(R.id.postButton);
                     postButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -185,7 +201,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                                 Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
                                         textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
-                                        profile.getId(), null, Calendar.getInstance());
+                                        profile.getId(), null, date);
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(post);
                                 ProfileController profileController = new ProfileController();
@@ -198,6 +214,28 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                     });
                 } else {
+                    ImageButton photoButton = (ImageButton) findViewById(R.id.takephoto);
+                    photoButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent intent = new Intent(context, TakePhotoActivity.class);
+                            startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+                        }
+                    });
+                    ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
+                    dateButton.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            Context context = view.getContext();
+                            Intent intent = new Intent(context, SelectDateActivity.class);
+                            startActivityForResult(intent,REQUEST_GET_DATE);
+                            //if (!(date == null)){
+                                //dateString.setText(date.toString());
+                            //}
+
+                        }
+                    });
 
                     final Post oldPost = postController.getPostFromId(id);
                     this.moodPhoto.setImageBitmap(ImageConverter.toBitmap(oldPost.getTriggerImage()));
@@ -205,11 +243,24 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     String oldTrigger = oldPost.getTriggerText();
                     int oldmood = oldPost.getMood();
                     int oldcontext = oldPost.getContext();
+                    Calendar olddate = oldPost.getDate();
+                    //double[] oldlocationArray = oldPost.getLocation();
+                    //String oldLatitude = Double.toString(oldlocationArray[0]);
+                    //String oldLongitude = Double.toString(oldlocationArray[1]);
+                    //String oldAltitude = Double.toString(oldlocationArray[2]);
+
 
                     textTrigger.setText(oldTrigger);
                     textExplanation.setText(oldExplannation);
                     moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
                     statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+                    dateString.setText(DateConverter.dateToString(olddate));
+                    //latitudetext.setText(oldLatitude);
+                    //altitudetext.setText(oldAltitude);
+                    //longitudetext.setText(oldLongitude);
+
+
+
                     Button postButton = (Button) findViewById(R.id.postButton);
                     postButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -227,8 +278,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 oldPost.setContext(onStatusButtonClicked(statusButtons));
                                 oldPost.setText(textExplanation.getText().toString());
                                 oldPost.setTriggerText(textTrigger.getText().toString());
-                                oldPost.setTriggerImage(image);
-                                oldPost.setDate(Calendar.getInstance());
+                                if (image != null)
+                                    oldPost.setTriggerImage(image);
+                                if (date != null)
+                                oldPost.setDate(date);
+
 
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(oldPost);
@@ -250,7 +304,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
             } catch (TimeoutException e) {
                 e.printStackTrace();
->>>>>>> aaron
             }
         }//else{
 

@@ -11,13 +11,11 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-<TextView
-    android:id="@+id/followerName"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    android:layout_alignParentTop="true"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+    <TextView
+        android:id="@+id/followerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
 </RelativeLayout>

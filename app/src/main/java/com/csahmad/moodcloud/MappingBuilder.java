@@ -30,9 +30,6 @@ public class MappingBuilder {
         }
 
         mapping += "}\n}";
-
-        Log.i("Mapping", "Mapping: " + mapping);
-
         return mapping;
     }
 }
