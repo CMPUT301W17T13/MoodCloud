@@ -3,6 +3,8 @@ package com.csahmad.moodcloud;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +42,20 @@ public class SelectDateActivity extends AppCompatActivity {
     protected Dialog onCreateDialog(int id){
         switch(id){
             case DIALOG_DATE_PICKER:
-                return new DatePickerDialog(this, mDateSetListener, setYear, setMonth, setDay);
+
+                final Activity context = this;
+
+                DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, setYear, setMonth, setDay);
+
+                dialog.setOnDismissListener(new DatePickerDialog.OnDismissListener(){
+
+                @Override
+                public void onDismiss(final DialogInterface arg0){
+                    context.finish();
+                }
+            });
+
+                return dialog;
         }
         return null;
     }
@@ -54,6 +69,8 @@ public class SelectDateActivity extends AppCompatActivity {
             returnDate();
         }
     };
+
+
 
 
     /*
