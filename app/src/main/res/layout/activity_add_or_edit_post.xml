@@ -297,6 +297,7 @@
         android:layout_height="30dp"
         android:background="@color/colorPrimary"
         android:hint="Post"
+        android:onClick="onPostClick"
 
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"/>

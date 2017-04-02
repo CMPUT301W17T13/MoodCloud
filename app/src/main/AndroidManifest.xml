@@ -74,7 +74,13 @@
         <activity
             android:name=".TakePhotoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MoodGraphActivity"></activity>
+        <activity
+            android:name=".MoodGraphActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SelectDateActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

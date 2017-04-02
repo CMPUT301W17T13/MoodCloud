@@ -21,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 
@@ -78,9 +79,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 //System.out.println(setDay + " " + setMonth + " " + setYear);
             }//else if (resultCode == RESULT_CANCELED)
-               //date = Calendar.getInstance();
-                //Toast.makeText(getApplicationContext(), "Use the current date", Toast.LENGTH_LONG).show();
-                //finish();
+            //date = Calendar.getInstance();
+            //Toast.makeText(getApplicationContext(), "Use the current date", Toast.LENGTH_LONG).show();
+            //finish();
 
 
         }
@@ -129,16 +130,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
         final double[] locationArray;
 
-        if (haveLocationPermission()) {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            double altitude = location.getAltitude();
-            locationArray = new double[]{latitude, longitude, altitude};
-        }
+        //if (haveLocationPermission()) {
+         // Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+          //  double latitude = location.getLatitude();
+           // double longitude = location.getLongitude();
+           // double altitude = location.getAltitude();
+           // locationArray = new double[]{latitude, longitude, altitude};
+        //}
 
-        else
-            locationArray = null;
+       // else
+         //locationArray = null;
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
@@ -200,7 +201,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                                 Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
                                         textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
-                                        profile.getId(), locationArray, date);
+                                        profile.getId(), null, date);
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(post);
                                 ProfileController profileController = new ProfileController();
@@ -229,9 +230,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Context context = view.getContext();
                             Intent intent = new Intent(context, SelectDateActivity.class);
                             startActivityForResult(intent,REQUEST_GET_DATE);
-                            if (!(date == null)){
-                                dateString.setText(date.toString());
-                            }
+                            //if (!(date == null)){
+                                //dateString.setText(date.toString());
+                            //}
 
                         }
                     });
@@ -277,7 +278,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 oldPost.setContext(onStatusButtonClicked(statusButtons));
                                 oldPost.setText(textExplanation.getText().toString());
                                 oldPost.setTriggerText(textTrigger.getText().toString());
-                                oldPost.setTriggerImage(image);
+                                if (image != null)
+                                    oldPost.setTriggerImage(image);
+                                if (date != null)
                                 oldPost.setDate(date);
 
 
