@@ -335,8 +335,8 @@
         android:id="@+id/moodRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/delimage"
         android:orientation="vertical"
+        android:layout_below="@+id/delimage"
         android:layout_alignParentEnd="true">
 
         <RadioButton

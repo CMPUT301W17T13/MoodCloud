@@ -28,6 +28,8 @@ import java.util.concurrent.TimeoutException;
 
 import android.location.LocationManager;
 
+import org.apache.commons.lang3.StringUtils;
+
 //import static com.csahmad.moodcloud.R.id.angry_selected;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
@@ -167,7 +169,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     //longitudetext.setText(Double.toString(locationArray[1]));
                     //altitudetext.setText(Double.toString(locationArray[2]));
 
-                    moodButtons.setOnClickListener(new View.OnClickListener() {
+                    moodPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
@@ -190,6 +192,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         public void onClick(View view){
                             moodPhoto.setImageDrawable(defaultImage);
                             deletePhoto.setVisibility(View.INVISIBLE);
+                            image = null;
                         }
                     });
 
@@ -202,17 +205,19 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
                             } else if (onRadioButtonClicked(moodButtons) == 8) {
                                 Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
-                            } else if (textTrigger.getText().toString().equals("")) {
+                            } else if (textTrigger.getText().toString().equals("") && (image == null)) {
                                 Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
-                            } else if (onStatusButtonClicked(statusButtons) == 4) {
+                            }
+                            else if (onStatusButtonClicked(statusButtons) == 4) {
                                 Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
                             } else {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                                 if (date == null){
                                     date = Calendar.getInstance();
                                 }
-                                Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
-                                        textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
+
+                                Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
+                                        textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
                                         profile.getId(), null, date);
                                 PostController postController = new PostController();
                                 postController.addOrUpdatePosts(post);
@@ -251,6 +256,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         public void onClick(View view){
                             moodPhoto.setImageDrawable(defaultImage);
                             deletePhoto.setVisibility(View.INVISIBLE);
+                            image = null;
                         }
                     });
 
@@ -260,6 +266,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         Bitmap bitmap = ImageConverter.toBitmap(oldPost.getTriggerImage());
                         this.moodPhoto.setImageBitmap(bitmap);
                         deletePhoto.setVisibility(View.VISIBLE);
+                        image = oldPost.getTriggerImage();
                     }
 
                     String oldExplannation = oldPost.getText();
@@ -292,15 +299,15 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
                             } else if (onRadioButtonClicked(moodButtons) == 8) {
                                 Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
-                            } else if (textTrigger.getText().toString().equals("")) {
+                            } else if (textTrigger.getText().toString().equals("") && image == null) {
                                 Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
                             } else if (onStatusButtonClicked(statusButtons) == 4) {
                                 Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
                             } else {
                                 oldPost.setMood(onRadioButtonClicked(moodButtons));
                                 oldPost.setContext(onStatusButtonClicked(statusButtons));
-                                oldPost.setText(textExplanation.getText().toString());
-                                oldPost.setTriggerText(textTrigger.getText().toString());
+                                oldPost.setText(textExplanation.getText().toString().replace("\\s+$", ""));
+                                oldPost.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
                                 oldPost.setTriggerImage(image);
                                 if (date != null)
                                 oldPost.setDate(date);

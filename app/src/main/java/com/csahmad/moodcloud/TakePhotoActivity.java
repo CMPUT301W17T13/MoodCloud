@@ -104,11 +104,11 @@ public class TakePhotoActivity extends Activity {
                 //finish();
 
             }
-            else
-            if (resultCode == RESULT_CANCELED)
-                Toast.makeText(getApplicationContext(), "Photo was cancelled !", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
+            //else
+            //if (resultCode == RESULT_CANCELED)
+                //Toast.makeText(getApplicationContext(), "Photo was cancelled !", Toast.LENGTH_LONG).show();
+            //else
+                //Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
         }
     }
 
