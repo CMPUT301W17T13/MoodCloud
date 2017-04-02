@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import static java.lang.Boolean.FALSE;
@@ -114,6 +116,8 @@ public class SearchMoods extends AppCompatActivity {
         topAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         topSpinner.setAdapter(topAdapter);
 
+        final Button graphButton = (Button) findViewById(R.id.button3);
+
         final Spinner moodSpinner = (Spinner) findViewById(R.id.spinner2);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> moodAdapter = ArrayAdapter.createFromResource(this,
@@ -122,7 +126,21 @@ public class SearchMoods extends AppCompatActivity {
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         moodSpinner.setAdapter(moodAdapter);
+        moodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    graphButton.setVisibility(View.VISIBLE);
+                } else {
+                    graphButton.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+                // sometimes you need nothing here
+            }
+        });
         final Spinner contextSpinner = (Spinner) findViewById(R.id.spinner3);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> contextAdapter = ArrayAdapter.createFromResource(this,
@@ -136,6 +154,80 @@ public class SearchMoods extends AppCompatActivity {
         Button mapButton = (Button) findViewById(R.id.button2);
 
         final SearchMoods context = this;
+
+        String moodString = (String) moodSpinner.getSelectedItem();
+        if (!moodString.equals("Any")) {
+            graphButton.setVisibility(View.GONE);
+        }
+
+        graphButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keywordString = findText.getText().toString().trim();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+                context.filter = filter;
+
+                if (!keywordString.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any")) {
+                    filter.setMood(Mood.fromString(moodString));
+                }
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, MoodGraphActivity.class);
+
+                if (recent == TRUE) {
+                    filter.setMaxTimeUnitsAgo(1);
+                }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
+
+                PostController postController = new PostController();
+                HashMap<Integer, Long> moodCounts;
+                try {
+                    if (where.equals("Following")) {
+                        moodCounts = postController.getFolloweeMoodCounts(
+                                filter, LocalData.getSignedInProfile(getApplicationContext()));
+                    } else {
+                        if (where.equals("My Moods")) {
+                            moodCounts = postController.getMoodCounts(filter,
+                                    LocalData.getSignedInProfile(getApplicationContext()));
+                        } else {
+                            moodCounts = postController.getMoodCounts(filter);
+                        }
+                    }
+                    intent.putExtra("ANGRY_COUNT",moodCounts.get(0));
+                    intent.putExtra("CONFUSED_COUNT",moodCounts.get(1));
+                    intent.putExtra("DISGUSTED_COUNT",moodCounts.get(2));
+                    intent.putExtra("SCARED_COUNT",moodCounts.get(3));
+                    intent.putExtra("HAPPY_COUNT",moodCounts.get(4));
+                    intent.putExtra("SAD_COUNT",moodCounts.get(5));
+                    intent.putExtra("ASHAMED_COUNT",moodCounts.get(6));
+                    intent.putExtra("SURPRISED_COUNT",moodCounts.get(7));
+                }catch (TimeoutException e) {}
+                startActivity(intent);
+            }
+        });
 
         mapButton.setOnClickListener(new View.OnClickListener() {
 
@@ -156,8 +248,9 @@ public class SearchMoods extends AppCompatActivity {
                     for (String keyword: keywords) filter.addKeyword(keyword);
                 }
 
-                if (!moodString.equals("Any"))
+                if (!moodString.equals("Any")) {
                     filter.setMood(Mood.fromString(moodString));
+                }
 
                 if (!contextString.equals("Any")) {
                     filter.setContext(SocialContext.fromString(contextString));

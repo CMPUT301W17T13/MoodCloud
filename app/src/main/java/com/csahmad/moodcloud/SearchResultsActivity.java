@@ -55,8 +55,19 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         PostController postController = new PostController();
         TextView maxMood = (TextView) findViewById(R.id.maxMood);
+        HashMap<Integer, Long> moodCounts;
         try {
-            HashMap<Integer, Long> moodCounts = postController.getMoodCounts(filter);
+            if (where.equals("Following")){
+                moodCounts = postController.getFolloweeMoodCounts(
+                        filter, LocalData.getSignedInProfile(getApplicationContext()));
+            } else {
+                if (where.equals("My Moods")) {
+                    moodCounts = postController.getMoodCounts(filter,
+                            LocalData.getSignedInProfile(getApplicationContext()));
+                } else {
+                    moodCounts = postController.getMoodCounts(filter);
+                }
+            }
             if (filter.hasMood() == FALSE) {
                 Long maxCount = (Collections.max(moodCounts.values()));
                 for (Map.Entry<Integer, Long> entry : moodCounts.entrySet()) {
