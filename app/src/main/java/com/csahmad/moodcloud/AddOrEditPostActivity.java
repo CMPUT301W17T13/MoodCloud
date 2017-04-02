@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.ContactsContract;
@@ -36,6 +37,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private static final int READ_LOCATION_REQUEST = 1;
     private final static int REQUEST_GET_DATE = 3;
     private String image;
+    private Drawable defaultImage;
     private ImageButton moodPhoto;
     private TextView dateString;
     private Calendar date;
@@ -53,10 +55,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         if (requestCode == TAKE_IMAGE_REQUEST) {
 
             if (resultCode == RESULT_OK) {
-                this.image = intent.getStringExtra("IMAGE");
-                Bitmap bitmap = intent.getParcelableExtra("BITMAP");
-                this.moodPhoto.setImageBitmap(bitmap);
-                deletePhoto.setVisibility(View.VISIBLE);
+
+                String cameraImage = intent.getStringExtra("IMAGE");
+
+                if (cameraImage != null) {
+                    this.image = cameraImage;
+                    Bitmap bitmap = intent.getParcelableExtra("BITMAP");
+                    this.moodPhoto.setImageBitmap(bitmap);
+                    deletePhoto.setVisibility(View.VISIBLE);
+                }
+
             } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
             else
@@ -71,17 +79,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 setYear = setDate.getInt("year");
                 this.date = DateConverter.toDate(setYear,setMonth,setDay);
 
-
-
                 dateString.setText(DateConverter.dateToString(date));
 
-
-                //System.out.println(setDay + " " + setMonth + " " + setYear);
-            }//else if (resultCode == RESULT_CANCELED)
-            //date = Calendar.getInstance();
-            //Toast.makeText(getApplicationContext(), "Use the current date", Toast.LENGTH_LONG).show();
-            //finish();
-
+            }
 
         }
     }
@@ -116,6 +116,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_or_edit_post);
         PostController postController = new PostController();
         moodPhoto = (ImageButton) findViewById(R.id.moodPhoto);
+        defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);
         deletePhoto = (ImageButton) findViewById(R.id.delimage);
 
@@ -187,7 +188,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     deletePhoto.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view){
-                            moodPhoto.setImageBitmap(null);
+                            moodPhoto.setImageDrawable(defaultImage);
                             deletePhoto.setVisibility(View.INVISIBLE);
                         }
                     });
@@ -207,6 +208,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
                             } else {
                                 Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                                if (date == null){
+                                    date = Calendar.getInstance();
+                                }
                                 Post post = new Post(textExplanation.getText().toString(), onRadioButtonClicked(moodButtons),
                                         textTrigger.getText().toString(), image, onStatusButtonClicked(statusButtons),
                                         profile.getId(), null, date);
@@ -245,7 +249,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     deletePhoto.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view){
-                            moodPhoto.setImageBitmap(null);
+                            moodPhoto.setImageDrawable(defaultImage);
                             deletePhoto.setVisibility(View.INVISIBLE);
                         }
                     });
@@ -297,8 +301,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 oldPost.setContext(onStatusButtonClicked(statusButtons));
                                 oldPost.setText(textExplanation.getText().toString());
                                 oldPost.setTriggerText(textTrigger.getText().toString());
-                                if (image != null)
-                                    oldPost.setTriggerImage(image);
+                                oldPost.setTriggerImage(image);
                                 if (date != null)
                                 oldPost.setDate(date);
 

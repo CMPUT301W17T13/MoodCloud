@@ -42,7 +42,7 @@
         android:id="@+id/moodPhoto"
         android:layout_width="100dp"
         android:layout_height="99dp"
-        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:src="@android:drawable/ic_menu_camera"
         android:scaleType="fitCenter"
         android:layout_below="@+id/body"
         android:layout_alignParentLeft="true"/>
