@@ -135,7 +135,7 @@ public class QueryBuilder {
             throw new IllegalArgumentException("Cannot pass null value.");
 
         return "\"" + field + "\": {\n" +
-                "\"terms\": {" + "\"field\": \"" + field + "\", \"size\": " + resultSize + "},\n" +
+                "\"terms\": {" + "\"field\": \"" + field + "\", \"size\": " + resultSize + "}\n" +
                 "}";
     }
 
