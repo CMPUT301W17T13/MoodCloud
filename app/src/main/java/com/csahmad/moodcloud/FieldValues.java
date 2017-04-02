@@ -89,10 +89,6 @@ public class FieldValues implements Parcelable {
             throw new IllegalArgumentException("Cannot pass null values.");
 
         this.fieldName = fieldName;
-
-        for (int i = 0; i < values.size(); i++)
-            values.set(i, "\"" + values.get(i) + "\"");
-
         this.values = values;
     }
 

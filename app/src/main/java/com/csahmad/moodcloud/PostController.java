@@ -174,11 +174,8 @@ public class PostController {
         if (filter == null)
             filter = new SearchFilter();
 
-        filter.addFieldValueRange(new FieldValues("followeeId", followeeIds));
+        filter.addFieldValueRange(new FieldValues("posterId", followeeIds));
         return this.getPosts(filter, from);
-
-        //ProfileController controller = new ProfileController();
-        //return this.getLatestPosts(controller.getFollowees(follower, from), filter);
     }
 
     /**
