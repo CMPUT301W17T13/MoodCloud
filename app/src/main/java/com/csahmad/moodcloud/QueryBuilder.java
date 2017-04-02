@@ -1,8 +1,6 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /** Build query strings to be used in elasticsearch queries. */
@@ -23,9 +21,9 @@ public class QueryBuilder {
         int objectResultSize = resultSize;
         if (hasTermAggregations) objectResultSize = 0;
 
-        String query = "{\n\"from\": " + Integer.toString(from) + ",\n";
-        query += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
-        query += "\"query\": {\n";
+        String query;
+        String startQuery = "{\n\"from\": " + Integer.toString(from) + ",\n";
+        startQuery += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
 
         ArrayList<String> components = new ArrayList<String>();
 
@@ -49,6 +47,9 @@ public class QueryBuilder {
             components.add(QueryBuilder.buildExactFieldValues(fieldValues));
         }
 
+        if (filter.hasFieldValueRanges())
+            components.add(QueryBuilder.buildFieldValueRanges(filter.getFieldValueRanges()));
+
         if (filter.hasTimeUnitsAgo())
             components.add(
                     QueryBuilder.buildSinceDate(filter.getMaxTimeUnitsAgo(), filter.getTimeUnits(),
@@ -57,42 +58,40 @@ public class QueryBuilder {
         String joined = TextUtils.join("},\n{", components);
 
         if (!joined.equals("")) {
-            query += "\"bool\": {\n" +
+            query = "\"query\": {\n" +
+                "\"bool\": {\n" +
                 "\"must\": [\n" +
                 "{\n" +
                 joined + "\n" +
                 "}\n" +
                 "]\n" +
+                "}\n" +
                 "}";
+            components.clear();
+            components.add(query);
         }
 
-        query += "\n}";
+        else
+            components.clear();
 
         if (filter.hasMaxDistance()) {
-            query += ",\n";
-            query += QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
+            query = QueryBuilder.buildGeoDistance(filter.getLocation(), filter.getMaxDistance(),
                     filter.getLocationField(), filter.getDistanceUnits());
+            components.add(query);
         }
 
-        if (filter.hasNonEmptyFields()) {
-            query += ",\n";
-            query += QueryBuilder.buildNonEmptyFields(filter.getNonEmptyFields());
-        }
-
-        if (filter.hasSortByFields()) {
-            query += ",\n";
-            query += QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
+        if (filter.hasSortByFields() && objectResultSize > 0) {
+            query = QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
+            components.add(query);
         }
 
         if (hasTermAggregations) {
-            query += ",\n";
-            query += QueryBuilder.buildTermAggregations(filter.getTermAggregationFields(),
+            query = QueryBuilder.buildTermAggregations(filter.getTermAggregationFields(),
                     resultSize);
+            components.add(query);
         }
 
-        query += "\n}";
-        // TODO: 2017-03-30 Gross
-        return query.replace("\"query\": {\n\n},", "");
+        return startQuery + TextUtils.join(",\n", components) + "\n}";
     }
 
     /**
@@ -132,7 +131,7 @@ public class QueryBuilder {
             throw new IllegalArgumentException("Cannot pass null value.");
 
         return "\"" + field + "\": {\n" +
-                "\"terms\": {" + "\"field\": \"" + field + "\", \"size\": " + resultSize + "},\n" +
+                "\"terms\": {" + "\"field\": \"" + field + "\", \"size\": " + resultSize + "}\n" +
                 "}";
     }
 
@@ -180,30 +179,27 @@ public class QueryBuilder {
     }
 
     /**
-     * Return a portion of a query indicating that the given fields should not be empty in the
-     * returned objects.
+     * Return a portion of a query indicating that certain fields should have any of a list of
+     * values.
      *
-     * @param fields the fields that should not be empty
-     * @return a portion of a query indicating that the given fields should not be empty in the
-     * returned objects
+     * @param ranges a list of field: [values] restrictions
+     * @return a portion of a query indicating that certain fields should have any of a list of
+     *  values
      */
-    public static String buildNonEmptyFields(ArrayList<String> fields) {
+    public static String buildFieldValueRanges(ArrayList<FieldValues> ranges) {
 
-        if (fields == null)
+        if (ranges == null)
             throw new IllegalArgumentException("Cannot pass null value.");
 
-        String query = "\"filter\": {" +
-                "\"exists\": {";
+        ArrayList<String> rangeStrings = new ArrayList<String>();
+        String rangeString;
 
-        int lastIndex = fields.size() - 1;
-
-        for (int i = 0; i < fields.size(); i++) {
-            query += "\"field\": \"" + fields.get(i) + "\"";
-            if (i < lastIndex) query += ", ";
+        for (FieldValues range: ranges) {
+            rangeString = QueryBuilder.buildFieldRange(range.getFieldName(), range.getValues());
+            rangeStrings.add(rangeString);
         }
 
-        query += "}\n}";
-        return query;
+        return TextUtils.join("},\n{", rangeStrings);
     }
 
     /**
@@ -232,21 +228,38 @@ public class QueryBuilder {
     }
 
     /**
+     * Return a portion of a query indicating that the given field should have any of the given
+     * values.
+     *
+     * @param field the field to restrict the value of
+     * @param values the values the given field can be
+     * @return a portion of a query indicating that the given field should have any of the given
+     *  values
+     */
+    private static String buildFieldRange(String field, ArrayList<String> values) {
+
+        if (field == null || values == null)
+            throw new IllegalArgumentException("Cannot pass null values.");
+
+        return "\"terms\": {\n" +
+                "\"" + field + "\": " + QueryBuilder.buildStringList(values) + "\n" +
+                "}";
+    }
+
+    /**
      * Return a portion of a query indicating that the given field should have the given value.
      *
      * @param field the field to restrict the value of
      * @param value the value the given field should be
      * @return a portion of a query indicating that the given field should have the given value
      */
-    private static String buildExactFieldValue(String field, Object value) {
+    private static String buildExactFieldValue(String field, String value) {
 
         if (field == null || value == null)
             throw new IllegalArgumentException("Cannot pass null values.");
 
-        String stringValue = value.toString();
-
         return "\"term\": {\n" +
-                "\"" + field + "\": " + stringValue + "\n" +
+                "\"" + field + "\": " + value + "\n" +
                 "}";
     }
 

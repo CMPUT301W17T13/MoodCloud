@@ -4,17 +4,19 @@ import android.os.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Read/write values from/to a {@link Parcel}. */
+// TODO: 2017-04-01 Instead of using/having some of the methods here, make some objects Parcelable
+
+/** Read/write values from/to a Parcel. */
 public class ParcelIO {
 
     /**
-     * What to replace null values with when writing {@link Integer}s to {@link Parcel} (and what to
-     * interpret as null values when reading {@link int}s from {@link Parcel}).
+     * What to replace null values with when writing Integers to Parcel (and what to
+     * interpret as null values when reading ints from Parcel).
      */
     private static int nullIntParcelValue = -1;
     /**
-     * What to replace null values with when writing {@link Double}s to {@link Parcel} (and what to
-     * interpret as null values when reading {@link double}s from {@link Parcel}).
+     * What to replace null values with when writing Doubles to Parcel (and what to
+     * interpret as null values when reading doubles from Parcel).
      */
     private static double nullDoubleParcelValue = -200.0d;
 
@@ -35,10 +37,10 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return a {@link GeoPoint} from the given {@link Parcel}.
+     * Read and return a {@link GeoPoint} from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link GeoPoint} read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the {@link GeoPoint} read from the given Parcel
      */
     public static GeoPoint readGeoPoint(Parcel in) {
 
@@ -49,9 +51,9 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link GeoPoint} to the given {@link Parcel}.
+     * Write the given {@link GeoPoint} to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      * @param geoPoint the {@link GeoPoint} to write
      */
     public static void writeGeoPoint(Parcel out, GeoPoint geoPoint) {
@@ -68,9 +70,9 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link SortOrder} value to the given {@link Parcel}.
+     * Write the given {@link SortOrder} value to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      * @param sortOrder the {@link SortOrder} value to write
      */
     public static void writeSortOrder(Parcel out, SortOrder sortOrder) {
@@ -97,10 +99,10 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return a {@link SortOrder} value from the given {@link Parcel}.
+     * Read and return a {@link SortOrder} value from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link SortOrder} value read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the {@link SortOrder} value read from the given Parcel
      */
     public static SortOrder readSortOrder(Parcel in) {
 
@@ -121,9 +123,9 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link SimpleLocation} to the given {@link Parcel}.
+     * Write the given {@link SimpleLocation} to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      * @param location the {@link SimpleLocation} to write
      */
     public static void writeLocation(Parcel out, SimpleLocation location) {
@@ -142,10 +144,10 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return a {@link SimpleLocation} value from the given {@link Parcel}.
+     * Read and return a {@link SimpleLocation} value from the given Parcel.
      *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link SimpleLocation} read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the {@link SimpleLocation} read from the given Parcel
      */
     public static SimpleLocation readLocation(Parcel in) {
 
@@ -160,10 +162,10 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link Integer} to the given {@link Parcel}.
+     * Write the given Integer to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
-     * @param integer the {@link Integer} to write
+     * @param out the Parcel to write to
+     * @param integer the Integer to write
      */
     public static void writeInteger(Parcel out, Integer integer) {
 
@@ -175,13 +177,13 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an {@link Integer} value from the given {@link Parcel}.
+     * Read and return an Integer value from the given Parcel.
      *
      * <p>
-     * If the read integer equals {@link #nullIntParcelValue}, return null.
+     * If the read integer equals nullIntParcelValue, return null.
      *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link Integer} read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the Integer read from the given Parcel
      */
     public static Integer readInteger(Parcel in) {
 
@@ -191,10 +193,10 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link Double} to the given {@link Parcel}.
+     * Write the given Double to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
-     * @param doubleValue the {@link Double} to write
+     * @param out the Parcel to write to
+     * @param doubleValue the Double to write
      */
     public static void writeDouble(Parcel out, Double doubleValue) {
 
@@ -206,13 +208,13 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an {@link Double} value from the given {@link Parcel}.
+     * Read and return an Double value from the given Parcel.
      *
      * <p>
-     * If the read double equals {@link #nullDoubleParcelValue}, return null.
+     * If the read double equals nullDoubleParcelValue, return null.
      *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link Double} read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the Double read from the given Parcel
      */
     public static Double readDouble(Parcel in) {
 
@@ -222,9 +224,9 @@ public class ParcelIO {
     }
 
     /**
-     * Write the given {@link FieldValue}s to the given {@link Parcel}.
+     * Write the given {@link FieldValue}s to the given Parcel.
      *
-     * @param out the {@link Parcel} to write to
+     * @param out the Parcel to write to
      * @param fieldValues the {@link FieldValue}s to write
      */
     public static void writeFieldValues(Parcel out, ArrayList<FieldValue> fieldValues) {
@@ -252,27 +254,10 @@ public class ParcelIO {
     }
 
     /**
-     * Read and return an {@link ArrayList} of {@link String}s from the given {@link Parcel}.
+     * Read and return {@link FieldValue}s from the given Parcel.
      *
-     * <p>
-     * If the read {@link ArrayList} is empty, return null.
-     *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link ArrayList} read from the given {@link Parcel}
-     */
-    public static ArrayList<String> readStringList(Parcel in) {
-
-        ArrayList<String> list = new ArrayList<String>();
-        in.readStringList(list);
-        if (list.size() == 0) return null;
-        return list;
-    }
-
-    /**
-     * Read and return {@link FieldValue}s from the given {@link Parcel}.
-     *
-     * @param in the {@link Parcel} to read from
-     * @return the {@link FieldValue}s read from the given {@link Parcel}
+     * @param in the Parcel to read from
+     * @return the {@link FieldValue}s read from the given Parcel
      */
     public static ArrayList<FieldValue> readFieldValues(Parcel in) {
 
@@ -290,5 +275,22 @@ public class ParcelIO {
 
         if (fieldValues.size() == 0) return null;
         return fieldValues;
+    }
+
+    /**
+     * Read and return an ArrayList of Strings from the given Parcel.
+     *
+     * <p>
+     * If the read ArrayList is empty, return null.
+     *
+     * @param in the Parcel to read from
+     * @return the ArrayList read from the given Parcel
+     */
+    public static ArrayList<String> readStringList(Parcel in) {
+
+        ArrayList<String> list = new ArrayList<String>();
+        in.readStringList(list);
+        if (list.size() == 0) return null;
+        return list;
     }
 }

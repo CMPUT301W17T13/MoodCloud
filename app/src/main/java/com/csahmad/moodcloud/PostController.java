@@ -1,6 +1,5 @@
 package com.csahmad.moodcloud;
 
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +23,49 @@ public class PostController {
     public void setTimeout(Integer timeout) {
 
         this.elasticSearch.setTimeout(timeout);
+    }
+
+    /**
+     * Return the number of occurrences of each mood for all posts by the followees of the given
+     * poster matching the restrictions in the given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @param follower the follower of the followees to restrict posts to
+     * @return the number of occurrences of each mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
+     */
+    public HashMap<Integer, Long> getFolloweeMoodCounts(SearchFilter filter,
+                                                Profile follower) throws TimeoutException {
+
+        if (filter == null) filter = new SearchFilter();
+        ArrayList<String> followeeIds = new ProfileController().getAllFolloweeIds(follower);
+        filter.addFieldValueRange(new FieldValues("posterId", followeeIds));
+        return this.getMoodCounts(filter);
+    }
+
+    /**
+     * Return the number of occurrences of each mood for all posts by the given poster matching the
+     * restrictions in the given {@link SearchFilter}.
+     *
+     * <p>
+     * If filter is null, return the number of occurrences of each mood for all posts.
+     *
+     * @param filter restrictions for which posts to count
+     * @param poster the poster to restrict posts to
+     * @return the number of occurrences of each mood
+     * @see Post#getMood()
+     * @see Post#setMood(int)
+     */
+    public HashMap<Integer, Long> getMoodCounts(SearchFilter filter,
+                                                Profile poster) throws TimeoutException {
+
+        if (filter == null) filter = new SearchFilter();
+        filter.addFieldValue(new FieldValue("posterId", poster.getId()));
+        return this.getMoodCounts(filter);
     }
 
     /**
@@ -62,6 +104,7 @@ public class PostController {
         }
 
         this.elasticSearch.setFilter(null);
+        filter.removeTermAggregation("mood");
 
         return counts;
     }
@@ -147,26 +190,15 @@ public class PostController {
     public ArrayList<Post> getFolloweePosts(Profile follower,
                                             SearchFilter filter, int from) throws TimeoutException {
 
-        ProfileController controller = new ProfileController();
-        return this.getLatestPosts(controller.getFollowees(follower, from), filter);
-    }
+        ArrayList<String> followeeIds = new ProfileController().getAllFolloweeIds(follower);
 
-    /**
-     * Return the latest {@link Post} of each follower of the given followee.
-     *
-     * @param followee the followee of the followers with the desired posts
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @param from set to 0 to get the first x number of results, set to x to get the next x number
-     *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return the latest {@link Post} of each follower of the given followee
-     * @throws TimeoutException
-     */
-    public ArrayList<Post> getFollowerPosts(Profile followee, SearchFilter filter,
-                                                   int from) throws TimeoutException {
+        if (filter == null)
+            filter = new SearchFilter();
 
-        ProfileController controller = new ProfileController();
-        return this.getLatestPosts(controller.getFollowers(followee, from), filter);
+        filter.addFieldValueRange(new FieldValues("posterId", followeeIds))
+            .sortByDate();
+
+        return this.getPosts(filter, from);
     }
 
     /**
@@ -194,56 +226,6 @@ public class PostController {
         ArrayList<Post> result = this.elasticSearch.getNext(0);
         this.elasticSearch.setFilter(null);
 
-        return result;
-    }
-
-    /**
-     * Return the latest {@link Post} of each of the given profiles.
-     *
-     * @param profiles the {@link Profile}s with the posts to return
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @return the latest {@link Post} posted by each profile
-     * @throws TimeoutException
-     */
-    public ArrayList<Post> getLatestPosts(ArrayList<Profile> profiles, SearchFilter filter)
-        throws TimeoutException{
-
-        ArrayList<Post> latestPosts = new ArrayList<Post>();
-        Post post;
-
-        for (Profile profile: profiles) {
-            post = this.getLatestPost(profile, filter);
-            if (post != null) latestPosts.add(post);
-        }
-
-        return latestPosts;
-    }
-
-    /**
-     * Return the latest {@link Post} posted by the given profile.
-     *
-     * <p>
-     * If there are no posts to return, return null.
-     *
-     * @param profile the poster of the post to return
-     * @param filter restricts which {@link Post}s will be returned (defines conditions each
-     *               {@link Post} must satisfy)
-     * @return the latest {@link Post} posted by the given profile
-     * @throws TimeoutException
-     */
-    public Post getLatestPost(Profile profile, SearchFilter filter) throws TimeoutException {
-
-        if (filter == null)
-            filter = new SearchFilter();
-
-        this.elasticSearch.setFilter(filter);
-        filter.removeFieldValue("posterId");
-        filter.addFieldValue(new FieldValue("posterId", profile.getId()))
-                .sortByDate();
-
-        Post result = this.elasticSearch.getSingleResult();
-        this.elasticSearch.setFilter(null);
         return result;
     }
 

@@ -1,5 +1,6 @@
 package com.csahmad.moodcloud;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +66,8 @@ public class FollowingActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
+                //erick 2017-04-01 set signedinprofile to null before signing out
+                LocalData.store((Profile) null, getApplicationContext());
                 Context context = view.getContext();
                 Intent intent = new Intent(context, SignInActivity.class);
                 startActivity(intent);

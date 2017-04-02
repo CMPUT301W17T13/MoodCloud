@@ -36,6 +36,30 @@ public class ProfileController {
         this.elasticSearch.waitForTask();
     }
 
+    /**
+     * Return the ID of every person the given {@link Profile} follows.
+     *
+     * @param profile the follower
+     * @return the ID of every person the given {@link Profile} follows
+     * @see Follow
+     */
+    public ArrayList<String> getAllFolloweeIds(Profile profile) throws TimeoutException {
+
+        ArrayList<String> ids = new ArrayList<String>();
+        ArrayList<Profile> profiles;
+        int from = 0;
+
+        do {
+
+            profiles = this.getFollowees(profile, from);
+            for (Profile p: profiles) ids.add(p.getId());
+            from += ElasticSearchController.getResultSize() - 1;
+
+        } while (profiles.size() >= ElasticSearchController.getResultSize());
+
+        return ids;
+    }
+
     public Profile getProfileFromUsername(String username) throws TimeoutException {
 
         AccountController controller = new AccountController();
@@ -43,24 +67,6 @@ public class ProfileController {
 
         if (account == null) return null;
         return account.getProfile();
-    }
-
-    /**
-     * Get the followers of the given {@link Profile}.
-     *
-     * @param followee the {@link Profile} to return the followers of
-     * @param from set to 0 to get the first x number of results, set to x to get the next x number
-     *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return the followers of the given {@link Profile}
-     * @throws TimeoutException
-     */
-    public ArrayList<Profile> getFollowers(Profile followee, int from) throws TimeoutException {
-
-        ArrayList<Profile> followers = new ArrayList<Profile>();
-        FollowController controller = new FollowController();
-        ArrayList<Follow> follows = controller.getFollowers(followee, from);
-        for (Follow follow: follows) followers.add(follow.getFollower());
-        return followers;
     }
 
     /**

@@ -136,13 +136,13 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return only one object that matches {@link #filter}.
+     * Return only one object that matches filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return any object. If no object matches
-     * {@link #filter} or no objects exist yet, return null.
+     * If filter is null or has no restrictions, return any object. If no object matches
+     * filter or no objects exist yet, return null.
      *
-     * @return an object that matches {@link #filter}
+     * @return an object that matches filter
      * @throws TimeoutException
      */
     public T getSingleResult() throws TimeoutException {
@@ -153,9 +153,9 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return the number of objects matching the restrictions in {@link #filter}.
+     * Return the number of objects matching the restrictions in filter.
      *
-     * @return the number of objects matching the restrictions in {@link #filter}
+     * @return the number of objects matching the restrictions in filter
      * @throws TimeoutException
      */
     public Double getCount() throws TimeoutException {
@@ -186,14 +186,14 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return objects that match {@link #filter}.
+     * Return objects that match filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return all objects.
+     * If filter is null or has no restrictions, return all objects.
      *
      * @param from set to 0 to get the first x number of results, set to x to get the next x number
      *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return objects that match {@link #filter}
+     * @return objects that match filter
      * @throws TimeoutException
      */
     public ArrayList<T> getNext(int from) throws TimeoutException {
@@ -204,10 +204,13 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     // TODO: 2017-03-31 Maybe make a new class and return objects of that type
     /**
      * Return the number of occurrences of each value for each field in
-     * {@link #filter}.{@link SearchFilter#termAggregationFields}.
+     * filter.termAggregationFields.
      *
-     * @return the number of occurrences of each value for the fields in {@link #filter}
+     * @return the number of occurrences of each value for the fields in filter
      * @throws TimeoutException
+     * @see SearchFilter#addTermAggregation(String)
+     * @see SearchFilter#setTermAggregationFields(ArrayList)
+     * @see SearchFilter#getTermAggregationFields()
      */
     public HashMap<String, HashMap<String, Long>> getTermCounts() throws TimeoutException {
 
@@ -239,16 +242,16 @@ public class ElasticSearch<T extends ElasticSearchObject> {
     }
 
     /**
-     * Return objects that match {@link #filter}.
+     * Return objects that match filter.
      *
      * <p>
-     * If {@link #filter} is null or has no restrictions, return all objects.
+     * If filter is null or has no restrictions, return all objects.
      *
      * @param from set to 0 to get the first x number of results, set to x to get the next x number
      *             of results, set to 2x to get the next x number of results after that, and so on
      * @param singleResult whether to only return one object (or zero if there are no objects to
      *                     return)
-     * @return objects that match {@link #filter}
+     * @return objects that match filter
      * @throws TimeoutException
      */
     private ArrayList<T> getNext(int from, boolean singleResult) throws TimeoutException {

@@ -35,6 +35,7 @@ public class SearchMoods extends AppCompatActivity {
     boolean locperm = FALSE;
     boolean near = FALSE;
     private static final int READ_LOCATION_REQUEST = 1;
+    private SearchFilter filter;
 
 
     //https://developer.android.com/guide/topics/ui/controls/checkbox.html
@@ -54,26 +55,48 @@ public class SearchMoods extends AppCompatActivity {
         }
     }
 
-    /**
-     * Return whether this app currently has permission to access location.
-     *
-     * @return whether this app currently has permission to access location
-     */
-    public boolean haveLocationPermission() {
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED)
-
-            return false;
-
-        return true;
-    }
-
     /** Request permission from the user to access location. */
     public void requestLocationPermission() {
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 READ_LOCATION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                              int[] grantResults) {
+
+        if (requestCode == READ_LOCATION_REQUEST)
+            this.setFilterLocation();
+    }
+
+    private void setFilterLocation() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            if (location != null) {
+
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                double altitude = location.getAltitude();
+
+                locperm = TRUE;
+
+                if (near == TRUE) {
+                    this.filter.setMaxDistance(5.0d);
+                    this.filter.setLocation(new SimpleLocation(latitude, longitude, altitude));
+                }
+            }
+        }
+
+        else
+
+            Toast.makeText(getApplicationContext(), "Location permission denied",
+                    Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -105,15 +128,61 @@ public class SearchMoods extends AppCompatActivity {
         ArrayAdapter<CharSequence> contextAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groupSoloArray, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
-        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contextAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         contextSpinner.setAdapter(contextAdapter);
 
         Button searchButton = (Button) findViewById(R.id.searchButton);
+        Button mapButton = (Button) findViewById(R.id.button2);
 
-        final Context context = this;
+        final SearchMoods context = this;
 
+        mapButton.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+
+                String where = (String) topSpinner.getSelectedItem();
+                String keywordString = findText.getText().toString().trim();
+                String moodString = (String) moodSpinner.getSelectedItem();
+                String contextString = (String) contextSpinner.getSelectedItem();
+
+                SearchFilter filter = new SearchFilter();
+                context.filter = filter;
+
+                if (!keywordString.equals("")) {
+                    filter.addKeywordField("triggerText");
+                    String[] keywords = keywordString.split("\\s+|\\s*,\\s*");
+                    for (String keyword: keywords) filter.addKeyword(keyword);
+                }
+
+                if (!moodString.equals("Any"))
+                    filter.setMood(Mood.fromString(moodString));
+
+                if (!contextString.equals("Any")) {
+                    filter.setContext(SocialContext.fromString(contextString));
+                }
+
+                Intent intent = new Intent(context, ShowMapActivity.class);
+
+                if (recent == TRUE) {
+                    filter.setMaxTimeUnitsAgo(1);
+                }
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    requestLocationPermission();
+                }
+
+                else
+                    setFilterLocation();
+
+                intent.putExtra("WHERE", where);
+                intent.putExtra("FILTER", filter);
+                startActivity(intent);
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
 
@@ -126,6 +195,7 @@ public class SearchMoods extends AppCompatActivity {
                 String contextString = (String) contextSpinner.getSelectedItem();
 
                 SearchFilter filter = new SearchFilter();
+                context.filter = filter;
 
                 if (!keywordString.equals("")) {
                     filter.addKeywordField("triggerText");
@@ -146,25 +216,14 @@ public class SearchMoods extends AppCompatActivity {
                     filter.setMaxTimeUnitsAgo(1);
                 }
 
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
 
                     requestLocationPermission();
                 }
 
-                if (haveLocationPermission()) {
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    double altitude = location.getAltitude();
-                    locperm = TRUE;
-                    if (near == TRUE){
-                        filter.setMaxDistance(5.0d);
-                        filter.setLocation(new SimpleLocation(latitude,longitude,altitude));
-                    }
-                }
+                else
+                    setFilterLocation();
 
                 intent.putExtra("WHERE", where);
                 intent.putExtra("FILTER", filter);

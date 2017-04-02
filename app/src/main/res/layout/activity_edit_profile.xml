@@ -10,7 +10,120 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.csahmad.moodcloud.EditProfileActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
+    <TextView
+        android:id="@+id/profileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+        android:text="Profile"
+        android:textSize="30dp"/>
 
+    <LinearLayout
+        android:id="@+id/nameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileTitle"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Name:"
+            android:textSize="20dp"/>
+
+        <EditText
+            android:id="@+id/profileName"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="@android:color/background_light"
+            android:hint="John Doe"
+            android:layout_alignParentEnd="true"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/accountTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/nameLayout"
+        android:text="Account"
+        android:textSize="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/oldPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountTitle"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/oldPasswordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Old Password:"
+            android:textSize="20dp"/>
+
+        <EditText
+            android:id="@+id/oldPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="@android:color/background_light"
+            android:layout_alignParentEnd="true"
+            android:inputType="textPassword"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/newPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/oldPasswordLayout"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/newPasswordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="New Password:"
+            android:textSize="20dp"/>
+
+        <EditText
+            android:id="@+id/newPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="@android:color/background_light"
+            android:layout_alignParentEnd="true"
+            android:inputType="textPassword"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/saveProfileButton"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
+        android:text="Save"
+        android:layout_below="@+id/newPasswordLayout"
+        android:layout_centerHorizontal="true"
+        android:onClick="onSaveProfileClick"/>
 
 </RelativeLayout>
