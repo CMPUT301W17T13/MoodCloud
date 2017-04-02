@@ -84,7 +84,7 @@ public class QueryBuilder {
             components.add(query);
         }
 
-        if (filter.hasSortByFields()) {
+        if (filter.hasSortByFields() && objectResultSize > 0) {
             query = QueryBuilder.buildSortBy(filter.getSortByFields(), filter.getSortOrder());
             components.add(query);
         }
