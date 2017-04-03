@@ -79,11 +79,60 @@ public class SignInActivity extends AppCompatActivity {
         //when user presses the Create Account button
         Button button1 = (Button) findViewById(R.id.createAccount);
         button1.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View view){
-                Context context = view.getContext();
-                Intent intent = new Intent(context, CreateAccountActivity.class);
-                startActivity(intent);
+
+                try{
+
+                    String username = usernameText.getText().toString();
+                    String password = passwordText.getText().toString();
+
+                    if (username.trim().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Username empty",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (password.trim().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Password empty",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    Boolean unique = accountController.isUsernameUnique(username);
+
+                    if (unique) {
+                        Profile profile = new Profile(username);
+                        profileController.addOrUpdateProfiles(profile);
+
+                        try {
+                            profileController.waitForTask();
+                        }
+
+                        catch (Exception e) {
+                            throw new RuntimeException("Crash on adding login profile.");
+                        }
+
+                        Account account = new Account(username, password, profile);
+                        accountController.addOrUpdateAccounts(account);
+                        profile.setHomeProfile(true);
+                        LocalData.store(account, getApplicationContext());
+                        //probably something to sign in the user
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, NewsFeedActivity.class);
+                        startActivity(intent);
+
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(), "Username already exists",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (TimeoutException e){
+                    System.err.println("TimeoutException: " + e.getMessage());
+                }
             }
         });
 
