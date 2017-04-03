@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -213,9 +214,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);
         deletePhoto = (ImageButton) findViewById(R.id.delimage);
+
         latitudetext = (EditText) findViewById(R.id.latitude);
         longitudetext = (EditText) findViewById(R.id.longitude);
         altitudetext = (EditText)findViewById(R.id.altitude);
+
+        latitudetext.setFilters(new InputFilter[]{new InputFilterMinMax("0.0", "90.0")});
+        longitudetext.setFilters(new InputFilter[]{new InputFilterMinMax("-180.0", "180.0")});
 
 
 
