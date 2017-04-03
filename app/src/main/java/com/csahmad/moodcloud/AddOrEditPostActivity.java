@@ -1,6 +1,7 @@
 package com.csahmad.moodcloud;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,7 @@ import com.google.android.gms.location.LocationRequest;
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
 
+    public static final int READ_CAMERA_REQUEST = 0;
     private static final int TAKE_IMAGE_REQUEST = 0;
     private static final int READ_LOCATION_REQUEST = 1;
     private final static int REQUEST_GET_DATE = 3;
@@ -63,15 +66,21 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
 
-                String cameraImage = intent.getStringExtra("IMAGE");
+                Bundle extras = intent.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                if (cameraImage != null) {
-                    this.image = cameraImage;
-                    Bitmap bitmap = intent.getParcelableExtra("BITMAP");
-
+                if (imageBitmap != null) {
+                    this.image = ImageConverter.toString(imageBitmap);
+                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                     this.moodPhoto.setImageBitmap(bitmap);
                     deletePhoto.setVisibility(View.VISIBLE);
                 }
+
+                moodPhoto.setImageBitmap(imageBitmap);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("IMAGE", ImageConverter.toString(imageBitmap));
+                returnIntent.putExtra("BITMAP", imageBitmap);
+                setResult(Activity.RESULT_OK, returnIntent);
 
             } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo was cancelled!", Toast.LENGTH_LONG).show();
@@ -79,7 +88,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Unknown bug! Please report!", Toast.LENGTH_LONG).show();
         }
 
-        if (requestCode == REQUEST_GET_DATE){
+        else if (requestCode == REQUEST_GET_DATE){
             if(resultCode == RESULT_OK){
                 setDate = intent.getBundleExtra("set_date");
                 setDay = setDate.getInt("day");
@@ -135,7 +144,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     @Override
                     public void onLocationChanged(Location location) {
 
-                        Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
                         Log.i("LocationStatus", "Got location!");
                         locationArray = new double[]{location.getLatitude(),
                                 location.getLongitude(), location.getAltitude()};
@@ -177,7 +185,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             }
 
             else {
-                Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
                 Log.i("LocationStatus", "Got location!");
                 locationArray = new double[]{location.getLatitude(),
                         location.getLongitude(), location.getAltitude()};
@@ -187,6 +194,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         else {
             Log.i("LocationStatus", "Denied!");
         }
+    }
+
+    /** Request permission from the user to use the camera. */
+    public void requestCameraPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                READ_CAMERA_REQUEST);
     }
 
     @Override
@@ -239,12 +253,21 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     altitudetext.setText(format.format(locationArray[2]));
                 }
 
+                final Context context = this;
+
                 moodPhoto.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View view) {
-                        Context context = view.getContext();
-                        Intent intent = new Intent(context, TakePhotoActivity.class);
-                        startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) !=
+                                PackageManager.PERMISSION_GRANTED)
+                            requestCameraPermission();
+
+                        else  {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, TAKE_IMAGE_REQUEST);
+                        }
                     }
                 });
                 ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
@@ -265,8 +288,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         image = null;
                     }
                 });
-
-                final Context context = this;
 
                 Button postButton = (Button) findViewById(R.id.postButton);
                 postButton.setOnClickListener(new View.OnClickListener() {
@@ -309,9 +330,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 moodPhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Context context = view.getContext();
-                        Intent intent = new Intent(context, TakePhotoActivity.class);
-                        startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, TAKE_IMAGE_REQUEST);
                     }
                 });
                 ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
