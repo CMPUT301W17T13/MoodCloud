@@ -3,7 +3,6 @@ package com.csahmad.moodcloud;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -27,6 +26,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 import android.location.LocationManager;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationRequest;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
@@ -143,6 +144,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     @Override
                     public void onLocationChanged(Location location) {
 
+                        Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                        Log.i("LocationStatus", "Got location!");
                         locationArray = new double[]{location.getLatitude(),
                                 location.getLongitude(), location.getAltitude()};
                     }
@@ -150,7 +153,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     @Override
                     public void onStatusChanged(String provider, int status, Bundle extras) {
 
-                        ;
+                        if (status == LocationProvider.OUT_OF_SERVICE) {
+                            Toast.makeText(getApplicationContext(), "Out of service", Toast.LENGTH_LONG).show();
+                            Log.i("LocationStatus", "Out of service");
+                        }
+
+                        else if (status == LocationProvider.TEMPORARILY_UNAVAILABLE) {
+                            Toast.makeText(getApplicationContext(), "Unavailable", Toast.LENGTH_LONG).show();
+                            Log.i("LocationStatus", "Unavailable");
+                        }
+
                     }
 
                     @Override
@@ -170,6 +182,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             }
 
             else {
+                Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                Log.i("LocationStatus", "Got location!");
                 locationArray = new double[]{location.getLatitude(),
                         location.getLongitude(), location.getAltitude()};
             }
