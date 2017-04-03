@@ -76,7 +76,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/toolbar4"
-        android:layout_marginBottom="100dp"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+        android:layout_marginBottom="100dp" />
 
 </RelativeLayout>
