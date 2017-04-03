@@ -2,6 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 
 // Modified from: https://stackoverflow.com/questions/14212518/is-there-a-way-to-define-a-min-and-max-value-for-edittext-in-android/14212734#14212734
 // (StackOverflow user Pratik Sharma)
@@ -17,12 +18,6 @@ public class InputFilterMinMax implements InputFilter {
         this.max = max;
     }
 
-    public InputFilterMinMax(String min, String max) {
-
-        this.min = Double.parseDouble(min);
-        this.max = Double.parseDouble(max);
-    }
-
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
                                int dend) {
@@ -35,7 +30,9 @@ public class InputFilterMinMax implements InputFilter {
                 return null;
         }
 
-        catch (NumberFormatException nfe) { }
+        catch (NumberFormatException nfe) {
+            return null;
+        }
 
         return "";
     }
@@ -43,6 +40,9 @@ public class InputFilterMinMax implements InputFilter {
     private boolean isInRange(double min, double max, double input) {
 
         if (input > max || input < min) return false;
+        Log.i("Min", Double.toString(min));
+        Log.i("Max", Double.toString(max));
+        Log.i("Input", Double.toString(input));
         return true;
     }
 }

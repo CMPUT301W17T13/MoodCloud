@@ -219,8 +219,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         longitudetext = (EditText) findViewById(R.id.longitude);
         altitudetext = (EditText)findViewById(R.id.altitude);
 
-        latitudetext.setFilters(new InputFilter[]{new InputFilterMinMax("0.0", "90.0")});
-        longitudetext.setFilters(new InputFilter[]{new InputFilterMinMax("-180.0", "180.0")});
+        latitudetext.setFilters(new InputFilter[]{new InputFilterMinMax(0.0d, 90.0d)});
+        longitudetext.setFilters(new InputFilter[]{new InputFilterMinMax(-180.0d, 180.0d)});
 
 
 

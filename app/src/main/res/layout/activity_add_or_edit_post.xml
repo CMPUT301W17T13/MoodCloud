@@ -73,8 +73,7 @@
         android:layout_below="@+id/body"
         android:layout_alignStart="@+id/longitude"
         android:textSize="18sp"
-        android:id="@+id/textView3"
-        android:inputType="numberDecimal"/>
+        android:id="@+id/textView3"/>
     <EditText
         android:id="@+id/longitude"
         android:layout_width="120dp"
@@ -82,7 +81,7 @@
         android:background="@android:color/background_light"
         android:hint="Longitude"
         android:layout_below="@+id/latitude"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:layout_alignStart="@+id/altitude" />
 
     <ImageButton
@@ -101,7 +100,7 @@
         android:layout_below="@+id/longitude"
         android:background="@android:color/background_light"
         android:hint="Altitude"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         />
 
     <TextView
