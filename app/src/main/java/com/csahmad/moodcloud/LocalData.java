@@ -33,6 +33,11 @@ public class LocalData {
     private static final String ACCOUNTSAVE = "account.sav";
     private static final String POSTSAVE = "posts.sav";
 
+    private static ArrayList<Post> toUpdate;
+    private static ArrayList<Post> toDelete;
+    private static final String TO_UPDATE_FILE = "toadd.sav";
+    private static final String TO_DELETE_FILE = "toadd.sav";
+
     /**
      * Used to access the {@link Account} of the current signed in user
      *
@@ -44,6 +49,63 @@ public class LocalData {
     public static Account getSignedInAccount(Context context){
         LocalData.tryReadProfile(context);
         return LocalData.signedInAccount;
+    }
+
+
+    public static ArrayList<Post> getToUpdate(Context context) {
+
+        LocalData.tryReadToUpdate(context);
+        return toUpdate;
+    }
+
+    public static ArrayList<Post> getToDelete(Context context) {
+
+        LocalData.tryReadToDelete(context);
+        return toDelete;
+    }
+
+    /**
+     * Add the given {@link Post} to the TO_UPDATE_FILE file.
+     *
+     * @param post the {@link Post} to add
+     * @param context
+     */
+    public static void addToUpdate(Post post, Context context) {
+
+        for (int i = 0; i < toUpdate.size(); i++) {
+
+            Post existing = toUpdate.get(i);
+
+            if (existing.getId() == post.getId()) {
+                toUpdate.remove(i);
+                break;
+            }
+        }
+
+        toUpdate.add(post);
+        storeToUpdate(context);
+    }
+
+    /**
+     * Add the given {@link Post} to the TO_DELETE_FILE file.
+     *
+     * @param post the {@link Post} to add
+     * @param context
+     */
+    public static void addToDelete(Post post, Context context) {
+
+        for (int i = 0; i < toDelete.size(); i++) {
+
+            Post existing = toDelete.get(i);
+
+            if (existing.getId() == post.getId()) {
+                toDelete.remove(i);
+                break;
+            }
+        }
+
+        toDelete.add(post);
+        storeToUpdate(context);
     }
 
     /**
@@ -199,6 +261,62 @@ public class LocalData {
     }
 
     /**
+     * Stores posts to update on internet connection in memory
+     *
+     * @param context
+     */
+    public static void storeToUpdate(Context context){
+
+        try{
+            FileOutputStream fos = context.openFileOutput(TO_UPDATE_FILE, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(toUpdate, out);
+            out.flush();
+            fos.close();
+
+
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+
+    }
+
+    /**
+     * Stores posts to delete on internet connection in memory
+     *
+     * @param context
+     */
+    public static void storeToDelete(Context context){
+
+        try{
+            FileOutputStream fos = context.openFileOutput(TO_DELETE_FILE, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(toDelete, out);
+            out.flush();
+            fos.close();
+
+
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+
+    }
+
+    /**
      * Reads stored posts
      *
      * @param context
@@ -211,6 +329,56 @@ public class LocalData {
             Gson gson = new Gson();
 
             userPosts = gson.fromJson(in, new TypeToken<ArrayList<Post>>(){}.getType());
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            return false;
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        return true;
+    }
+
+    /**
+     * Reads TO_UPDATE_FILE
+     *
+     * @param context
+     * @return true if Posts are read
+     */
+    public static boolean tryReadToUpdate(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(TO_UPDATE_FILE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+
+            toUpdate = gson.fromJson(in, new TypeToken<ArrayList<Post>>(){}.getType());
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            return false;
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        return true;
+    }
+
+    /**
+     * Reads TO_DELETE_FILE
+     *
+     * @param context
+     * @return true if Posts are read
+     */
+    public static boolean tryReadToDelete(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(TO_DELETE_FILE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+
+            toDelete = gson.fromJson(in, new TypeToken<ArrayList<Post>>(){}.getType());
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
