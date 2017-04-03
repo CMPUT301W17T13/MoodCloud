@@ -221,6 +221,7 @@ public class LocalData {
      */
     public static void addPost(Post post, Context context) {
 
+        if (userPosts == null) userPosts = new ArrayList<Post>();
         userPosts.add(post);
         store(userPosts, context);
     }

@@ -24,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 import android.location.LocationManager;
@@ -46,6 +48,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private int setYear;
     private ImageButton deletePhoto;
     private double[] locationArray = null;
+    EditText latitudetext = null; //(EditText) findViewById(R.id.latitude);
+    EditText longitudetext = null; //(EditText) findViewById(R.id.longitude);
+    EditText altitudetext = null; //(EditText)findViewById(R.id.altitude);
 
 
 
@@ -101,83 +106,86 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
 
-        if (requestCode == READ_LOCATION_REQUEST) {
+        if (requestCode == READ_LOCATION_REQUEST)
+            setLocation();
+    }
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                    PackageManager.PERMISSION_GRANTED) {
+    private void setLocation() {
 
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
 
-                String provider = lm.getBestProvider(new Criteria(), true);
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                if (!lm.isProviderEnabled(provider)) {
-                    Toast.makeText(getApplicationContext(), "Provider disabled", Toast.LENGTH_LONG).show();
-                    Log.i("LocationStatus", "Provider disabled");
-                }
+            String provider = lm.getBestProvider(new Criteria(), true);
 
-                Location location = lm.getLastKnownLocation(provider);
+            if (!lm.isProviderEnabled(provider)) {
+                Log.i("LocationStatus", "Provider disabled");
+            }
 
-                if (location == null){
+            Location location = lm.getLastKnownLocation(provider);
 
-                    LocationRequest locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            if (location == null){
 
-                    LocationListener locationListener= new LocationListener() {
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                        @Override
-                        public void onLocationChanged(Location location) {
+                LocationListener locationListener= new LocationListener() {
 
-                            Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
-                            Log.i("LocationStatus", "Got location!");
-                            locationArray = new double[]{location.getLatitude(),
-                                    location.getLongitude(), location.getAltitude()};
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                        Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                        Log.i("LocationStatus", "Got location!");
+                        locationArray = new double[]{location.getLatitude(),
+                                location.getLongitude(), location.getAltitude()};
+                        DecimalFormat format = new DecimalFormat("#.####");
+                        latitudetext.setText(format.format(locationArray[0]));
+                        longitudetext.setText(format.format(locationArray[1]));
+                        altitudetext.setText(format.format(locationArray[2]));
+
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        if (status == LocationProvider.OUT_OF_SERVICE) {
+                            Log.i("LocationStatus", "Out of service");
                         }
 
-                        @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                            if (status == LocationProvider.OUT_OF_SERVICE) {
-                                Toast.makeText(getApplicationContext(), "Out of service", Toast.LENGTH_LONG).show();
-                                Log.i("LocationStatus", "Out of service");
-                            }
-
-                            else if (status == LocationProvider.TEMPORARILY_UNAVAILABLE) {
-                                Toast.makeText(getApplicationContext(), "Unavailable", Toast.LENGTH_LONG).show();
-                                Log.i("LocationStatus", "Unavailable");
-                            }
-
+                        else if (status == LocationProvider.TEMPORARILY_UNAVAILABLE) {
+                            Log.i("LocationStatus", "Unavailable");
                         }
 
-                        @Override
-                        public void onProviderEnabled(String provider) {
+                    }
 
-                            ;
-                        }
+                    @Override
+                    public void onProviderEnabled(String provider) {
 
-                        @Override
-                        public void onProviderDisabled(String provider) {
+                        ;
+                    }
 
-                            Toast.makeText(getApplicationContext(), "Disabled", Toast.LENGTH_LONG).show();
-                            Log.i("LocationStatus", "Disabled");
-                        }
-                    };
+                    @Override
+                    public void onProviderDisabled(String provider) {
 
-                    //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
-                    lm.requestLocationUpdates(provider, 2_000l, 100f, locationListener);
-                }
+                        Log.i("LocationStatus", "Disabled");
+                    }
+                };
 
-                else {
-                    Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
-                    Log.i("LocationStatus", "Got location!");
-                    locationArray = new double[]{location.getLatitude(),
-                            location.getLongitude(), location.getAltitude()};
-                }
+                //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
+                lm.requestLocationUpdates(provider, 2_000l, 100f, locationListener);
             }
 
             else {
-                Toast.makeText(getApplicationContext(), "Denied!", Toast.LENGTH_LONG).show();
-                Log.i("LocationStatus", "Denied!");
+                Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                Log.i("LocationStatus", "Got location!");
+                locationArray = new double[]{location.getLatitude(),
+                        location.getLongitude(), location.getAltitude()};
             }
+        }
+
+        else {
+            Log.i("LocationStatus", "Denied!");
         }
     }
 
@@ -191,15 +199,20 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);
         deletePhoto = (ImageButton) findViewById(R.id.delimage);
+        latitudetext = (EditText) findViewById(R.id.latitude);
+        longitudetext = (EditText) findViewById(R.id.longitude);
+        altitudetext = (EditText)findViewById(R.id.altitude);
 
         // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
 
-            Toast.makeText(getApplicationContext(), "Requesting permission", Toast.LENGTH_LONG).show();
             Log.i("LocationStatus", "Requesting permission");
             requestLocationPermission();
         }
+
+        else
+            setLocation();
 
         if(isNetworkAvailable()) {
             final Intent intent = getIntent();
@@ -211,9 +224,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
             final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
             final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
-            final EditText latitudetext = (EditText) findViewById(R.id.latitude);
-            final EditText longitudetext = (EditText) findViewById(R.id.longitude);
-            final EditText altitudetext = (EditText)findViewById(R.id.altitude);
+
 
 
             if (post == null) {
@@ -221,9 +232,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
 
                 if (locationArray != null) {
-                    latitudetext.setText(Double.toString(locationArray[0]));
-                    longitudetext.setText(Double.toString(locationArray[1]));
-                    altitudetext.setText(Double.toString(locationArray[2]));
+                    DecimalFormat format = new DecimalFormat("#.####");
+                    latitudetext.setText(format.format(locationArray[0]));
+                    longitudetext.setText(format.format(locationArray[1]));
+                    altitudetext.setText(format.format(locationArray[2]));
                 }
 
                 moodPhoto.setOnClickListener(new View.OnClickListener() {
@@ -365,9 +377,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
                 dateString.setText(DateConverter.dateToString(olddate));
 
-                if (oldLatitude != null) latitudetext.setText(oldLatitude);
-                altitudetext.setText(oldAltitude);
-                longitudetext.setText(oldLongitude);
+                if (oldLatitude != null) {
+                    DecimalFormat format = new DecimalFormat("#.####");
+                    latitudetext.setText(format.format(oldLatitude));
+                    altitudetext.setText(format.format(oldAltitude));
+                    longitudetext.setText(format.format(oldLongitude));}
 
 
 
