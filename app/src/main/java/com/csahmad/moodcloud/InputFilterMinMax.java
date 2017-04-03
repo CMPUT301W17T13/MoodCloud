@@ -26,7 +26,7 @@ public class InputFilterMinMax implements InputFilter {
 
             double input = Double.parseDouble(dest.toString() + source.toString());
 
-            if (isInRange(min, max, input))
+            if (isInRange(this.min, this.max, input))
                 return null;
         }
 
@@ -37,12 +37,9 @@ public class InputFilterMinMax implements InputFilter {
         return "";
     }
 
-    private boolean isInRange(double min, double max, double input) {
+    private static boolean isInRange(double min, double max, double input) {
 
         if (input > max || input < min) return false;
-        Log.i("Min", Double.toString(min));
-        Log.i("Max", Double.toString(max));
-        Log.i("Input", Double.toString(input));
         return true;
     }
 }
