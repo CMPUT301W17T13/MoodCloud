@@ -312,11 +312,10 @@
     <Button
         android:id="@+id/postButton"
         android:layout_width="80dp"
-        android:layout_height="30dp"
-        android:background="@color/colorPrimary"
-        android:hint="Post"
+        android:layout_height="wrap_content"
+        android:text="Post"
         android:onClick="onPostClick"
-
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"/>
 

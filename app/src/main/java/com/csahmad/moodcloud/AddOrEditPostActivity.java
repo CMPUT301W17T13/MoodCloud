@@ -203,16 +203,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         longitudetext = (EditText) findViewById(R.id.longitude);
         altitudetext = (EditText)findViewById(R.id.altitude);
 
-        // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
 
-            Log.i("LocationStatus", "Requesting permission");
-            requestLocationPermission();
-        }
-
-        else
-            setLocation();
 
         if(isNetworkAvailable()) {
             final Intent intent = getIntent();
@@ -228,6 +219,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
 
             if (post == null) {
+                // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    Log.i("LocationStatus", "Requesting permission");
+                    requestLocationPermission();
+                }
+
+                else
+                    setLocation();
 
                 dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
 
@@ -350,24 +351,24 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 double[] oldlocationArray = post.getLocation();
 
-                String oldLatitude = null;
-                String oldLongitude = null;
-                String oldAltitude = null;
+                Double oldLatitude = null;
+                Double oldLongitude = null;
+                Double oldAltitude = null;
 
 
                 if (oldlocationArray == null) {
 
                     if (locationArray != null) {
-                        oldLatitude = Double.toString(locationArray[0]);
-                        oldLongitude = Double.toString(locationArray[1]);
-                        oldAltitude = Double.toString(locationArray[2]);
+                        oldLatitude = locationArray[0];
+                        oldLongitude = locationArray[1];
+                        oldAltitude = locationArray[2];
                     }
                 }
 
                 else {
-                    oldLatitude = Double.toString(oldlocationArray[0]);
-                    oldLongitude = Double.toString(oldlocationArray[1]);
-                    oldAltitude = Double.toString(oldlocationArray[2]);
+                    oldLatitude = oldlocationArray[0];
+                    oldLongitude = oldlocationArray[1];
+                    oldAltitude = oldlocationArray[2];
                 }
 
 
