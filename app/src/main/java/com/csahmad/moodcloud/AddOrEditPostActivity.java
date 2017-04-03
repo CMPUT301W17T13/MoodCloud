@@ -106,6 +106,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 String provider = lm.getBestProvider(new Criteria(), true);
 
+                if (!lm.isProviderEnabled(provider)) {
+                    Toast.makeText(getApplicationContext(), "Provider disabled", Toast.LENGTH_LONG).show();
+                    Log.i("LocationStatus", "Provider disabled");
+                }
+
                 Location location = lm.getLastKnownLocation(provider);
 
                 if (location == null){
