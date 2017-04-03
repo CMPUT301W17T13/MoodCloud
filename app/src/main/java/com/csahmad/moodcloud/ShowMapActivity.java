@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 
-public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class ShowMapActivity extends AppCompatActivity{
+
+    /*
 
     private PostController postController = new PostController();
     private ProfileController profileController = new ProfileController();
@@ -43,13 +45,13 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
         //String id = intent.getStringExtra("ID");
         String where = intent.getStringExtra("WHERE");
         final SearchFilter filter = intent.getParcelableExtra("FILTER");
-        /**try {
+        try {
             profile = profileController.getProfileFromID(id);
 
             if (profile.getId() == null)
                 throw new RuntimeException("Oh noes ID is null");
 
-        } catch (TimeoutException e){}*/
+        } catch (TimeoutException e){}
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
@@ -149,4 +151,6 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
 
 
     }
+
+    */
 }
