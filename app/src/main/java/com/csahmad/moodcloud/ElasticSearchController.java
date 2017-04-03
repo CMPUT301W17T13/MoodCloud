@@ -322,7 +322,7 @@ public class ElasticSearchController {
 
             else {
                 SearchFilter searchFilter = searchFilters[0];
-                query = QueryBuilder.build(searchFilter, ElasticSearchController.resultSize, 0);
+                query = QueryBuilder.build(searchFilter);
             }
 
             Count count = new Count.Builder()
@@ -340,7 +340,7 @@ public class ElasticSearchController {
                 }
 
                 else
-                    Log.i("Error", "Elasticsearch died with " + result.getErrorMessage());
+                    Log.i("Error", "Elasticsearch died with (count) " + result.getErrorMessage());
             }
 
             catch (IOException e) {

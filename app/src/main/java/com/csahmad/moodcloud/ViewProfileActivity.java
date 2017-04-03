@@ -47,9 +47,9 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onStart() {
 
-        super.onCreate(savedInstanceState);
+        super.onStart();
         setContentView(R.layout.activity_view_profile);
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
@@ -119,8 +119,19 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Double count = followRequestController.getFollowRequestCount(profile);
 
                     followeditbutton.setText("See Follow Requests");
+
                     if (count != null){
-                        followeditbutton.setText("See Follow Requests (" + Double.toString(count) + ")");
+
+                        long longCount = count.longValue();
+
+                        if (longCount == 0l) {
+                            followeditbutton.setText("No Follow Requests");
+                            followeditbutton.setEnabled(false);
+                        }
+
+                        else
+                            followeditbutton.setText("See Follow Requests (" +
+                                    Long.toString(longCount) + ")");
                     }
                 } catch (TimeoutException e) {}
                 followeditbutton.setOnClickListener(new View.OnClickListener() {
@@ -224,8 +235,19 @@ public class ViewProfileActivity extends AppCompatActivity {
             case GET_POST_REQUEST:
 
                 if (resultCode == RESULT_OK) {
+
                     Post post = data.getParcelableExtra("POST");
-                    mDataset.set(position, post);
+
+                    if (post == null) {
+                        mDataset.remove(position);
+                        LocalData.deletePostAt(position, this);
+                    }
+
+                    else {
+                        mDataset.set(position, post);
+                        LocalData.updatePostAt(position, post, this);
+                    }
+
                     mAdapter.notifyDataSetChanged();
                 }
 
@@ -260,9 +282,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 Post post = mDataset.get(position);
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ViewPostActivity.class);
-                /////////////////////////////////////////
                 intent.putExtra("POST",post);
-                ///////////////////////////////////////
                 startActivityForResult(intent, GET_POST_REQUEST);
             }
         }

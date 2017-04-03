@@ -74,6 +74,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 );
                 deleteButton.setText("Delete Post");
                 deleteButton.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View view){
                         postController.deletePosts(post);
@@ -151,8 +152,14 @@ public class ViewPostActivity extends AppCompatActivity {
             case GET_POST_REQUEST:
 
                 if (resultCode == RESULT_OK) {
+
                     post = data.getParcelableExtra("POST");
-                    updateView();
+
+                    if (post == null)
+                        finish();
+
+                    else
+                        updateView();
                 }
 
                 break;

@@ -177,14 +177,14 @@ public class PostController {
     }
 
     /**
-     * Return the latest {@link Post} of each followee of the given follower.
+     * Return the {@link Post}s of each followee of the given follower.
      *
      * @param follower the follower of the followees with the desired posts
      * @param filter restricts which {@link Post}s will be returned (defines conditions each
      *               {@link Post} must satisfy)
      * @param from set to 0 to get the first x number of results, set to x to get the next x number
      *             of results, set to 2x to get the next x number of results after that, and so on
-     * @return the latest {@link Post} of each followee of the given follower
+     * @return the {@link Post}s of each followee of the given follower
      * @throws TimeoutException
      */
     public ArrayList<Post> getFolloweePosts(Profile follower,
@@ -199,6 +199,40 @@ public class PostController {
             .sortByDate();
 
         return this.getPosts(filter, from);
+    }
+
+    /**
+     * Return the latest {@link Post} of each followee of the given follower.
+     *
+     * @param follower the follower of the followees with the desired posts
+     * @param filter restricts which {@link Post}s will be returned (defines conditions each
+     *               {@link Post} must satisfy)
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return the latest {@link Post} of each followee of the given follower
+     * @throws TimeoutException
+     */
+    public ArrayList<Post> getLatestFolloweePosts(Profile follower,
+                                                  SearchFilter filter, int from)
+            throws TimeoutException {
+
+        ArrayList<String> followeeIds = new ProfileController().getAllFolloweeIds(follower);
+        ArrayList<Post> posts = new ArrayList<Post>();
+
+        if (filter == null)
+            filter = new SearchFilter();
+
+        filter.sortByDate();
+        this.elasticSearch.setFilter(filter);
+
+        for (String id: followeeIds) {
+            filter.addFieldValue(new FieldValue("posterId", id));
+            posts.add(this.elasticSearch.getSingleResult());
+            filter.removeFieldValue("posterId");
+        }
+
+        this.elasticSearch.setFilter(null);
+        return posts;
     }
 
     /**

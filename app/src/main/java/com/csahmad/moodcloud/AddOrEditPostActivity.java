@@ -253,6 +253,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     }
                 });
 
+                final Context context = this;
+
                 Button postButton = (Button) findViewById(R.id.postButton);
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -278,7 +280,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                     profile.getId(),locationArray, date);
                             PostController postController = new PostController();
                             postController.addOrUpdatePosts(post);
-                            Intent intent1 = new Intent();
+                            LocalData.addPost(post, context);
+                            Intent intent = new Intent();
                             intent.putExtra("POST",post);
                             setResult(RESULT_OK,intent);
 
