@@ -224,8 +224,15 @@ public class ViewProfileActivity extends AppCompatActivity {
             case GET_POST_REQUEST:
 
                 if (resultCode == RESULT_OK) {
+
                     Post post = data.getParcelableExtra("POST");
-                    mDataset.set(position, post);
+
+                    if (post == null)
+                        mDataset.remove(position);
+
+                    else
+                        mDataset.set(position, post);
+
                     mAdapter.notifyDataSetChanged();
                 }
 
@@ -260,9 +267,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 Post post = mDataset.get(position);
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ViewPostActivity.class);
-                /////////////////////////////////////////
                 intent.putExtra("POST",post);
-                ///////////////////////////////////////
                 startActivityForResult(intent, GET_POST_REQUEST);
             }
         }
