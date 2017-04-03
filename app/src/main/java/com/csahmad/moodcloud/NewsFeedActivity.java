@@ -50,7 +50,7 @@ public class NewsFeedActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            mDataset = postController.getLatestFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
+            mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
             //final ArrayList<Post> mDataset = postController.getPosts(null,0);
             mAdapter = new MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
@@ -75,7 +75,7 @@ public class NewsFeedActivity extends AppCompatActivity {
                         (firstVisibleItems + visibleThreshold)) {
                     loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
-                        ArrayList<Post> newDS = postController.getLatestFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,loadCount);
+                        ArrayList<Post> newDS = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,loadCount);
                         mDataset.addAll(newDS);
                     } catch (TimeoutException e) {}
                     mAdapter.notifyDataSetChanged();
