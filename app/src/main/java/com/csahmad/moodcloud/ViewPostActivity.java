@@ -191,7 +191,14 @@ public class ViewPostActivity extends AppCompatActivity {
         dateText.setText(format1.format(post.getDate().getTime()));
         TextView contextText = (TextView) findViewById(R.id.contextText);
         String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
-        contextText.setText(contexts[post.getContext()]);
+
+        Integer socialContext = post.getContext();
+
+        if (socialContext != null)
+            contextText.setText(contexts[socialContext]);
+
+        else
+            contextText.setText("None");
 
         TextView triggerText = (TextView) findViewById(R.id.triggerText);
         triggerText.setText("Trigger: " + post.getTriggerText());
