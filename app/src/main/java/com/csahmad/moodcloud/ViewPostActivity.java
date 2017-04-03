@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +46,12 @@ public class ViewPostActivity extends AppCompatActivity {
         try {
 
             //final Post post = postController.getPostFromId(id);
-            profile = profileController.getProfileFromID(post.getPosterId());
+            if(post.getPosterId().equals(LocalData.getSignedInProfile(getApplicationContext()).getId())){
+                profile = LocalData.getSignedInProfile(getApplicationContext());
+            } else {
+                profile = profileController.getProfileFromID(post.getPosterId());
+            }
+            //profile = profileController.getProfileFromID(post.getPosterId());
             updateView();
             TextView nameText = (TextView) findViewById(R.id.nameText);
 
@@ -55,6 +61,14 @@ public class ViewPostActivity extends AppCompatActivity {
             else
                 nameText.setText("Name: " + profile.getName());
 
+            TextView locationText = (TextView) findViewById(R.id.locationText);
+            if (post.getLocation() != null) {
+                double[] location = post.getLocation();
+                DecimalFormat format = new DecimalFormat("#.##");
+                locationText.setText("Location: " + format.format(location[0]) + "," + format.format(location[1]) + "," + format.format(location[2]));
+            } else {
+                locationText.setVisibility(View.GONE);
+            }
             final Button button = (Button) findViewById(R.id.button);
             final Button deleteButton = (Button) findViewById(R.id.deleteButton);
             if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
@@ -171,7 +185,7 @@ public class ViewPostActivity extends AppCompatActivity {
         final TextView textText = (TextView) findViewById(R.id.textText);
         textText.setText(post.getText());
         TextView dateText = (TextView) findViewById(R.id.dateText);
-        SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
+        SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateTimeFormat);
         dateText.setText(format1.format(post.getDate().getTime()));
         TextView contextText = (TextView) findViewById(R.id.contextText);
         String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};

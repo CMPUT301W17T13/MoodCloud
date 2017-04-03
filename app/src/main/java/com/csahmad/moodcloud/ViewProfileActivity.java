@@ -122,7 +122,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 }}
             );
         } else {
-            editButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.INVISIBLE);
         }
 
         final Button followeditbutton = (Button) findViewById(R.id.followeditbutton);
