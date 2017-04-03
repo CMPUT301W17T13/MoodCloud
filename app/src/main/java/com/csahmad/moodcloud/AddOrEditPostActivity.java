@@ -299,6 +299,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        Integer socialContext = onStatusButtonClicked(statusButtons);
+                        if (socialContext == 4) socialContext = null;
+
                         // condition checkers for fields that are not supposed to be null
                         if (textExplanation.getText().toString().equals("")) {
                             Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
@@ -307,16 +311,14 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         } else if (textTrigger.getText().toString().equals("") && (image == null)) {
                             Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
                         }
-                        else if (onStatusButtonClicked(statusButtons) == 4) {
-                            Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
-                        } else {
+                        else {
                             Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                             if (date == null){
                                 date = Calendar.getInstance();
                             }
 
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
-                                    textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
+                                    textTrigger.getText().toString().replace("\\s+$", ""), image, socialContext,
                                     profile.getId(),locationArray, date);
                             if (isNetworkAvailable()){
                             PostController postController = new PostController();
@@ -373,7 +375,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 String oldExplannation = post.getText();
                 String oldTrigger = post.getTriggerText();
                 int oldmood = post.getMood();
-                int oldcontext = post.getContext();
+                Integer oldcontext = post.getContext();
                 Calendar olddate = post.getDate();
 
                 double[] oldlocationArray = post.getLocation();
@@ -402,7 +404,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 textTrigger.setText(oldTrigger);
                 textExplanation.setText(oldExplannation);
                 moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
-                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+
+                if (oldcontext != null)
+                    statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+
                 dateString.setText(DateConverter.dateToString(olddate));
 
                 if (oldLatitude != null) {
@@ -417,6 +422,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        Integer socialContext = onStatusButtonClicked(statusButtons);
+                        if (socialContext == 4) socialContext = null;
+
                         //condition checkers for the input fields that are not supposed to be bull
                         if (textExplanation.getText().toString().equals("")) {
                             Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
@@ -424,11 +433,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
                         } else if (textTrigger.getText().toString().equals("") && image == null) {
                             Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
-                        } else if (onStatusButtonClicked(statusButtons) == 4) {
-                            Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
                         } else {
                             post.setMood(onRadioButtonClicked(moodButtons));
-                            post.setContext(onStatusButtonClicked(statusButtons));
+                            post.setContext(socialContext);
                             post.setText(textExplanation.getText().toString().replace("\\s+$", ""));
                             post.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
                             post.setTriggerImage(image);
