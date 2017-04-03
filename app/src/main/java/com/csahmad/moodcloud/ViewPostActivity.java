@@ -152,6 +152,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
                 if (resultCode == RESULT_OK) {
                     post = data.getParcelableExtra("POST");
+                    if (post == null) finish();
                     updateView();
                 }
 
