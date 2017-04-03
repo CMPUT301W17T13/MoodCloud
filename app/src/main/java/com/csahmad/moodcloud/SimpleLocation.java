@@ -17,9 +17,6 @@ public class SimpleLocation {
         if (longitude < -180.0)
             throw new IllegalArgumentException("Longitude cannot be less than -180");
 
-        if (altitude < 0.0)
-            throw new IllegalArgumentException("Altitude cannot be negative.");
-
         if (latitude > 90.0)
             throw new IllegalArgumentException("Latitude cannot be over 90.");
 
