@@ -57,7 +57,7 @@ public class SignInActivity extends AppCompatActivity {
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
                     if(account.getPassword().equals(passwordText.getText().toString())){
-                        localData.store(account.getProfile(), getApplicationContext());
+                        localData.store(account, getApplicationContext());
                         Context context = view.getContext();
                         Intent intent = new Intent(context, NewsFeedActivity.class);
                         startActivity(intent);

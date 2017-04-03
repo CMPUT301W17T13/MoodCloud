@@ -67,7 +67,7 @@ public class FollowingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 //erick 2017-04-01 set signedinprofile to null before signing out
-                LocalData.store((Profile) null, getApplicationContext());
+                LocalData.store((Account) null, getApplicationContext());
                 Context context = view.getContext();
                 Intent intent = new Intent(context, SignInActivity.class);
                 startActivity(intent);
