@@ -424,13 +424,14 @@
     <ImageButton
         android:id="@+id/backButton"
         style="@android:style/Widget.Holo.Light.ImageButton"
-        android:layout_width="?attr/actionBarSize"
+        android:layout_width="48dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:tint="@android:color/background_light"
-        app:srcCompat="?attr/actionModeCloseDrawable"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"/>
+        android:background="@color/colorPrimary"
+        android:scaleType="fitCenter"
+        android:tint="@android:color/background_light"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
 
 
 
