@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,11 +71,11 @@ public class SignInActivity extends AppCompatActivity {
                         return;
                     }
 
-                    Account account = accountController.getAccountFromUsername(usernameText.getText().toString());
+                    Account account = accountController.getAccountFromUsername(username);
 
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
-                    if(account.getPassword().equals(passwordText)){
+                    if(account.getPassword().equals(password)){
                         localData.store(account, getApplicationContext());
                         Context context = view.getContext();
                         Intent intent = new Intent(context, NewsFeedActivity.class);
