@@ -181,12 +181,12 @@ public class Post extends ElasticSearchObject implements Parcelable {
         this.triggerImage = triggerImage;
     }
 
-    public int getContext() {
+    public Integer getContext() {
 
         return this.context;
     }
 
-    public void setContext(int context) {
+    public void setContext(Integer context) {
 
         this.context = context;
     }
