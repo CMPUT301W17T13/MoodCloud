@@ -116,8 +116,24 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
 
-        if (requestCode == READ_LOCATION_REQUEST)
-            setLocation();
+        if (requestCode == READ_LOCATION_REQUEST) {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+                setLocation();
+            }
+        }
+
+        else if (requestCode == READ_CAMERA_REQUEST) {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, TAKE_IMAGE_REQUEST);
+            }
+        }
     }
 
     private void setLocation() {
@@ -336,11 +352,24 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             } else {
 
+                final Context context = this;
+
                 moodPhoto.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, TAKE_IMAGE_REQUEST);
+
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) !=
+                                PackageManager.PERMISSION_GRANTED) {
+
+                            Log.i("LocationStatus", "Requesting permission");
+                            requestCameraPermission();
+                        }
+
+                        else {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, TAKE_IMAGE_REQUEST);
+                        }
                     }
                 });
                 ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
