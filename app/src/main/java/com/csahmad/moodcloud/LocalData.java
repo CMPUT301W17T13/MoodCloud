@@ -51,6 +51,28 @@ public class LocalData {
         return LocalData.signedInAccount;
     }
 
+    /**
+     * Clear {@link Post}s to update on reconnect (in field and in file).
+     *
+     * @param context
+     */
+    public static void clearToUpdate(Context context) {
+
+        toUpdate.clear();
+        storeToUpdate(context);
+    }
+
+    /**
+     * Clear {@link Post}s to delete on reconnect (in field and in file).
+     *
+     * @param context
+     */
+    public static void clearToDelete(Context context) {
+
+        toDelete.clear();
+        storeToDelete(context);
+    }
+
 
     public static ArrayList<Post> getToUpdate(Context context) {
 
