@@ -216,12 +216,23 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
-        Button profileButton = (Button) findViewById(R.id.newsfeedButton);
-        profileButton.setOnClickListener(new View.OnClickListener(){
+        Button newsfeedButton = (Button) findViewById(R.id.newsfeedButton);
+        newsfeedButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, NewsFeedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button profileButton = (Button) findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ViewProfileActivity.class);
+                intent.putExtra("ID",LocalData.getSignedInProfile(getApplicationContext()).getId());
                 startActivity(intent);
             }
         });
