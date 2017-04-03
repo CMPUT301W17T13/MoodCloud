@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
@@ -146,18 +147,38 @@ public class FollowRequestActivity extends AppCompatActivity {
                     FollowController followController = new FollowController();
                     followController.addOrUpdateFollows(follow);
                     followRequestController.deleteFollowRequests(followRequest);
-                    holder.accept.setVisibility(View.GONE);
-                    holder.decline.setVisibility(View.GONE);
-                    holder.result.setText("Request Accepted");
+                    //holder.accept.setVisibility(View.GONE);
+                    //holder.decline.setVisibility(View.GONE);
+                    //holder.result.setText("Request Accepted");
+                    mDataset.clear();
+                    try{
+                        mDataset = followRequestController.getFollowRequests(
+                                LocalData.getSignedInProfile(getApplicationContext()),0
+                        );}catch (TimeoutException e){
+                        System.err.println("TimeoutException: " + e.getMessage());
+                    }
+                    notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "Request Accepted",
+                            Toast.LENGTH_LONG).show();
                 }
             });
             holder.decline.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
                     followRequestController.deleteFollowRequests(followRequest);
-                    holder.accept.setVisibility(View.GONE);
-                    holder.decline.setVisibility(View.GONE);
-                    holder.result.setText("Request Declined");
+                    //holder.accept.setVisibility(View.GONE);
+                    //holder.decline.setVisibility(View.GONE);
+                    //holder.result.setText("Request Declined");
+                    mDataset.clear();
+                    try{
+                    mDataset = followRequestController.getFollowRequests(
+                            LocalData.getSignedInProfile(getApplicationContext()),0
+                    );}catch (TimeoutException e){
+                        System.err.println("TimeoutException: " + e.getMessage());
+                    }
+                    notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "Request Declined",
+                            Toast.LENGTH_LONG).show();
                 }
             });
         }
