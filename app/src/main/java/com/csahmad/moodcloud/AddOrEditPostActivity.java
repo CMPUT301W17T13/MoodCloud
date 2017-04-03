@@ -182,7 +182,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
-        PostController postController = new PostController();
+        //PostController postController = new PostController();
         moodPhoto = (ImageButton) findViewById(R.id.moodPhoto);
         defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);

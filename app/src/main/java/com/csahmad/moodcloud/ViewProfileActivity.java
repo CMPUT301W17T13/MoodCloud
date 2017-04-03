@@ -79,7 +79,9 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Post post = mDataset.get(position);
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ViewPostActivity.class);
-                    intent.putExtra("POST_ID",post.getId());
+                    /////////////////////////////////////////
+                    intent.putExtra("POST",post);
+                    ///////////////////////////////////////
                     startActivity(intent);
                 }
 

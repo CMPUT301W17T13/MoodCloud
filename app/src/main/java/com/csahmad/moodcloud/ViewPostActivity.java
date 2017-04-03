@@ -36,10 +36,12 @@ public class ViewPostActivity extends AppCompatActivity {
         super.onStart();
         setContentView(R.layout.activity_view_post);
         Intent intent = getIntent();
-        String id = intent.getStringExtra("POST_ID");
+        ////////////////////////////////////
+        final Post post = intent.getParcelableExtra("Post");
+        /////////////////////////////////////
         try {
 
-            final Post post = postController.getPostFromId(id);
+            //final Post post = postController.getPostFromId(id);
             final Profile profile = profileController.getProfileFromID(post.getPosterId());
             TextView nameText = (TextView) findViewById(R.id.nameText);
 
@@ -75,7 +77,9 @@ public class ViewPostActivity extends AppCompatActivity {
                     public void onClick(View view){
                         Context context = view.getContext();
                         Intent intent = new Intent(context, AddOrEditPostActivity.class);
+                        ///////////////////////////////////////
                         intent.putExtra("POST",post);
+                        //////////////////////////////////////
                         startActivity(intent);
                     }}
                 );
