@@ -111,6 +111,20 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
+        final Button editButton = (Button) findViewById(R.id.button4);
+        if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view){
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, EditProfileActivity.class);
+                    startActivity(intent);
+                }}
+            );
+        } else {
+            editButton.setVisibility(View.GONE);
+        }
+
         final Button followeditbutton = (Button) findViewById(R.id.followeditbutton);
         if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
             if (ConnectionManager.haveConnection(getApplicationContext())){
