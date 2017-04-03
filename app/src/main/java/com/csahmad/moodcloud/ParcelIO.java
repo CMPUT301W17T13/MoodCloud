@@ -20,22 +20,6 @@ public class ParcelIO {
      */
     private static double nullDoubleParcelValue = -200.0d;
 
-    public static double[] readLocationArray(Parcel in) {
-
-        double[] location = {ParcelIO.nullDoubleParcelValue, ParcelIO.nullDoubleParcelValue,
-                ParcelIO.nullDoubleParcelValue};
-
-        in.readDoubleArray(location);
-
-        if (location[0] == ParcelIO.nullDoubleParcelValue &&
-                location[1] == ParcelIO.nullDoubleParcelValue &&
-                location[2] == ParcelIO.nullDoubleParcelValue)
-
-            return null;
-
-        return location;
-    }
-
     /**
      * Read and return a {@link GeoPoint} from the given Parcel.
      *

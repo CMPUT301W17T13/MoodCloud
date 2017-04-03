@@ -75,7 +75,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     public void onClick(View view){
                         Context context = view.getContext();
                         Intent intent = new Intent(context, AddOrEditPostActivity.class);
-                        intent.putExtra("POST_ID",post.getId());
+                        intent.putExtra("POST",post);
                         startActivity(intent);
                     }}
                 );

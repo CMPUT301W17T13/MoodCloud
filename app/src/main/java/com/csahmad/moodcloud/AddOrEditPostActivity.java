@@ -199,220 +199,214 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
-            String id = intent.getStringExtra("POST_ID");
+            final Post post = intent.getParcelableExtra("POST");
 
 
+            final EditText textExplanation = (EditText) findViewById(R.id.body);
+            final EditText textTrigger = (EditText) findViewById(R.id.trigger);
 
-            try {
-
-                final EditText textExplanation = (EditText) findViewById(R.id.body);
-                final EditText textTrigger = (EditText) findViewById(R.id.trigger);
-
-                final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
-                final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
-                final EditText latitudetext = (EditText) findViewById(R.id.latitude);
-                final EditText longitudetext = (EditText) findViewById(R.id.longitude);
-                final EditText altitudetext = (EditText)findViewById(R.id.altitude);
+            final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
+            final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
+            final EditText latitudetext = (EditText) findViewById(R.id.latitude);
+            final EditText longitudetext = (EditText) findViewById(R.id.longitude);
+            final EditText altitudetext = (EditText)findViewById(R.id.altitude);
 
 
+            if (post == null) {
 
-                if (id == null) {
+                dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
 
-                    dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
-
-                    if (locationArray != null) {
-                        latitudetext.setText(Double.toString(locationArray[0]));
-                        longitudetext.setText(Double.toString(locationArray[1]));
-                        altitudetext.setText(Double.toString(locationArray[2]));
-                    }
-
-                    moodPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Context context = view.getContext();
-                            Intent intent = new Intent(context, TakePhotoActivity.class);
-                            startActivityForResult(intent,TAKE_IMAGE_REQUEST);
-                        }
-                    });
-                    ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
-                    dateButton.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view){
-                            Context context = view.getContext();
-                            Intent intent = new Intent(context, SelectDateActivity.class);
-                            startActivityForResult(intent,REQUEST_GET_DATE);
-                        }
-                    });
-                    final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
-                    deletePhoto.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view){
-                            moodPhoto.setImageDrawable(defaultImage);
-                            deletePhoto.setVisibility(View.INVISIBLE);
-                            image = null;
-                        }
-                    });
-
-                    Button postButton = (Button) findViewById(R.id.postButton);
-                    postButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if (textExplanation.getText().toString().equals("")) {
-                                Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
-                            } else if (onRadioButtonClicked(moodButtons) == 8) {
-                                Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
-                            } else if (textTrigger.getText().toString().equals("") && (image == null)) {
-                                Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
-                            }
-                            else if (onStatusButtonClicked(statusButtons) == 4) {
-                                Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
-                            } else {
-                                Profile profile = LocalData.getSignedInProfile(getApplicationContext());
-                                if (date == null){
-                                    date = Calendar.getInstance();
-                                }
-
-                                Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
-                                        textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
-                                        profile.getId(), null, date);
-                                PostController postController = new PostController();
-                                postController.addOrUpdatePosts(post);
-                                ProfileController profileController = new ProfileController();
-                                profileController.addOrUpdateProfiles(profile);
-
-
-                                finish();
-                            }
-                        }
-
-                    });
-                } else {
-
-                    moodPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Context context = view.getContext();
-                            Intent intent = new Intent(context, TakePhotoActivity.class);
-                            startActivityForResult(intent,TAKE_IMAGE_REQUEST);
-                        }
-                    });
-                    ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
-                    dateButton.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view){
-                            Context context = view.getContext();
-                            Intent intent = new Intent(context, SelectDateActivity.class);
-                            startActivityForResult(intent,REQUEST_GET_DATE);
-
-                        }
-                    });
-                    final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
-                    deletePhoto.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view){
-                            moodPhoto.setImageDrawable(defaultImage);
-                            deletePhoto.setVisibility(View.INVISIBLE);
-                            image = null;
-                        }
-                    });
-
-                    final Post oldPost = postController.getPostFromId(id);
-
-                    if (oldPost.getTriggerImage() != null) {
-                        Bitmap bitmap = ImageConverter.toBitmap(oldPost.getTriggerImage());
-                        this.moodPhoto.setImageBitmap(bitmap);
-                        deletePhoto.setVisibility(View.VISIBLE);
-                        image = oldPost.getTriggerImage();
-                    }
-
-                    String oldExplannation = oldPost.getText();
-                    String oldTrigger = oldPost.getTriggerText();
-                    int oldmood = oldPost.getMood();
-                    int oldcontext = oldPost.getContext();
-                    Calendar olddate = oldPost.getDate();
-
-                    double[] oldlocationArray = oldPost.getLocation();
-
-                    String oldLatitude = null;
-                    String oldLongitude = null;
-                    String oldAltitude = null;
-
-
-                    if (oldlocationArray == null) {
-
-                        if (locationArray != null) {
-                            oldLatitude = Double.toString(locationArray[0]);
-                            oldLongitude = Double.toString(locationArray[1]);
-                            oldAltitude = Double.toString(locationArray[2]);
-                        }
-                    }
-
-                    else {
-                        oldLatitude = Double.toString(oldlocationArray[0]);
-                        oldLongitude = Double.toString(oldlocationArray[1]);
-                        oldAltitude = Double.toString(oldlocationArray[2]);
-                    }
-
-
-                    textTrigger.setText(oldTrigger);
-                    textExplanation.setText(oldExplannation);
-                    moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
-                    statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
-                    dateString.setText(DateConverter.dateToString(olddate));
-
-                    if (oldLatitude != null) latitudetext.setText(oldLatitude);
-                    altitudetext.setText(oldAltitude);
-                    longitudetext.setText(oldLongitude);
-
-
-
-                    Button postButton = (Button) findViewById(R.id.postButton);
-                    postButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (textExplanation.getText().toString().equals("")) {
-                                Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
-                            } else if (onRadioButtonClicked(moodButtons) == 8) {
-                                Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
-                            } else if (textTrigger.getText().toString().equals("") && image == null) {
-                                Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
-                            } else if (onStatusButtonClicked(statusButtons) == 4) {
-                                Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
-                            } else {
-                                oldPost.setMood(onRadioButtonClicked(moodButtons));
-                                oldPost.setContext(onStatusButtonClicked(statusButtons));
-                                oldPost.setText(textExplanation.getText().toString().replace("\\s+$", ""));
-                                oldPost.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
-                                oldPost.setTriggerImage(image);
-                                if (date != null)
-                                oldPost.setDate(date);
-
-
-                                PostController postController = new PostController();
-                                postController.addOrUpdatePosts(oldPost);
-
-
-                                //Context context = v.getContext();
-                                //Intent intent = new Intent(context, ViewPostActivity.class);
-
-                                //intent.putExtra("POST_ID", oldPost.getId());
-                                finish();
-                                //startActivity(intent);
-                            }
-
-
-                        }
-
-                    });
+                if (locationArray != null) {
+                    latitudetext.setText(Double.toString(locationArray[0]));
+                    longitudetext.setText(Double.toString(locationArray[1]));
+                    altitudetext.setText(Double.toString(locationArray[2]));
                 }
 
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
-        }//else{
+                moodPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, TakePhotoActivity.class);
+                        startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+                    }
+                });
+                ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
+                dateButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, SelectDateActivity.class);
+                        startActivityForResult(intent,REQUEST_GET_DATE);
+                    }
+                });
+                final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
+                deletePhoto.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        moodPhoto.setImageDrawable(defaultImage);
+                        deletePhoto.setVisibility(View.INVISIBLE);
+                        image = null;
+                    }
+                });
 
-        //}
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (textExplanation.getText().toString().equals("")) {
+                            Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
+                        } else if (onRadioButtonClicked(moodButtons) == 8) {
+                            Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
+                        } else if (textTrigger.getText().toString().equals("") && (image == null)) {
+                            Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
+                        }
+                        else if (onStatusButtonClicked(statusButtons) == 4) {
+                            Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
+                        } else {
+                            Profile profile = LocalData.getSignedInProfile(getApplicationContext());
+                            if (date == null){
+                                date = Calendar.getInstance();
+                            }
+
+                            Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
+                                    textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
+                                    profile.getId(), null, date);
+                            PostController postController = new PostController();
+                            postController.addOrUpdatePosts(post);
+                            ProfileController profileController = new ProfileController();
+                            profileController.addOrUpdateProfiles(profile);
+
+
+                            finish();
+                        }
+                    }
+
+                });
+            } else {
+
+                moodPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, TakePhotoActivity.class);
+                        startActivityForResult(intent,TAKE_IMAGE_REQUEST);
+                    }
+                });
+                ImageButton dateButton = (ImageButton) findViewById(R.id.datebutton);
+                dateButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, SelectDateActivity.class);
+                        startActivityForResult(intent,REQUEST_GET_DATE);
+
+                    }
+                });
+                final ImageButton deletePhoto = (ImageButton) findViewById(R.id.delimage);
+                deletePhoto.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        moodPhoto.setImageDrawable(defaultImage);
+                        deletePhoto.setVisibility(View.INVISIBLE);
+                        image = null;
+                    }
+                });
+
+                //final Post oldPost = postController.getPostFromId(id);
+
+                if (post.getTriggerImage() != null) {
+                    Bitmap bitmap = ImageConverter.toBitmap(post.getTriggerImage());
+                    this.moodPhoto.setImageBitmap(bitmap);
+                    deletePhoto.setVisibility(View.VISIBLE);
+                    image = post.getTriggerImage();
+                }
+
+                String oldExplannation = post.getText();
+                String oldTrigger = post.getTriggerText();
+                int oldmood = post.getMood();
+                int oldcontext = post.getContext();
+                Calendar olddate = post.getDate();
+
+                double[] oldlocationArray = post.getLocation();
+
+                String oldLatitude = null;
+                String oldLongitude = null;
+                String oldAltitude = null;
+
+
+                if (oldlocationArray == null) {
+
+                    if (locationArray != null) {
+                        oldLatitude = Double.toString(locationArray[0]);
+                        oldLongitude = Double.toString(locationArray[1]);
+                        oldAltitude = Double.toString(locationArray[2]);
+                    }
+                }
+
+                else {
+                    oldLatitude = Double.toString(oldlocationArray[0]);
+                    oldLongitude = Double.toString(oldlocationArray[1]);
+                    oldAltitude = Double.toString(oldlocationArray[2]);
+                }
+
+
+                textTrigger.setText(oldTrigger);
+                textExplanation.setText(oldExplannation);
+                moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
+                statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
+                dateString.setText(DateConverter.dateToString(olddate));
+
+                if (oldLatitude != null) latitudetext.setText(oldLatitude);
+                altitudetext.setText(oldAltitude);
+                longitudetext.setText(oldLongitude);
+
+
+
+                Button postButton = (Button) findViewById(R.id.postButton);
+                postButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (textExplanation.getText().toString().equals("")) {
+                            Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
+                        } else if (onRadioButtonClicked(moodButtons) == 8) {
+                            Toast.makeText(getApplicationContext(), "Want to select a mood?", Toast.LENGTH_LONG).show();
+                        } else if (textTrigger.getText().toString().equals("") && image == null) {
+                            Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
+                        } else if (onStatusButtonClicked(statusButtons) == 4) {
+                            Toast.makeText(getApplicationContext(), "Want to select a social context?", Toast.LENGTH_LONG).show();
+                        } else {
+                            post.setMood(onRadioButtonClicked(moodButtons));
+                            post.setContext(onStatusButtonClicked(statusButtons));
+                            post.setText(textExplanation.getText().toString().replace("\\s+$", ""));
+                            post.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
+                            post.setTriggerImage(image);
+                            if (date != null)
+                            post.setDate(date);
+
+
+                            PostController postController = new PostController();
+                            postController.addOrUpdatePosts(post);
+
+
+                            //Context context = v.getContext();
+                            //Intent intent = new Intent(context, ViewPostActivity.class);
+
+                            //intent.putExtra("POST_ID", oldPost.getId());
+                            finish();
+                            //startActivity(intent);
+                        }
+
+
+                    }
+
+                });
+            }
+
+        }else{
+
+
+        }
 
 
 

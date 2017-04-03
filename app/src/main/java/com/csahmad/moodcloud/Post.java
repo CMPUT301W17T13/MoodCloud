@@ -62,7 +62,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
         this.posterId = in.readString();
         this.date = (Calendar) in.readSerializable();
         this.dateString = in.readString();
-        this.location = ParcelIO.readLocationArray(in);
+        this.location = in.createDoubleArray();
         this.geoPoint = ParcelIO.readGeoPoint(in);
     }
 
@@ -86,6 +86,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
         out.writeString(this.posterId);
         out.writeSerializable(this.date);
         out.writeString(this.dateString);
+        if (this.location != null && this.location.length != 3) this.location = null;
         out.writeDoubleArray(this.location);
         ParcelIO.writeGeoPoint(out, this.geoPoint);
     }
