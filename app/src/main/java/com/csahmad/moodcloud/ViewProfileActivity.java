@@ -28,6 +28,10 @@ import static java.lang.Boolean.TRUE;
  * @author Taylor
  */
 public class ViewProfileActivity extends AppCompatActivity {
+
+    private static final int GET_POST_REQUEST = 0;
+
+    private int position;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private LinearLayoutManager mLayoutMananger;
@@ -43,9 +47,9 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
+    protected void onCreate(Bundle savedInstanceState) {
 
-        super.onStart();
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
@@ -110,23 +114,23 @@ public class ViewProfileActivity extends AppCompatActivity {
         final Button followeditbutton = (Button) findViewById(R.id.followeditbutton);
         if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
             if (ConnectionManager.haveConnection(getApplicationContext())){
-            FollowRequestController followRequestController = new FollowRequestController();
-            try {
-                Double count = followRequestController.getFollowRequestCount(profile);
+                FollowRequestController followRequestController = new FollowRequestController();
+                try {
+                    Double count = followRequestController.getFollowRequestCount(profile);
 
-            followeditbutton.setText("See Follow Requests");
-            if (count != null){
-                followeditbutton.setText("See Follow Requests (" + Double.toString(count) + ")");
-            }
-            } catch (TimeoutException e) {}
-            followeditbutton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view){
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, FollowRequestActivity.class);
-                    startActivity(intent);
-                }}
-            );} else {
+                    followeditbutton.setText("See Follow Requests");
+                    if (count != null){
+                        followeditbutton.setText("See Follow Requests (" + Double.toString(count) + ")");
+                    }
+                } catch (TimeoutException e) {}
+                followeditbutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, FollowRequestActivity.class);
+                        startActivity(intent);
+                    }}
+                );} else {
                 followeditbutton.setVisibility(View.GONE);
             }
         }else {
@@ -159,7 +163,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                             } catch (InterruptedException e) {}
                             catch (TimeoutException e) {}
                             catch (ExecutionException e) {}
-                            }}
+                        }}
                     );}
             }}
 
@@ -212,6 +216,23 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+            case GET_POST_REQUEST:
+
+                if (resultCode == RESULT_OK) {
+                    Post post = data.getParcelableExtra("POST");
+                    mDataset.set(position, post);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                break;
+        }
+    }
+
     /**
      * MyAdapter controls the list of the profile's posts by extending RecyclerView <br>
      *     http://www.androidhive.info/2016/01/android-working-with-recycler-view/ <br>
@@ -235,14 +256,14 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
             @Override
             public void onClick(View view){
-                int position = mRecyclerView.getChildLayoutPosition(view);
+                position = mRecyclerView.getChildLayoutPosition(view);
                 Post post = mDataset.get(position);
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ViewPostActivity.class);
                 /////////////////////////////////////////
                 intent.putExtra("POST",post);
                 ///////////////////////////////////////
-                startActivity(intent);
+                startActivityForResult(intent, GET_POST_REQUEST);
             }
         }
 
@@ -278,15 +299,11 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
     /*public interface ClickListener {
         void onClick(View view, int position);
-
         void onLongClick(View view, int position);
     }
-
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
         private GestureDetector gestureDetector;
         private ViewProfileActivity.ClickListener clickListener;
-
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ViewProfileActivity.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -294,7 +311,6 @@ public class ViewProfileActivity extends AppCompatActivity {
                 public boolean onSingleTapUp(MotionEvent e) {
                     return true;
                 }
-
                 @Override
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -304,24 +320,19 @@ public class ViewProfileActivity extends AppCompatActivity {
                 }
             });
         }
-
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
                 clickListener.onClick(child, rv.getChildPosition(child));
             }
             return false;
         }
-
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         }
-
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
         }
     }
 */
