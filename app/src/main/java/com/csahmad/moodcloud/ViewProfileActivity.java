@@ -139,7 +139,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                         long longCount = count.longValue();
 
                         if (longCount == 0l) {
-                            followeditbutton.setText("No Follow Requests");
+                            followeditbutton.setText("No Requests");
                             followeditbutton.setEnabled(false);
                         }
 
