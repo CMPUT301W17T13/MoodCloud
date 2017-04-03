@@ -231,6 +231,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
             final EditText textExplanation = (EditText) findViewById(R.id.body);
             final EditText textTrigger = (EditText) findViewById(R.id.trigger);
+            textTrigger.setFilters(new InputFilter[]{new TriggerInputFilter(20, 3)});
 
             final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
             final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
