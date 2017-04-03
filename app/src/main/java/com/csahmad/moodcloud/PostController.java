@@ -227,7 +227,8 @@ public class PostController {
 
         for (String id: followeeIds) {
             filter.addFieldValue(new FieldValue("posterId", id));
-            posts.add(this.elasticSearch.getSingleResult());
+            Post result = this.elasticSearch.getSingleResult();
+            if (result != null) posts.add(result);
             filter.removeFieldValue("posterId");
         }
 
