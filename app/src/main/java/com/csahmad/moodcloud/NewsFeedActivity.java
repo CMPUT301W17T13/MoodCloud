@@ -30,8 +30,14 @@ import java.util.concurrent.TimeoutException;
 public class NewsFeedActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutMananger;
+    private LinearLayoutManager mLayoutMananger;
     PostController postController = new PostController();
+    private int loadCount = 0;
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    private int firstVisibleItems, visibleItemCount, totalItemCount;
+    ArrayList<Post> mDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class NewsFeedActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            final ArrayList<Post> mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
+            mDataset = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,0);
             //final ArrayList<Post> mDataset = postController.getPosts(null,0);
             mAdapter = new MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
@@ -67,12 +73,38 @@ public class NewsFeedActivity extends AppCompatActivity {
             System.err.println("TimeoutException: " + e.getMessage());
         }
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = mLayoutMananger.getChildCount();
+                totalItemCount = mLayoutMananger.getItemCount();
+                firstVisibleItems = mLayoutMananger.findFirstVisibleItemPosition();
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount) <=
+                        (firstVisibleItems + visibleThreshold)) {
+                    loadCount = loadCount + 1;
+                    try {
+                        ArrayList<Post> newDS = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,loadCount);
+                        mDataset.addAll(newDS);
+                    } catch (TimeoutException e) {}
+                    mAdapter.notifyDataSetChanged();
+                    loading = true;
+                }
+            }
+        });
+
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 //erick 2017-04-01 set signedinprofile to null before signing out
-                LocalData.store((Profile) null, getApplicationContext());
+                LocalData.store((Account) null, getApplicationContext());
                 Context context = view.getContext();
                 Intent intent = new Intent(context, SignInActivity.class);
                 startActivity(intent);

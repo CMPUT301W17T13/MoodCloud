@@ -70,7 +70,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     Account account = new Account(usernameText.getText().toString(), passwordText.getText().toString(), profile);
                     accountController.addOrUpdateAccounts(account);
                     profile.setHomeProfile(TRUE);
-                    LocalData.store(profile, getApplicationContext());
+                    LocalData.store(account, getApplicationContext());
                     //probably something to sign in the user
                     Context context = view.getContext();
                     Intent intent = new Intent(context, NewsFeedActivity.class);

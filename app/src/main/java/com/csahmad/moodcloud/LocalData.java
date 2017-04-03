@@ -75,38 +75,31 @@ public class LocalData {
     }
 
     /**
-     * Stores Account of passed Profile object in local memory
+     * Stores Account in local memory
      *
-     * @param profile profile to be stored
+     * @param account account to be stored
      * @param context
      */
-    public static void store(Profile profile, Context context) {
+    public static void store(Account account, Context context) {
 
-        if(profile == null){return;}
-        AccountController AC = new AccountController();
+        //Store data
         try {
-            Account account = AC.getAccountFromUsername(profile.getName());
-
-            //Store data
-            try {
-                //Store ACCOUNT to ACCOUNTSAVE file
-                FileOutputStream fos = context.openFileOutput(ACCOUNTSAVE, Context.MODE_PRIVATE);
-                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-                Gson gson = new Gson();
-                gson.toJson(account, out);
-                out.flush();
-                fos.close();
+            //Store ACCOUNT to ACCOUNTSAVE file
+            FileOutputStream fos = context.openFileOutput(ACCOUNTSAVE, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(account, out);
+            out.flush();
+            fos.close();
 
 
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                throw new RuntimeException();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new RuntimeException();
-            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
         }
-        catch(TimeoutException e){Log.i("error", "AccountController Timeout");}
     }
 
     /**

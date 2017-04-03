@@ -9,6 +9,7 @@ import android.widget.EditText;
 public class EditProfileActivity extends AppCompatActivity {
 
     private Profile profile;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         this.profile = LocalData.getSignedInProfile(this);
+        this.account = LocalData.getSignedInAccount(this);
 
         EditText name = (EditText) this.findViewById(R.id.profileName);
         name.setText(profile.getName());
@@ -27,7 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         ProfileController controller = new ProfileController();
         controller.addOrUpdateProfiles(profile);
-        LocalData.store(profile, this);
+        LocalData.store(account, this);
         this.finish();
     }
 }

@@ -94,8 +94,8 @@ public class ViewProfileUITest {
 
             double[] location = {0.0d, 0.0d, 0.0d};
             Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            LocalData.store((Profile) null, targetContext);
-            LocalData.store(testProfile, targetContext);
+            LocalData.store((Account) null, targetContext);
+            LocalData.store(userAccount, targetContext);
 
             testPost1 = new Post(
                     "Testing the UI :D",
@@ -137,7 +137,7 @@ public class ViewProfileUITest {
             }
             catch(TimeoutException e){}
             psc.addOrUpdatePosts(testPost1, testPost2, testPost3);
-            LocalData.store(testProfile, targetContext);
+            LocalData.store(userAccount, targetContext);
         }
 
         /**
@@ -167,7 +167,7 @@ public class ViewProfileUITest {
                 }
             }
             catch(TimeoutException e){}
-            LocalData.store((Profile) null, InstrumentationRegistry.getTargetContext());
+            LocalData.store((Account) null, InstrumentationRegistry.getTargetContext());
         }
     };
 

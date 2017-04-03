@@ -25,9 +25,10 @@ public class LocalDataTest extends ActivityInstrumentationTestCase2<MainActivity
         final LocalData ld = new LocalData();
         Profile John = new Profile("John");
         John.setId("00000");
+        Account JohnAcc = new Account("John", "12345", John);
         context = this.getInstrumentation().getTargetContext().getApplicationContext();
 //this.getInstrumentation().getTargetContext().getApplicationContext();
-        ld.store(John, context);
+        ld.store(JohnAcc, context);
         ld.tryReadProfile(context);
 
 
