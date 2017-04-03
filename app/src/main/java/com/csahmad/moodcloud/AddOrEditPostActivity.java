@@ -219,7 +219,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
 
 
-        if(isNetworkAvailable()) {
+        //if(isNetworkAvailable()) {
             final Intent intent = getIntent();
             final Post post = intent.getParcelableExtra("POST");
 
@@ -445,7 +445,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-        }
+        //}
 
 
 
