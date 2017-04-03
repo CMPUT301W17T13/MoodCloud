@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
@@ -26,8 +27,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 import android.location.LocationManager;
-
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationRequest;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
@@ -105,7 +104,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                String provider = lm.getBestProvider(new Criteria(), true);
+
+                Location location = lm.getLastKnownLocation(provider);
 
                 if (location == null){
 
@@ -153,7 +154,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     };
 
                     //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
-                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2_000l, 100f, locationListener);
+                    lm.requestLocationUpdates(provider, 2_000l, 100f, locationListener);
                 }
 
                 else {
