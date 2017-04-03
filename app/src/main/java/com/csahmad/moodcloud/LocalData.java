@@ -130,6 +130,18 @@ public class LocalData {
     }
 
     /**
+     * Delete the post at the given index and update the file.
+     *
+     * @param index the index where the post is in userPosts
+     * @param context
+     */
+    public static void deletePostAt(int index, Context context) {
+
+        userPosts.remove(index);
+        store(userPosts, context);
+    }
+
+    /**
      * Stores posts in memory
      * Responsibility of caller to pass correct posts
      *

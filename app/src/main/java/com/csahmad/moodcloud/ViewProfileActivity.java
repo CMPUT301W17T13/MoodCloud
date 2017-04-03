@@ -227,8 +227,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
                     Post post = data.getParcelableExtra("POST");
 
-                    if (post == null)
+                    if (post == null) {
                         mDataset.remove(position);
+                        LocalData.deletePostAt(position, this);
+                    }
 
                     else
                         mDataset.set(position, post);
