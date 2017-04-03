@@ -1,10 +1,26 @@
 package com.csahmad.moodcloud;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /** Build query strings to be used in elasticsearch queries. */
 public class QueryBuilder {
+
+    /**
+     * Return an elasticsearch query reflecting the restrictions in the given filter.
+     *
+     * <p>
+     * Does not set the "from" or "size" fields for the query.
+     *
+     * @param filter the restrictions the query should enforce
+     * @return an elasticsearch query reflecting the restrictions in the given filter
+     */
+    public static String build(SearchFilter filter) {
+
+        return QueryBuilder.buildQuery(filter, null, null);
+    }
 
     /**
      * Return an elasticsearch query reflecting the restrictions in the given filter.
@@ -17,13 +33,32 @@ public class QueryBuilder {
      */
     public static String build(SearchFilter filter, int resultSize, int from) {
 
+        return QueryBuilder.buildQuery(filter, resultSize, from);
+    }
+
+    /**
+     * Return an elasticsearch query reflecting the restrictions in the given filter.
+     *
+     * @param filter the restrictions the query should enforce
+     * @param resultSize the maximum number of results to return
+     * @param from set to 0 to get the first x number of results, set to x to get the next x number
+     *             of results, set to 2x to get the next x number of results after that, and so on
+     * @return an elasticsearch query reflecting the restrictions in the given filter
+     */
+    private static String buildQuery(SearchFilter filter, Integer resultSize, Integer from) {
+
         boolean hasTermAggregations = filter.hasTermAggregations();
-        int objectResultSize = resultSize;
+        Integer objectResultSize = resultSize;
         if (hasTermAggregations) objectResultSize = 0;
 
         String query;
-        String startQuery = "{\n\"from\": " + Integer.toString(from) + ",\n";
-        startQuery += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
+        String startQuery = "{\n";
+
+        if (from != null)
+            startQuery += "\"from\": " + Integer.toString(from) + ",\n";
+
+        if (objectResultSize != null)
+            startQuery += "\"size\": " + Integer.toString(objectResultSize) + ",\n";
 
         ArrayList<String> components = new ArrayList<String>();
 
@@ -91,6 +126,7 @@ public class QueryBuilder {
             components.add(query);
         }
 
+        Log.i("Query", startQuery + TextUtils.join(",\n", components) + "\n}");
         return startQuery + TextUtils.join(",\n", components) + "\n}";
     }
 

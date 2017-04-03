@@ -47,9 +47,9 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onStart() {
 
-        super.onCreate(savedInstanceState);
+        super.onStart();
         setContentView(R.layout.activity_view_profile);
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
@@ -119,8 +119,19 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Double count = followRequestController.getFollowRequestCount(profile);
 
                     followeditbutton.setText("See Follow Requests");
+
                     if (count != null){
-                        followeditbutton.setText("See Follow Requests (" + Double.toString(count) + ")");
+
+                        long longCount = count.longValue();
+
+                        if (longCount == 0l) {
+                            followeditbutton.setText("No Follow Requests");
+                            followeditbutton.setEnabled(false);
+                        }
+
+                        else
+                            followeditbutton.setText("See Follow Requests (" +
+                                    Long.toString(longCount) + ")");
                     }
                 } catch (TimeoutException e) {}
                 followeditbutton.setOnClickListener(new View.OnClickListener() {
