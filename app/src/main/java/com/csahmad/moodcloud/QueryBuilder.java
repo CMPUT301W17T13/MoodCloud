@@ -125,8 +125,7 @@ public class QueryBuilder {
                     resultSize);
             components.add(query);
         }
-
-        Log.i("Query", startQuery + TextUtils.join(",\n", components) + "\n}");
+        
         return startQuery + TextUtils.join(",\n", components) + "\n}";
     }
 
