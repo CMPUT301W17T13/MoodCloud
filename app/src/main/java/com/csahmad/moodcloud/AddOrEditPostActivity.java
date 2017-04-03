@@ -3,12 +3,15 @@ package com.csahmad.moodcloud;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationProvider;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,19 +21,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
-
 import android.location.LocationManager;
-
-import org.apache.commons.lang3.StringUtils;
-
-//import static com.csahmad.moodcloud.R.id.angry_selected;
+import com.google.android.gms.location.LocationRequest;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
@@ -48,6 +45,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private int setMonth;
     private int setYear;
     private ImageButton deletePhoto;
+    private double[] locationArray = null;
 
 
 
@@ -131,18 +129,51 @@ public class AddOrEditPostActivity extends AppCompatActivity {
             requestLocationPermission();
         }
 
-        final double[] locationArray;
+        if (haveLocationPermission()) {
 
-        //if (haveLocationPermission()) {
-         // Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-          //  double latitude = location.getLatitude();
-           // double longitude = location.getLongitude();
-           // double altitude = location.getAltitude();
-           // locationArray = new double[]{latitude, longitude, altitude};
-        //}
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-       // else
-         //locationArray = null;
+            if (location == null){
+
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                LocationListener locationListener= new LocationListener() {
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                        locationArray = new double[]{location.getLatitude(),
+                                location.getLongitude(), location.getAltitude()};
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        ;
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                        ;
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+
+                        ;
+                    }
+                };
+
+                lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
+            }
+
+            else {
+                locationArray = new double[]{location.getLatitude(),
+                        location.getLongitude(), location.getAltitude()};
+            }
+        }
 
         if(isNetworkAvailable()) {
             Intent intent = getIntent();
@@ -157,17 +188,21 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 final RadioGroup moodButtons = (RadioGroup) findViewById(R.id.moodRadioGroup);
                 final RadioGroup statusButtons = (RadioGroup) findViewById(R.id.statusRadioGroup);
-                //final EditText latitudetext = (EditText) findViewById(R.id.latitude);
-                //final EditText longitudetext = (EditText) findViewById(R.id.longitude);
-                //final EditText altitudetext = (EditText)findViewById(R.id.altitude);
+                final EditText latitudetext = (EditText) findViewById(R.id.latitude);
+                final EditText longitudetext = (EditText) findViewById(R.id.longitude);
+                final EditText altitudetext = (EditText)findViewById(R.id.altitude);
 
 
 
                 if (id == null) {
+
                     dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
-                    //latitudetext.setText(Double.toString(locationArray[0]));
-                    //longitudetext.setText(Double.toString(locationArray[1]));
-                    //altitudetext.setText(Double.toString(locationArray[2]));
+
+                    if (locationArray != null) {
+                        latitudetext.setText(Double.toString(locationArray[0]));
+                        longitudetext.setText(Double.toString(locationArray[1]));
+                        altitudetext.setText(Double.toString(locationArray[2]));
+                    }
 
                     moodPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -274,10 +309,28 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     int oldmood = oldPost.getMood();
                     int oldcontext = oldPost.getContext();
                     Calendar olddate = oldPost.getDate();
-                    //double[] oldlocationArray = oldPost.getLocation();
-                    //String oldLatitude = Double.toString(oldlocationArray[0]);
-                    //String oldLongitude = Double.toString(oldlocationArray[1]);
-                    //String oldAltitude = Double.toString(oldlocationArray[2]);
+
+                    double[] oldlocationArray = oldPost.getLocation();
+
+                    String oldLatitude = null;
+                    String oldLongitude = null;
+                    String oldAltitude = null;
+
+
+                    if (oldlocationArray == null) {
+
+                        if (locationArray != null) {
+                            oldLatitude = Double.toString(locationArray[0]);
+                            oldLongitude = Double.toString(locationArray[1]);
+                            oldAltitude = Double.toString(locationArray[2]);
+                        }
+                    }
+
+                    else {
+                        oldLatitude = Double.toString(oldlocationArray[0]);
+                        oldLongitude = Double.toString(oldlocationArray[1]);
+                        oldAltitude = Double.toString(oldlocationArray[2]);
+                    }
 
 
                     textTrigger.setText(oldTrigger);
@@ -285,9 +338,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     moodButtons.check(RadioConverter.getMoodButtonId(oldmood));
                     statusButtons.check(RadioConverter.getContextButtonId(oldcontext));
                     dateString.setText(DateConverter.dateToString(olddate));
-                    //latitudetext.setText(oldLatitude);
-                    //altitudetext.setText(oldAltitude);
-                    //longitudetext.setText(oldLongitude);
+
+                    if (oldLatitude != null) latitudetext.setText(oldLatitude);
+                    altitudetext.setText(oldAltitude);
+                    longitudetext.setText(oldLongitude);
 
 
 
