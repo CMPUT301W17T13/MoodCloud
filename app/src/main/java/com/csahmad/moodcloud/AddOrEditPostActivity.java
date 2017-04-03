@@ -94,20 +94,81 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 READ_LOCATION_REQUEST);
     }
 
-    /**
-     * Return whether this app currently has permission to access location.
-     *
-     * @return whether this app currently has permission to access location
-     */
-    public boolean haveLocationPermission() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED)
+        if (requestCode == READ_LOCATION_REQUEST) {
 
-            return false;
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) {
 
-        return true;
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if (location == null){
+
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                    LocationListener locationListener= new LocationListener() {
+
+                        @Override
+                        public void onLocationChanged(Location location) {
+
+                            Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                            Log.i("LocationStatus", "Got location!");
+                            locationArray = new double[]{location.getLatitude(),
+                                    location.getLongitude(), location.getAltitude()};
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                            if (status == LocationProvider.OUT_OF_SERVICE) {
+                                Toast.makeText(getApplicationContext(), "Out of service", Toast.LENGTH_LONG).show();
+                                Log.i("LocationStatus", "Out of service");
+                            }
+
+                            else if (status == LocationProvider.TEMPORARILY_UNAVAILABLE) {
+                                Toast.makeText(getApplicationContext(), "Unavailable", Toast.LENGTH_LONG).show();
+                                Log.i("LocationStatus", "Unavailable");
+                            }
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                            ;
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                            Toast.makeText(getApplicationContext(), "Disabled", Toast.LENGTH_LONG).show();
+                            Log.i("LocationStatus", "Disabled");
+                        }
+                    };
+
+                    //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
+                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2_000l, 100f, locationListener);
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
+                    Log.i("LocationStatus", "Got location!");
+                    locationArray = new double[]{location.getLatitude(),
+                            location.getLongitude(), location.getAltitude()};
+                }
+            }
+
+            else {
+                Toast.makeText(getApplicationContext(), "Denied!", Toast.LENGTH_LONG).show();
+                Log.i("LocationStatus", "Denied!");
+            }
+        }
     }
 
     @Override
@@ -121,72 +182,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         dateString = (TextView) findViewById(R.id.postDate);
         deletePhoto = (ImageButton) findViewById(R.id.delimage);
 
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         // TODO: 2017-03-31 Find out why Android Studio won't let me put this in a separate method
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
 
+            Toast.makeText(getApplicationContext(), "Requesting permission", Toast.LENGTH_LONG).show();
+            Log.i("LocationStatus", "Requesting permission");
             requestLocationPermission();
-        }
-
-        if (haveLocationPermission()) {
-
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            if (location == null){
-
-                LocationRequest locationRequest = LocationRequest.create();
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-                LocationListener locationListener= new LocationListener() {
-
-                    @Override
-                    public void onLocationChanged(Location location) {
-
-                        Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
-                        Log.i("LocationStatus", "Got location!");
-                        locationArray = new double[]{location.getLatitude(),
-                                location.getLongitude(), location.getAltitude()};
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                        if (status == LocationProvider.OUT_OF_SERVICE) {
-                            Toast.makeText(getApplicationContext(), "Out of service", Toast.LENGTH_LONG).show();
-                            Log.i("LocationStatus", "Out of service");
-                        }
-
-                        else if (status == LocationProvider.TEMPORARILY_UNAVAILABLE) {
-                            Toast.makeText(getApplicationContext(), "Unavailable", Toast.LENGTH_LONG).show();
-                            Log.i("LocationStatus", "Unavailable");
-                        }
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                        ;
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                        ;
-                    }
-                };
-
-                lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
-            }
-
-            else {
-                Toast.makeText(getApplicationContext(), "Got location!", Toast.LENGTH_LONG).show();
-                Log.i("LocationStatus", "Got location!");
-                locationArray = new double[]{location.getLatitude(),
-                        location.getLongitude(), location.getAltitude()};
-            }
         }
 
         if(isNetworkAvailable()) {
