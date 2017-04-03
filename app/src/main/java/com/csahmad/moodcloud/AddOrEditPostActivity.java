@@ -318,9 +318,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
                                     textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
                                     profile.getId(),locationArray, date);
+                            if (isNetworkAvailable()){
                             PostController postController = new PostController();
-                            postController.addOrUpdatePosts(post);
-                            LocalData.addPost(post, context);
+                            postController.addOrUpdatePosts(post);} else{
+                            LocalData.addPost(post, context);}
                             Intent intent = new Intent();
                             intent.putExtra("POST",post);
                             setResult(RESULT_OK,intent);
@@ -434,11 +435,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             if (date != null)
                             post.setDate(date);
 
+                            if (isNetworkAvailable()){
+                                PostController postController = new PostController();
+                                postController.addOrUpdatePosts(post);}
 
-                            PostController postController = new PostController();
-                            postController.addOrUpdatePosts(post);
-
-                            Intent intent1 = new Intent();
+                            Intent intent = new Intent();
                             intent.putExtra("POST",post);
                             setResult(RESULT_OK,intent);
                             finish();

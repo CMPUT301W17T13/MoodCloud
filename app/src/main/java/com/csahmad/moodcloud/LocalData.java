@@ -32,11 +32,12 @@ public class LocalData {
     private static ArrayList<Post> userPosts;
     private static final String ACCOUNTSAVE = "account.sav";
     private static final String POSTSAVE = "posts.sav";
-
+    private static ArrayList<Post> toAdd;
     private static ArrayList<Post> toUpdate;
     private static ArrayList<Post> toDelete;
-    private static final String TO_UPDATE_FILE = "toadd.sav";
-    private static final String TO_DELETE_FILE = "toadd.sav";
+    private static final String TO_ADD_FILE = "toadd.sav";
+    private static final String TO_UPDATE_FILE = "toupdate.sav";
+    private static final String TO_DELETE_FILE = "todelete.sav";
 
     /**
      * Used to access the {@link Account} of the current signed in user
@@ -62,6 +63,11 @@ public class LocalData {
         storeToUpdate(context);
     }
 
+    public static void clearToAdd(Context context) {
+        toAdd.clear();
+        storeToAdd(context);
+    }
+
     /**
      * Clear {@link Post}s to delete on reconnect (in field and in file).
      *
@@ -73,6 +79,10 @@ public class LocalData {
         storeToDelete(context);
     }
 
+    public static ArrayList<Post> getToAdd(Context context){
+        LocalData.tryReadToAdd(context);
+        return toUpdate;
+    }
 
     public static ArrayList<Post> getToUpdate(Context context) {
 
@@ -108,6 +118,22 @@ public class LocalData {
         storeToUpdate(context);
     }
 
+    public static void addToAdd(Post post, Context context) {
+
+        for (int i = 0; i < toAdd.size(); i++) {
+
+            Post existing = toAdd.get(i);
+
+            if (existing.getId() == post.getId()) {
+                toAdd.remove(i);
+                break;
+            }
+        }
+
+        toAdd.add(post);
+        storeToAdd(context);
+    }
+
     /**
      * Add the given {@link Post} to the TO_DELETE_FILE file.
      *
@@ -127,7 +153,7 @@ public class LocalData {
         }
 
         toDelete.add(post);
-        storeToUpdate(context);
+        storeToDelete(context);
     }
 
     /**
@@ -156,6 +182,12 @@ public class LocalData {
     public static ArrayList<Post> getUserPosts(Context context){
         tryReadPosts(context);
         return userPosts;
+    }
+
+    public static void setUserPosts(ArrayList<Post> posts){
+        if (userPosts != null){
+        userPosts.clear();}
+        userPosts = posts;
     }
 
     /**
@@ -223,6 +255,7 @@ public class LocalData {
 
         if (userPosts == null) userPosts = new ArrayList<Post>();
         userPosts.add(post);
+        addToAdd(post,context);
         store(userPosts, context);
     }
 
@@ -236,6 +269,7 @@ public class LocalData {
     public static void updatePostAt(int index, Post post, Context context) {
 
         userPosts.set(index, post);
+        addToUpdate(post,context);
         store(userPosts, context);
     }
 
@@ -245,9 +279,10 @@ public class LocalData {
      * @param index the index where the {@link Post} is in userPosts
      * @param context
      */
-    public static void deletePostAt(int index, Context context) {
+    public static void deletePostAt(int index, Post post, Context context) {
 
         userPosts.remove(index);
+        addToDelete(post, context);
         store(userPosts, context);
     }
 
@@ -289,6 +324,29 @@ public class LocalData {
      * @param context
      */
     public static void storeToUpdate(Context context){
+
+        try{
+            FileOutputStream fos = context.openFileOutput(TO_UPDATE_FILE, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(toUpdate, out);
+            out.flush();
+            fos.close();
+
+
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+
+    }
+
+    public static void storeToAdd(Context context){
 
         try{
             FileOutputStream fos = context.openFileOutput(TO_UPDATE_FILE, Context.MODE_PRIVATE);
@@ -371,6 +429,25 @@ public class LocalData {
      * @return true if Posts are read
      */
     public static boolean tryReadToUpdate(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(TO_UPDATE_FILE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+
+            toUpdate = gson.fromJson(in, new TypeToken<ArrayList<Post>>(){}.getType());
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            return false;
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+        return true;
+    }
+
+    public static boolean tryReadToAdd(Context context) {
         try {
             FileInputStream fis = context.openFileInput(TO_UPDATE_FILE);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));

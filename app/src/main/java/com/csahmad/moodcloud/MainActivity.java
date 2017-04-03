@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.updatePosts();
+        //this.updatePosts();
 
         if (LocalData.getSignedInProfile(getApplicationContext()) == null) {
             Intent intent = new Intent(this, SignInActivity.class);
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
      * Check if there are any local {@link Post}s that need to be updated/deleted and try to
      * update/delete them online.
      */
-    private void updatePosts() {
+    /*private void updatePosts() {
 
         if (!ConnectionManager.haveConnection(this)) {
             Toast.makeText(getApplicationContext(), "Sync failed (no connection)", Toast.LENGTH_LONG).show();
@@ -92,6 +92,31 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Sync failed", Toast.LENGTH_LONG).show();
             }
         }
-    }
+
+        postList = LocalData.getToAdd(this);
+        posts = null;
+        if (postList != null) posts = (Post[]) postList.toArray();
+
+        if (posts != null) {
+
+            Toast.makeText(getApplicationContext(), "Syncing adding posts", Toast.LENGTH_LONG).show();
+
+            try {
+                controller.addOrUpdatePosts(posts);
+                controller.waitForTask();
+                LocalData.clearToAdd(this);
+            }
+
+            catch (TimeoutException e) {
+                Toast.makeText(getApplicationContext(), "Sync failed (timeout)", Toast.LENGTH_LONG).show();
+            }
+
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Sync failed", Toast.LENGTH_LONG).show();
+            }
+        }
+        try{
+        LocalData.setUserPosts(controller.getPosts(LocalData.getSignedInProfile(getApplicationContext()),null,0));
+    }catch (TimeoutException e) {}}*/
 }
 

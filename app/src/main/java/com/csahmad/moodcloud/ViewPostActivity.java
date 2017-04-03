@@ -3,6 +3,7 @@ package com.csahmad.moodcloud;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -91,7 +92,8 @@ public class ViewPostActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View view){
-                        postController.deletePosts(post);
+                        if (ConnectionManager.haveConnection(getApplicationContext())){
+                        postController.deletePosts(post);}
                         finish();
                     }}
                 );
