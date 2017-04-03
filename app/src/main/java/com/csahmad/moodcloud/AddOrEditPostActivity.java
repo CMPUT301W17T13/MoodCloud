@@ -271,7 +271,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
                                     textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
-                                    profile.getId(), null, date);
+                                    profile.getId(),locationArray, date);
                             PostController postController = new PostController();
                             postController.addOrUpdatePosts(post);
                             ProfileController profileController = new ProfileController();
@@ -403,10 +403,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-        }else{
+        }//else{
 
 
-        }
+        //}
 
 
 
