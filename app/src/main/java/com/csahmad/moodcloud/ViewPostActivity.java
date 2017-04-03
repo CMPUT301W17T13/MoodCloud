@@ -37,7 +37,7 @@ public class ViewPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_post);
         Intent intent = getIntent();
         ////////////////////////////////////
-        final Post post = intent.getParcelableExtra("Post");
+        final Post post = intent.getParcelableExtra("POST");
         /////////////////////////////////////
         try {
 
