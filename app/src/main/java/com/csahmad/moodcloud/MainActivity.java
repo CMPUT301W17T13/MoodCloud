@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("erick",LocalData.getSignedInProfile(getApplicationContext()).getName());
         if (LocalData.getSignedInProfile(getApplicationContext()) == null) {
 
             Intent intent = new Intent(this, SignInActivity.class);

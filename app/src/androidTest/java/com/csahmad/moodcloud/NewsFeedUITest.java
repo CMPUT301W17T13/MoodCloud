@@ -8,7 +8,13 @@ package com.csahmad.moodcloud;
         import android.support.test.rule.ActivityTestRule;
         import android.support.test.runner.AndroidJUnit4;
         import android.util.Log;
+        import android.view.View;
+        import android.widget.Adapter;
+        import android.widget.AdapterView;
 
+        import org.hamcrest.Description;
+        import org.hamcrest.Matcher;
+        import org.hamcrest.TypeSafeMatcher;
         import org.junit.Rule;
         import org.junit.Test;
         import org.junit.runner.RunWith;
@@ -29,7 +35,6 @@ package com.csahmad.moodcloud;
         import static android.support.test.espresso.matcher.ViewMatchers.withText;
         import static org.hamcrest.Matchers.allOf;
         import static org.hamcrest.CoreMatchers.is;
-        import static org.hamcrest.Matchers.allOf;
         import static org.hamcrest.Matchers.instanceOf;
         import static org.hamcrest.Matchers.not;
         import static org.hamcrest.Matchers.anything;
@@ -58,8 +63,14 @@ public class NewsFeedUITest {
     private Follow follow3;
 
     //declare Posts
+    private Post JohnPost1;
+    private Post JohnPost2;
+    private Post JohnPost3;
+    private Post JohnPost4;
     private Post EdPost1;
+    private Post EdPost2;
     private Post RandyPost1;
+    private Post RandyPost2;
     private Post BobPost1;
 
     //instantiate controllers
@@ -105,6 +116,46 @@ public class NewsFeedUITest {
             follow3 = new Follow(testProfile, followedProfile3);
 
             //instantiate Posts with locations
+            double[] JohnPost1Loc = {0.0d, 0.0d, 0.0d};
+            JohnPost1 = new Post(
+                    "it's a great day to be me!",
+                    Mood.HAPPY,                                // Mood
+                    "life",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.ALONE,                       // Social context
+                    "JohnID",                                  // Poster ID
+                    JohnPost1Loc,                                  // Location
+                    new GregorianCalendar(2017, 2, 2));
+            double[] JohnPost2Loc = {0.0d, 0.0d, 0.0d};
+            JohnPost2 = new Post(
+                    "I petted a puppy",
+                    Mood.HAPPY,                                // Mood
+                    "dog",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.ALONE,                       // Social context
+                    "JohnID",                                  // Poster ID
+                    JohnPost2Loc,                                  // Location
+                    new GregorianCalendar(2017, 3, 2));
+            double[] JohnPost3Loc = {0.0d, 0.0d, 0.0d};
+            JohnPost3 = new Post(
+                    "Found out I'm allergic to dogs",
+                    Mood.SAD,                                // Mood
+                    "allergies",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.ALONE,                       // Social context
+                    "JohnID",                                  // Poster ID
+                    JohnPost3Loc,                                  // Location
+                    new GregorianCalendar(2017, 3, 2));
+            double[] JohnPost4Loc = {0.0d, 0.0d, 0.0d};
+            JohnPost4 = new Post(
+                    "A stranger gave me flowers",
+                    Mood.HAPPY,                                // Mood
+                    "gift",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.WITH_GROUP,                       // Social context
+                    "JohnID",                                  // Poster ID
+                    JohnPost4Loc,                                  // Location
+                    new GregorianCalendar(2017, 1, 15));
             double[] EdPost1Loc = {0.0d, 0.0d, 0.0d};
             EdPost1 = new Post(
                     "how do i fix my bicycle?",
@@ -114,7 +165,17 @@ public class NewsFeedUITest {
                     SocialContext.ALONE,                       // Social context
                     "EdID",                                  // Poster ID
                     EdPost1Loc,                                  // Location
-                    new GregorianCalendar(2017, 4, 2));
+                    new GregorianCalendar(2017, 3, 2));
+            double[] EdPost2Loc = {0.0d, 0.0d, 0.0d};
+            EdPost2 = new Post(
+                    "Living in Chicago",
+                    Mood.SCARED,                                // Mood
+                    "crime",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.ALONE,                       // Social context
+                    "EdID",                                  // Poster ID
+                    EdPost2Loc,                                  // Location
+                    new GregorianCalendar(2017, 2, 31));
             double[] RandyPost1Loc = {0.0d, 0.0d, 0.0d};
             RandyPost1 = new Post(
                     "Stepped on a rake",
@@ -124,7 +185,17 @@ public class NewsFeedUITest {
                     SocialContext.ALONE,                       // Social context
                     "RandyID",                                  // Poster ID
                     RandyPost1Loc,                                  // Location
-                    new GregorianCalendar(2017, 3, 10));
+                    new GregorianCalendar(2017, 1, 10));
+            double[] RandyPost2Loc = {0.0d, 0.0d, 0.0d};
+            RandyPost2 = new Post(
+                    "where did I leave my keys?",
+                    Mood.CONFUSED,                                // Mood
+                    "Lost Keys",                    // Trigger text
+                    null,                                      // Trigger image
+                    SocialContext.ALONE,                       // Social context
+                    "RandyID",                                  // Poster ID
+                    RandyPost2Loc,                                  // Location
+                    new GregorianCalendar(2017, 3, 1));
             double[] BobPost1Loc = {0.0d, 0.0d, 0.0d};
             BobPost1 = new Post(
                     "Just watched Randy get a rake in the face",
@@ -134,14 +205,14 @@ public class NewsFeedUITest {
                     SocialContext.WITH_GROUP,                       // Social context
                     "BobID",                                  // Poster ID
                     BobPost1Loc,                                  // Location
-                    new GregorianCalendar(2017, 3, 10));
+                    new GregorianCalendar(2017, 1, 10));
 
             //add objects to elasticsearch
             prc.addOrUpdateProfiles(testProfile, followedProfile1, followedProfile2, followedProfile3);
             acc.addOrUpdateAccounts(testAccount, followedAccount1, followedAccount2, followedAccount3);
             LocalData.store(testAccount, targetContext);
             fc.addOrUpdateFollows(follow1, follow2,follow3);
-            pc.addOrUpdatePosts(EdPost1, RandyPost1, BobPost1);
+            pc.addOrUpdatePosts(JohnPost1, JohnPost2, JohnPost3, JohnPost4, EdPost1, EdPost2, RandyPost1, RandyPost2, BobPost1);
         }
 
         @Override
@@ -233,12 +304,12 @@ public class NewsFeedUITest {
      /**
       * Tests that "Map" tab button takes the user to the correct screen
       */
-     @Test
+     /*@Test
      public void goToMapTest(){
         onView(withId(R.id.mapButton)).perform(click());
 
         onView(withId(R.id.title)).check(matches(withText("Map")));
-     }
+     }*/
 
      /**
       * Tests that "+" button takes the user to the correct screen
@@ -315,16 +386,15 @@ public class NewsFeedUITest {
         //click on spinner
         onView(withId(R.id.spinner2)).perform(click());
 
-        //click on "Following" which is item at index 1
+        //click on "Confused" which is item at index 2
         onData(allOf(is(instanceOf(String.class)))).atPosition(2).perform(click());
 
         //click search
         onView(withId(R.id.searchButton)).perform(click());
 
-        //click on first result
+        ////check that only 1 post is shown and that it is EdJohnson's "how do i fix my bicycle?" post
+        onView(withId(R.id.maxMood)).check(matches(withText("1 Posts")));
         onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
-
-        //check that post is "how do i fix my bicycle?"
         onView(withId(R.id.textText)).check(matches(withText("how do i fix my bicycle?")));
     }
 
@@ -350,10 +420,84 @@ public class NewsFeedUITest {
         //click search
         onView(withId(R.id.searchButton)).perform(click());
 
-        //click on first result
-        onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        //check that confused is the most common mood
+        onView(withId(R.id.maxMood)).check(matches(withText("Confused is the Most Common Mood")));
 
-        //check that poster is EdJohnson
-        onView(withId(R.id.dateText)).check(matches(withText("")));
+        //check that result date is within last week
+        onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(withId(R.id.dateText)).check(matches(withText("2017-04-02")));
+    }
+
+    /**
+     * Tests that user may filter their own event history by recent week and mood
+     */
+    @Test
+    public void historyMoodWeekTest(){
+        onView(withId(R.id.search)).perform(click());
+        try{
+            Thread.sleep(500);
+        }catch(InterruptedException e){}
+
+        //click on spinner
+        onView(withId(R.id.spinner1)).perform(click());
+
+        //click on "My Moods" which is item at index 2
+        onData(allOf(is(instanceOf(String.class)))).atPosition(2).perform(click());
+
+        //click on spinner
+        onView(withId(R.id.spinner2)).perform(click());
+
+        //click on "Happy" which is item at index 5
+        onData(allOf(is(instanceOf(String.class)))).atPosition(5).perform(click());
+
+        //select "Only Recent Week
+        onView(withId(R.id.recentBox)).perform(click());
+
+        //click search
+        onView(withId(R.id.searchButton)).perform(click());
+
+        //ensure that only one post is shown and that it is in the recent week,
+        // and that it is the "I petted a puppy" event
+        onView(withId(R.id.maxMood)).check(matches(withText("1 Posts")));
+        onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(withId(R.id.textText)).check(matches(withText("I petted a puppy")));
+    }
+
+    /**
+     * Tests that the user may filter their own history by keyword
+     */
+    @Test
+    public void historyWordTest(){
+        onView(withId(R.id.search)).perform(click());
+        try{
+            Thread.sleep(500);
+        }catch(InterruptedException e){}
+
+        //click on spinner
+        onView(withId(R.id.spinner1)).perform(click());
+
+        //click on "My Moods" which is item at index 2
+        onData(allOf(is(instanceOf(String.class)))).atPosition(2).perform(click());
+
+        //click on spinner
+        onView(withId(R.id.spinner2)).perform(click());
+
+        //click on "Happy" which is item at index 5
+        onData(allOf(is(instanceOf(String.class)))).atPosition(5).perform(click());
+
+        //Enter keyword "me"
+        onView(withId(R.id.findText)).perform(typeText("me"), ViewActions.closeSoftKeyboard());
+
+        //click search
+        onView(withId(R.id.searchButton)).perform(click());
+
+        //check that only two posts are displayed, and that they are
+        //"it's a great day to be me!" and "A stranger gave me flowers"
+        onView(withId(R.id.maxMood)).check(matches(withText("2 Posts")));
+        onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(withId(R.id.textText)).check(matches(withText("it's a great day to be me!")));
+        onView(withId(R.id.backButton)).perform(click());
+        onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(1,click()));
+        onView(withId(R.id.textText)).check(matches(withText("A stranger gave me flowers")));
     }
 }
