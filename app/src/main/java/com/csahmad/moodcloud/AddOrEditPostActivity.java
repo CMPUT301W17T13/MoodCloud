@@ -50,6 +50,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
 
     @Override
+    // Methods to get the result from the camera and the date picker.
+    //Cases are separated by REQUESTS that are ints
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         if (requestCode == TAKE_IMAGE_REQUEST) {
@@ -61,6 +63,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 if (cameraImage != null) {
                     this.image = cameraImage;
                     Bitmap bitmap = intent.getParcelableExtra("BITMAP");
+
                     this.moodPhoto.setImageBitmap(bitmap);
                     deletePhoto.setVisibility(View.VISIBLE);
                 }
@@ -94,6 +97,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     }
 
     @Override
+    // requesting location, first by requesting permission to use location
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
 
@@ -182,7 +186,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_post);
-        //PostController postController = new PostController();
+
         moodPhoto = (ImageButton) findViewById(R.id.moodPhoto);
         defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);
@@ -253,7 +257,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        // condition checkers for fields that are not supposed to be null
                         if (textExplanation.getText().toString().equals("")) {
                             Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
                         } else if (onRadioButtonClicked(moodButtons) == 8) {
@@ -314,7 +318,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     }
                 });
 
-                //final Post oldPost = postController.getPostFromId(id);
+
 
                 if (post.getTriggerImage() != null) {
                     Bitmap bitmap = ImageConverter.toBitmap(post.getTriggerImage());
@@ -368,6 +372,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //condition checkers for the input fields that are not supposed to be bull
                         if (textExplanation.getText().toString().equals("")) {
                             Toast.makeText(getApplicationContext(), "Want to say something?", Toast.LENGTH_LONG).show();
                         } else if (onRadioButtonClicked(moodButtons) == 8) {
@@ -402,16 +407,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-        }//else{
-
-
-        //}
+        }
 
 
 
 
 
-
+        //a back button
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -468,7 +470,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 break;
 
             default:
-                //throw new RuntimeException("fsdfdssdfsd");
+                 //return this int when no radiobutton is selected
                 return 8;
         }
 
@@ -491,12 +493,12 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 status = SocialContext.WITH_GROUP;
                 break;
             default:
-                //throw new RuntimeException("other fsdfdssdfsd");
+                //returns this when no radiobutton is selected
                 return 4;
         }
         return status;
     }
-
+    // methods for checking internet accessibility
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
