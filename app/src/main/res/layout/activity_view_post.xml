@@ -57,7 +57,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_toStartOf="@+id/button" />
 
     <TextView
         android:id="@+id/textText"
@@ -68,7 +69,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="Text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_toStartOf="@+id/button" />
 
     <TextView
         android:id="@+id/dateText"
@@ -79,7 +81,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="Date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_toStartOf="@+id/button" />
 
     <TextView
         android:id="@+id/contextText"
@@ -90,7 +93,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="Context"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_toStartOf="@+id/button" />
 
     <TextView
         android:id="@+id/triggerText"
@@ -101,7 +105,8 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="Trigger"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_toStartOf="@+id/deleteButton" />
 
     <ImageView
         android:id="@+id/triggerImage"
