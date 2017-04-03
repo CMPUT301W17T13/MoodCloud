@@ -36,8 +36,15 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutMananger;
+    private LinearLayoutManager mLayoutMananger;
     PostController postController = new PostController();
+    private int loadCount = 0;
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    private int firstVisibleItems, visibleItemCount, totalItemCount;
+    ArrayList<Post> mDataset;
+    private String where;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +56,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         mLayoutMananger = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutMananger);
         Intent intent = getIntent();
-        String where = intent.getStringExtra("WHERE");
+        where = intent.getStringExtra("WHERE");
         final SearchFilter filter = intent.getParcelableExtra("FILTER");
-            //Toast.makeText(getApplicationContext(), "filter null", Toast.LENGTH_LONG).show();
-
-        PostController postController = new PostController();
         TextView maxMood = (TextView) findViewById(R.id.maxMood);
         HashMap<Integer, Long> moodCounts;
         try {
@@ -72,8 +76,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 Long maxCount = (Collections.max(moodCounts.values()));
                 for (Map.Entry<Integer, Long> entry : moodCounts.entrySet()) {
                     if (entry.getValue() == maxCount){
-                        String[] draws = new String[]{"Angry","Confused","Disgusted",
-                                "Embarassed","Fear","Happy","Sad","Shame","Suprised"};
+                        String[] draws = new String[]{"Angry","Confused","Disgusted","Fear","Happy","Sad","Shame","Suprised"};
                         maxMood.setText(draws[entry.getKey()] + " is the Most Common Mood");
                         break;
                     }
@@ -84,7 +87,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 maxMood.setText(count + " Posts");
             }
         }catch (TimeoutException e) {}
-        final ArrayList<Post> mDataset;
         try {
             if (where.equals("Following")) {
                 mDataset = postController.getFolloweePosts(
@@ -125,6 +127,45 @@ public class SearchResultsActivity extends AppCompatActivity {
                 finish();
             }}
         );
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = mLayoutMananger.getChildCount();
+                totalItemCount = mLayoutMananger.getItemCount();
+                firstVisibleItems = mLayoutMananger.findFirstVisibleItemPosition();
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount) <=
+                        (firstVisibleItems + visibleThreshold)) {
+                    loadCount = loadCount + 1;
+                    try {
+                        ArrayList<Post> newDS;
+                        if (where.equals("Following")) {
+                            newDS = postController.getFolloweePosts(
+                                    LocalData.getSignedInProfile(getApplicationContext()),
+                                    filter, loadCount);
+                        } else {
+                            if (where.equals("My Moods")) {
+                                newDS = postController.getPosts(
+                                        LocalData.getSignedInProfile(getApplicationContext()),
+                                        filter, loadCount);
+                            } else {
+                                newDS = postController.getPosts(filter, loadCount);
+                            }
+                        }
+                        mDataset.addAll(newDS);
+                    } catch (TimeoutException e) {}
+                    mAdapter.notifyDataSetChanged();
+                    loading = true;
+                }
+            }
+        });
     }
 
     /**
@@ -178,7 +219,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
-                    R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+                    R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             holder.mMoodView.setImageResource(draws[post.getMood()]);
         }
 

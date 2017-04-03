@@ -25,8 +25,14 @@ import java.util.concurrent.TimeoutException;
 public class FollowRequestActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutMananger;
+    private LinearLayoutManager mLayoutMananger;
     private FollowRequestController followRequestController = new FollowRequestController();
+    private int loadCount = 0;
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    private int firstVisibleItems, visibleItemCount, totalItemCount;
+    ArrayList<FollowRequest> mDataset;
     //mwschafe made ProfileController private
 
     @Override
@@ -40,7 +46,7 @@ public class FollowRequestActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutMananger);
 
         try{
-            final ArrayList<FollowRequest> mDataset = followRequestController.getFollowRequests(
+            mDataset = followRequestController.getFollowRequests(
                     LocalData.getSignedInProfile(getApplicationContext()),0
             );
             mAdapter = new FollowRequestActivity.MyAdapter(mDataset);
@@ -48,6 +54,33 @@ public class FollowRequestActivity extends AppCompatActivity {
         } catch (TimeoutException e){
             System.err.println("TimeoutException: " + e.getMessage());
         }
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = mLayoutMananger.getChildCount();
+                totalItemCount = mLayoutMananger.getItemCount();
+                firstVisibleItems = mLayoutMananger.findFirstVisibleItemPosition();
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount) <=
+                        (firstVisibleItems + visibleThreshold)) {
+                    loadCount = loadCount + 1;
+                    try {
+                        ArrayList<FollowRequest> newDS = followRequestController.getFollowRequests(
+                                LocalData.getSignedInProfile(getApplicationContext()),loadCount);
+                        mDataset.addAll(newDS);
+                    } catch (TimeoutException e) {}
+                    mAdapter.notifyDataSetChanged();
+                    loading = true;
+                }
+            }
+        });
 
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {

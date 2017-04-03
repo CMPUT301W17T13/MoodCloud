@@ -202,7 +202,7 @@ public class NewsFeedActivity extends AppCompatActivity {
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
-                    R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+                    R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             holder.mMoodView.setImageResource(draws[post.getMood()]);
         }
 

@@ -30,10 +30,16 @@ import static java.lang.Boolean.TRUE;
 public class ViewProfileActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutMananger;
-    private Profile profile;
+    private LinearLayoutManager mLayoutMananger;
+    private static Profile profile;
     private ProfileController profileController = new ProfileController();
     private PostController postController = new PostController();
+    private int loadCount = 0;
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    private int firstVisibleItems, visibleItemCount, totalItemCount;
+    ArrayList<Post> mDataset;
 
 
     @Override
@@ -56,7 +62,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         TextView nameText = (TextView) findViewById(R.id.profileName);
         nameText.setText("Name: " + profile.getName());
         try {
-            final ArrayList<Post> mDataset = postController.getPosts(profile, null, 0);
+            if (ConnectionManager.haveConnection(getApplicationContext())) {
+                mDataset = postController.getPosts(profile, null, 0);
+            } else {
+                if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
+                    mDataset = LocalData.getUserPosts(getApplicationContext());
+                } else {
+                    finish();
+                }
+            }
             mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.addOnItemTouchListener(new ViewProfileActivity.RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ViewProfileActivity.ClickListener() {
@@ -78,10 +92,36 @@ public class ViewProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = mLayoutMananger.getChildCount();
+                totalItemCount = mLayoutMananger.getItemCount();
+                firstVisibleItems = mLayoutMananger.findFirstVisibleItemPosition();
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount) <=
+                        (firstVisibleItems + visibleThreshold) &&
+                        ConnectionManager.haveConnection(getApplicationContext())) {
+                    loadCount = loadCount + 1;
+                    try {
+                        ArrayList<Post> newDS = postController.getPosts(profile, null, loadCount);
+                        mDataset.addAll(newDS);
+                    } catch (TimeoutException e) {}
+                    mAdapter.notifyDataSetChanged();
+                    loading = true;
+                }
+            }
+        });
+
         final Button followeditbutton = (Button) findViewById(R.id.followeditbutton);
         if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
-            //button.setText(LocalData.getSignedInProfile().getId() + " " + post.getPosterId());
-            //Button button = (Button) findViewById(R.id.followeditbutton);
+            if (ConnectionManager.haveConnection(getApplicationContext())){
             FollowRequestController followRequestController = new FollowRequestController();
             try {
                 Double count = followRequestController.getFollowRequestCount(profile);
@@ -98,33 +138,30 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(context, FollowRequestActivity.class);
                     startActivity(intent);
                 }}
-            );
+            );} else {
+                followeditbutton.setVisibility(View.GONE);
+            }
         }else {
             FollowController followController = new FollowController();
             final FollowRequestController followRequestController = new FollowRequestController();
             if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
-                //Button button = (Button) findViewById(R.id.followeditbutton);
                 followeditbutton.setText("Followed");
                 followeditbutton.setClickable(FALSE);
             } else {
                 if (followRequestController.requestExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
-                    //Button button = (Button) findViewById(R.id.followeditbutton);
                     followeditbutton.setText("Request Sent");
                     followeditbutton.setClickable(FALSE);
                 }else {
-                    //Button button = (Button) findViewById(R.id.followeditbutton);
                     followeditbutton.setText("Send Follow Request");
                     followeditbutton.setClickable(TRUE);
                     followeditbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view){
-                            //Toast.makeText(getApplicationContext(), "button clicked", Toast.LENGTH_LONG).show();
                             FollowRequest followRequest = new FollowRequest(
                                     LocalData.getSignedInProfile(getApplicationContext()), profile);
                             followRequestController.addOrUpdateFollows(followRequest);
                             try {
                                 followRequestController.waitForTask();
-                                //textText.setText(followRequest.getId().toString());
                                 if (followRequestController.getFollowRequestFromID(followRequest.getId()).equals(followRequest)) {
                                     followeditbutton.setText("Request Sent");
                                 } else {
@@ -134,23 +171,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                             } catch (InterruptedException e) {}
                             catch (TimeoutException e) {}
                             catch (ExecutionException e) {}
-                            /**FollowRequest followRequest = new FollowRequest(
-                             LocalData.getSignedInProfile(getApplicationContext()), profile);
-                             FollowRequestController followRequestController = new FollowRequestController();
-                             followRequestController.addOrUpdateFollows(followRequest);
-                             try {
-                             followRequestController.waitForTask();
-                             } catch (InterruptedException e) {}
-                             catch (TimeoutException e) {}
-                             catch (ExecutionException e) {}
-                             if (followRequestController.requestExists(LocalData.getSignedInProfile(getApplicationContext()),profile)) {
-                             Toast.makeText(getApplicationContext(), "made request", Toast.LENGTH_LONG).show();
-                             } else {
-                             Toast.makeText(getApplicationContext(), "at least it toasts", Toast.LENGTH_LONG).show();
-                             }
-                             //button.setText("Request Sent");
-                             //button.setClickable(FALSE);
-                             */}}
+                            }}
                     );}
             }}
 
@@ -243,16 +264,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewProfileActivity.MyAdapter.ViewHolder holder, int position) {
             Post post = mDataset.get(position);
-            Profile profile = null;
-            try {
-                profile = new ProfileController().getProfileFromID(post.getPosterId());
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
             holder.mNameView.setText(profile.getName());
             holder.mTextView.setText(post.getText());
             int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,
-                    R.drawable.embarassed,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+                    R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
             holder.mMoodView.setImageResource(draws[post.getMood()]);
         }
 
