@@ -311,6 +311,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     }
                 });
 
+
                 Button postButton = (Button) findViewById(R.id.postButton);
                 postButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -331,6 +332,16 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                             if (date == null){
                                 date = Calendar.getInstance();
+                            }
+
+                            if ((! latitudetext.getText().toString().equals("")) || (! latitudetext.getText().toString() .equals("-"))
+                                    || (! longitudetext.getText().toString().equals("")) || (! longitudetext.getText().toString().equals("-"))
+                                    || (! altitudetext.getText().toString().equals("")) || (! altitudetext.getText().toString().equals("-"))){
+                                double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
+                                        Double.parseDouble(longitudetext.getText().toString()),
+                                        Double.parseDouble(altitudetext.getText().toString())};
+                                //post.setLocation(newLocationArray);
+                                locationArray = newLocationArray;
                             }
 
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
@@ -468,8 +479,17 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             post.setText(textExplanation.getText().toString().replace("\\s+$", ""));
                             post.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
                             post.setTriggerImage(image);
+                            if ((! latitudetext.getText().toString().equals("")) || (! latitudetext.getText().toString() .equals("-"))
+                                    || (! longitudetext.getText().toString().equals("")) || (! longitudetext.getText().toString().equals("-"))
+                                    || (! altitudetext.getText().toString().equals("")) || (! altitudetext.getText().toString().equals("-"))){
+                                double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
+                                        Double.parseDouble(longitudetext.getText().toString()),
+                                        Double.parseDouble(altitudetext.getText().toString())};
+                            post.setLocation(newLocationArray);
+                            }
                             if (date != null)
                             post.setDate(date);
+
 
                             if (isNetworkAvailable()){
                                 PostController postController = new PostController();
@@ -488,7 +508,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-        //}
+
 
 
 
