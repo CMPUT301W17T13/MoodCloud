@@ -82,6 +82,7 @@
         android:background="@android:color/background_light"
         android:hint="Longitude"
         android:layout_below="@+id/latitude"
+        android:inputType="numberDecimal"
         android:layout_alignStart="@+id/altitude" />
 
     <ImageButton
