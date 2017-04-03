@@ -56,11 +56,15 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     EditText longitudetext = null; //(EditText) findViewById(R.id.longitude);
     EditText altitudetext = null; //(EditText)findViewById(R.id.altitude);
 
-
-
+    /**
+     * Methods to get the result from the camera and the date picker.
+     Cases are separated by REQUESTS that are ints
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
     @Override
-    // Methods to get the result from the camera and the date picker.
-    //Cases are separated by REQUESTS that are ints
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         if (requestCode == TAKE_IMAGE_REQUEST) {
@@ -111,8 +115,14 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 READ_LOCATION_REQUEST);
     }
 
+    /**
+     * Requesting location, first by requesting permission to use location
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
-    // requesting location, first by requesting permission to use location
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
 
