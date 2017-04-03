@@ -49,14 +49,32 @@ public class SignInActivity extends AppCompatActivity {
         //when user presses the Sign In button
         Button button = (Button) findViewById(R.id.signIn);
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+
                 try{
+
+                    String username = usernameText.getText().toString();
+                    String password = passwordText.getText().toString();
+
+                    if (username.trim().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Username empty",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (password.trim().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Password empty",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     Account account = accountController.getAccountFromUsername(usernameText.getText().toString());
 
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
-                    if(account.getPassword().equals(passwordText.getText().toString())){
+                    if(account.getPassword().equals(passwordText)){
                         localData.store(account, getApplicationContext());
                         Context context = view.getContext();
                         Intent intent = new Intent(context, NewsFeedActivity.class);
@@ -67,9 +85,11 @@ public class SignInActivity extends AppCompatActivity {
                     else{
                         passwordText.setBackgroundColor(Color.RED);
                         passwordText.setText("");
-                        Toast.makeText(getApplicationContext(), "Incorrect Login Information", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Incorrect Login Information",
+                                Toast.LENGTH_LONG).show();
                     }
                 }
+
                 catch (TimeoutException e){
                     System.err.println("TimeoutException: " + e.getMessage());
                 }
