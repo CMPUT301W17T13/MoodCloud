@@ -100,7 +100,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
     private int mood;
     private String triggerText;
     private String triggerImage;
-    private int context;
+    private Integer context;
     private String posterId;
     private Calendar date;
     private String dateString;
@@ -111,7 +111,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
     private GeoPoint geoPoint;
 
     public Post(String text, int mood, String triggerText, String triggerImage,
-                int context, String posterId, double[] location, Calendar date) {
+                Integer context, String posterId, double[] location, Calendar date) {
 
         this.text = text;
         this.mood = mood;
