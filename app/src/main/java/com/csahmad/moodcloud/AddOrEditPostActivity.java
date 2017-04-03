@@ -198,7 +198,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         }
 
         if(isNetworkAvailable()) {
-            Intent intent = getIntent();
+            final Intent intent = getIntent();
             final Post post = intent.getParcelableExtra("POST");
 
 
@@ -271,11 +271,12 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
                                     textTrigger.getText().toString().replace("\\s+$", ""), image, onStatusButtonClicked(statusButtons),
-                                    profile.getId(), null, date);
+                                    profile.getId(),locationArray, date);
                             PostController postController = new PostController();
                             postController.addOrUpdatePosts(post);
-                            ProfileController profileController = new ProfileController();
-                            profileController.addOrUpdateProfiles(profile);
+                            Intent intent1 = new Intent();
+                            intent.putExtra("POST",post);
+                            setResult(RESULT_OK,intent);
 
 
                             finish();
@@ -388,13 +389,11 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             PostController postController = new PostController();
                             postController.addOrUpdatePosts(post);
 
-
-                            //Context context = v.getContext();
-                            //Intent intent = new Intent(context, ViewPostActivity.class);
-
-                            //intent.putExtra("POST_ID", oldPost.getId());
+                            Intent intent1 = new Intent();
+                            intent.putExtra("POST",post);
+                            setResult(RESULT_OK,intent);
                             finish();
-                            //startActivity(intent);
+
                         }
 
 
@@ -403,10 +402,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-        }else{
+        }//else{
 
 
-        }
+        //}
 
 
 

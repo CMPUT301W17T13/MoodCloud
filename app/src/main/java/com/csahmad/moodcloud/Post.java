@@ -54,6 +54,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
      */
     private void readFromParcel(Parcel in) {
 
+        this.id = in.readString();
         this.text = in.readString();
         this.mood = ParcelIO.readInteger(in);
         this.triggerText = in.readString();
@@ -78,6 +79,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
 
+        out.writeString(this.getId());
         out.writeString(this.text);
         ParcelIO.writeInteger(out, this.mood);
         out.writeString(this.triggerText);

@@ -26,23 +26,27 @@ import static java.lang.Boolean.TRUE;
 
 public class ViewPostActivity extends AppCompatActivity {
 
+    private static final int GET_POST_REQUEST = 0;
+
+    Post post;
+    Profile profile;
     PostController postController = new PostController();
     ProfileController profileController = new ProfileController();
-   //FollowRequestController followRequestController = new FollowRequestController();
 
     @Override
-    protected void onStart() {
+    protected void onCreate(Bundle savedInstanceState) {
 
-        super.onStart();
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
         Intent intent = getIntent();
         ////////////////////////////////////
-        final Post post = intent.getParcelableExtra("POST");
+        post = intent.getParcelableExtra("POST");
         /////////////////////////////////////
         try {
 
             //final Post post = postController.getPostFromId(id);
-            final Profile profile = profileController.getProfileFromID(post.getPosterId());
+            profile = profileController.getProfileFromID(post.getPosterId());
+            updateView();
             TextView nameText = (TextView) findViewById(R.id.nameText);
 
             if (profile == null)
@@ -51,21 +55,6 @@ public class ViewPostActivity extends AppCompatActivity {
             else
                 nameText.setText("Name: " + profile.getName());
 
-            final TextView textText = (TextView) findViewById(R.id.textText);
-            textText.setText(post.getText());
-            TextView dateText = (TextView) findViewById(R.id.dateText);
-            SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
-            dateText.setText(format1.format(post.getDate().getTime()));
-            TextView contextText = (TextView) findViewById(R.id.contextText);
-            String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
-            contextText.setText(contexts[post.getContext()]);
-
-            TextView triggerText = (TextView) findViewById(R.id.triggerText);
-            triggerText.setText("Trigger: " + post.getTriggerText());
-            int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
-            ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
-            ImageView triggerImage = (ImageView) findViewById(R.id.triggerImage);
-            triggerImage.setImageBitmap(ImageConverter.toBitmap(post.getTriggerImage()));
             final Button button = (Button) findViewById(R.id.button);
             final Button deleteButton = (Button) findViewById(R.id.deleteButton);
             if (LocalData.getSignedInProfile(getApplicationContext()).equals(profile)) {
@@ -78,9 +67,9 @@ public class ViewPostActivity extends AppCompatActivity {
                         Context context = view.getContext();
                         Intent intent = new Intent(context, AddOrEditPostActivity.class);
                         ///////////////////////////////////////
-                        intent.putExtra("POST",post);
+                        intent.putExtra("POST", post);
                         //////////////////////////////////////
-                        startActivity(intent);
+                        startActivityForResult(intent, GET_POST_REQUEST);
                     }}
                 );
                 deleteButton.setText("Delete Post");
@@ -141,7 +130,6 @@ public class ViewPostActivity extends AppCompatActivity {
                             }}
                         );}}
             }
-            moodImage.setImageResource(draws[post.getMood()]);
         } catch (TimeoutException e){}
 
 
@@ -153,5 +141,42 @@ public class ViewPostActivity extends AppCompatActivity {
                 finish();
             }}
         );
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+            case GET_POST_REQUEST:
+
+                if (resultCode == RESULT_OK) {
+                    post = data.getParcelableExtra("POST");
+                    updateView();
+                }
+
+                break;
+        }
+    }
+
+    private void updateView() {
+
+        final TextView textText = (TextView) findViewById(R.id.textText);
+        textText.setText(post.getText());
+        TextView dateText = (TextView) findViewById(R.id.dateText);
+        SimpleDateFormat format1 = new SimpleDateFormat(StringFormats.dateFormat);
+        dateText.setText(format1.format(post.getDate().getTime()));
+        TextView contextText = (TextView) findViewById(R.id.contextText);
+        String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
+        contextText.setText(contexts[post.getContext()]);
+
+        TextView triggerText = (TextView) findViewById(R.id.triggerText);
+        triggerText.setText("Trigger: " + post.getTriggerText());
+        int[] draws = new int[]{R.drawable.angry,R.drawable.confused,R.drawable.disgusted,R.drawable.fear,R.drawable.happy,R.drawable.sad,R.drawable.shame,R.drawable.suprised};
+        ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
+        ImageView triggerImage = (ImageView) findViewById(R.id.triggerImage);
+        triggerImage.setImageBitmap(ImageConverter.toBitmap(post.getTriggerImage()));
+
+        moodImage.setImageResource(draws[post.getMood()]);
     }
 }
