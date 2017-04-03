@@ -232,8 +232,10 @@ public class ViewProfileActivity extends AppCompatActivity {
                         LocalData.deletePostAt(position, this);
                     }
 
-                    else
+                    else {
                         mDataset.set(position, post);
+                        LocalData.updatePostAt(position, post, this);
+                    }
 
                     mAdapter.notifyDataSetChanged();
                 }

@@ -130,9 +130,22 @@ public class LocalData {
     }
 
     /**
-     * Delete the post at the given index and update the file.
+     * Set the {@link Post} at the given index to the given {@link Post}.
      *
-     * @param index the index where the post is in userPosts
+     * @param index where the old post is stored in userPosts
+     * @param post the post to replace the old post with
+     * @param context
+     */
+    public static void updatePostAt(int index, Post post, Context context) {
+
+        userPosts.set(index, post);
+        store(userPosts, context);
+    }
+
+    /**
+     * Delete the {@link Post} at the given index and update the file.
+     *
+     * @param index the index where the {@link Post} is in userPosts
      * @param context
      */
     public static void deletePostAt(int index, Context context) {
