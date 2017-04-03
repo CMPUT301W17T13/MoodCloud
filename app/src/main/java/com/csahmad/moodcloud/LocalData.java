@@ -130,6 +130,18 @@ public class LocalData {
     }
 
     /**
+     * Add the given {@link Post} to the local file.
+     *
+     * @param post the {@link Post} to add
+     * @param context
+     */
+    public static void addPost(Post post, Context context) {
+
+        userPosts.add(post);
+        store(userPosts, context);
+    }
+
+    /**
      * Set the {@link Post} at the given index to the given {@link Post}.
      *
      * @param index where the old post is stored in userPosts
