@@ -11,6 +11,8 @@ import java.util.concurrent.TimeoutException;
 // TODO: 2017-03-08 Handle exceptions better
 // TODO: 2017-03-31 Refactor controller classes that use this class to reduce repeated code
 // - Maybe refactor this class too
+// TODO: 2017-04-03 Pagination costly (find better way):
+// https://www.elastic.co/guide/en/elasticsearch/guide/current/pagination.html
 
 /**
  * Get {@link ElasticSearchObject}s using elasticsearch or add/update {@link ElasticSearchObject}s
