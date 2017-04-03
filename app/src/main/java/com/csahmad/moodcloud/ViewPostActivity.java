@@ -191,6 +191,14 @@ public class ViewPostActivity extends AppCompatActivity {
         dateText.setText(format1.format(post.getDate().getTime()));
         TextView contextText = (TextView) findViewById(R.id.contextText);
         String[] contexts = new String[]{"Alone","With a Group","In a Crowd"};
+        TextView locationText = (TextView) findViewById(R.id.locationText);
+        if (post.getLocation() != null) {
+            double[] location = post.getLocation();
+            DecimalFormat format = new DecimalFormat("#.##");
+            locationText.setText("Location: " + format.format(location[0]) + "," + format.format(location[1]) + "," + format.format(location[2]));
+        } else {
+            locationText.setVisibility(View.GONE);
+        }
 
         Integer socialContext = post.getContext();
 
