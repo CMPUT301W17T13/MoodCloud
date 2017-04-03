@@ -96,8 +96,8 @@ public class ViewProfileActivity extends AppCompatActivity {
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold) &&
                         ConnectionManager.haveConnection(getApplicationContext())) {
-                    loadCount = loadCount + 1;
                     try {
+                        loadCount = loadCount + ElasticSearchController.getResultSize();
                         ArrayList<Post> newDS = postController.getPosts(profile, null, loadCount);
                         mDataset.addAll(newDS);
                     } catch (TimeoutException e) {}

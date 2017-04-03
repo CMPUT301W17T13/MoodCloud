@@ -128,7 +128,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold)) {
-                    loadCount = loadCount + 1;
+                    loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
                         ArrayList<Post> newDS;
                         if (where.equals("Following")) {

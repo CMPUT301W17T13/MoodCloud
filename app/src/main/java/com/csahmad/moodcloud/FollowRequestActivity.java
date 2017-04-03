@@ -70,7 +70,7 @@ public class FollowRequestActivity extends AppCompatActivity {
                 }
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold)) {
-                    loadCount = loadCount + 1;
+                    loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
                         ArrayList<FollowRequest> newDS = followRequestController.getFollowRequests(
                                 LocalData.getSignedInProfile(getApplicationContext()),loadCount);

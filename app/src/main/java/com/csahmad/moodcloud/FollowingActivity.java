@@ -68,7 +68,7 @@ public class FollowingActivity extends AppCompatActivity {
                 }
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold)) {
-                    loadCount = loadCount + 1;
+                    loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
                         ArrayList<Profile> newDS = profileController.getFollowees(LocalData.getSignedInProfile(getApplicationContext()),loadCount);
                         mDataset.addAll(newDS);

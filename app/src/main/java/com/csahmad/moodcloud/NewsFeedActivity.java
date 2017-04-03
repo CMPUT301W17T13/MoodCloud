@@ -73,7 +73,7 @@ public class NewsFeedActivity extends AppCompatActivity {
                 }
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold)) {
-                    loadCount = loadCount + 1;
+                    loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
                         ArrayList<Post> newDS = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,loadCount);
                         mDataset.addAll(newDS);
