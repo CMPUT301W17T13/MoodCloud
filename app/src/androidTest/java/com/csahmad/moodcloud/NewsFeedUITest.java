@@ -148,9 +148,9 @@ public class NewsFeedUITest {
                     new GregorianCalendar(2017, 3, 2));
             double[] JohnPost4Loc = {0.0d, 0.0d, 0.0d};
             JohnPost4 = new Post(
-                    "A stranger gave me flowers",
+                    "There's a dog in the car next to me",
                     Mood.HAPPY,                                // Mood
-                    "gift",                    // Trigger text
+                    "dog",                    // Trigger text
                     null,                                      // Trigger image
                     SocialContext.WITH_GROUP,                       // Social context
                     "JohnID",                                  // Poster ID
@@ -486,18 +486,18 @@ public class NewsFeedUITest {
         onData(allOf(is(instanceOf(String.class)))).atPosition(5).perform(click());
 
         //Enter keyword "me"
-        onView(withId(R.id.findText)).perform(typeText("me"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.findText)).perform(typeText("dog"), ViewActions.closeSoftKeyboard());
 
         //click search
         onView(withId(R.id.searchButton)).perform(click());
 
         //check that only two posts are displayed, and that they are
-        //"it's a great day to be me!" and "A stranger gave me flowers"
+        //"There's a dog in the car next to me" and "I petted a puppy"
         onView(withId(R.id.maxMood)).check(matches(withText("2 Posts")));
         onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
-        onView(withId(R.id.textText)).check(matches(withText("it's a great day to be me!")));
+        onView(withId(R.id.textText)).check(matches(withText("I petted a puppy")));
         onView(withId(R.id.backButton)).perform(click());
         onView(withId(R.id.resultList)).perform(RecyclerViewActions.actionOnItemAtPosition(1,click()));
-        onView(withId(R.id.textText)).check(matches(withText("A stranger gave me flowers")));
+        onView(withId(R.id.textText)).check(matches(withText("There's a dog in the car next to me")));
     }
 }
