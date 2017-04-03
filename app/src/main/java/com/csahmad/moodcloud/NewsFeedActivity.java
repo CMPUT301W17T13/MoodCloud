@@ -54,21 +54,6 @@ public class NewsFeedActivity extends AppCompatActivity {
             //final ArrayList<Post> mDataset = postController.getPosts(null,0);
             mAdapter = new MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    Post post = mDataset.get(position);
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ViewPostActivity.class);
-                    intent.putExtra("POST_ID",post.getId());
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
         } catch (TimeoutException e){
             System.err.println("TimeoutException: " + e.getMessage());
         }
@@ -88,7 +73,7 @@ public class NewsFeedActivity extends AppCompatActivity {
                 }
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold)) {
-                    loadCount = loadCount + 1;
+                    loadCount = loadCount + ElasticSearchController.getResultSize();
                     try {
                         ArrayList<Post> newDS = postController.getFolloweePosts(LocalData.getSignedInProfile(getApplicationContext()),null,loadCount);
                         mDataset.addAll(newDS);
@@ -161,7 +146,7 @@ public class NewsFeedActivity extends AppCompatActivity {
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             public TextView mNameView;
             public ImageView mMoodView;
             public TextView mTextView;
@@ -171,6 +156,16 @@ public class NewsFeedActivity extends AppCompatActivity {
                 mTextView = (TextView) v.findViewById(R.id.postText);
                 mNameView = (TextView) v.findViewById(R.id.postName);
                 mMoodView = (ImageView) v.findViewById(R.id.postMood);
+                v.setOnClickListener(this);
+            }
+            @Override
+            public void onClick(View view) {
+                int position = mRecyclerView.getChildLayoutPosition(view);
+                Post post = mDataset.get(position);
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ViewPostActivity.class);
+                intent.putExtra("POST",post);
+                startActivity(intent);
             }
         }
 
@@ -209,55 +204,6 @@ public class NewsFeedActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return mDataset.size();
-        }
-    }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private NewsFeedActivity.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final NewsFeedActivity.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
         }
     }
 }

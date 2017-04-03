@@ -51,8 +51,11 @@ public class ViewProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String id = intent.getStringExtra("ID");
         try {
-            profile = profileController.getProfileFromID(id);
-
+            if(id.equals(LocalData.getSignedInProfile(getApplicationContext()).getId())){
+                profile = LocalData.getSignedInProfile(getApplicationContext());
+            } else {
+                profile = profileController.getProfileFromID(id);
+            }
             if (profile.getId() == null)
                 throw new RuntimeException("Oh noes ID is null");
 
@@ -73,23 +76,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
             mAdapter = new ViewProfileActivity.MyAdapter(mDataset);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnItemTouchListener(new ViewProfileActivity.RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ViewProfileActivity.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    Post post = mDataset.get(position);
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ViewPostActivity.class);
-                    /////////////////////////////////////////
-                    intent.putExtra("POST",post);
-                    ///////////////////////////////////////
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
@@ -110,8 +96,8 @@ public class ViewProfileActivity extends AppCompatActivity {
                 if (!loading && (totalItemCount - visibleItemCount) <=
                         (firstVisibleItems + visibleThreshold) &&
                         ConnectionManager.haveConnection(getApplicationContext())) {
-                    loadCount = loadCount + 1;
                     try {
+                        loadCount = loadCount + ElasticSearchController.getResultSize();
                         ArrayList<Post> newDS = postController.getPosts(profile, null, loadCount);
                         mDataset.addAll(newDS);
                     } catch (TimeoutException e) {}
@@ -232,10 +218,10 @@ public class ViewProfileActivity extends AppCompatActivity {
      *         2017-03-7
      * @author Taylor
      */
-    public static class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<ViewProfileActivity.MyAdapter.ViewHolder> {
         private ArrayList<Post> mDataset;
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             public TextView mNameView;
             public ImageView mMoodView;
             public TextView mTextView;
@@ -245,6 +231,18 @@ public class ViewProfileActivity extends AppCompatActivity {
                 mTextView = (TextView) v.findViewById(R.id.postText);
                 mNameView = (TextView) v.findViewById(R.id.postName);
                 mMoodView = (ImageView) v.findViewById(R.id.postMood);
+                v.setOnClickListener(this);
+            }
+            @Override
+            public void onClick(View view){
+                int position = mRecyclerView.getChildLayoutPosition(view);
+                Post post = mDataset.get(position);
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ViewPostActivity.class);
+                /////////////////////////////////////////
+                intent.putExtra("POST",post);
+                ///////////////////////////////////////
+                startActivity(intent);
             }
         }
 
@@ -278,7 +276,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             return mDataset.size();
         }
     }
-    public interface ClickListener {
+    /*public interface ClickListener {
         void onClick(View view, int position);
 
         void onLongClick(View view, int position);
@@ -326,5 +324,5 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         }
     }
-
+*/
 }

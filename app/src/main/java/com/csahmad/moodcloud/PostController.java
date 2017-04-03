@@ -223,7 +223,7 @@ public class PostController {
         filter.addFieldValue(new FieldValue("posterId", profile.getId()))
                 .sortByDate();
 
-        ArrayList<Post> result = this.elasticSearch.getNext(0);
+        ArrayList<Post> result = this.elasticSearch.getNext(from);
         this.elasticSearch.setFilter(null);
 
         return result;
