@@ -28,10 +28,6 @@ import java.util.concurrent.TimeoutException;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-/**
- * Created by Taylor on 2017-03-29.
- */
-
 public class SearchResultsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;

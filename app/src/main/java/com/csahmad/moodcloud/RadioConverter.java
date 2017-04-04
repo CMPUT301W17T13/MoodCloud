@@ -1,9 +1,5 @@
 package com.csahmad.moodcloud;
 
-/**
- * Created by linghou on 2017-03-24.
- */
-
 public class RadioConverter {
     public static int getMoodButtonId(int mood){
 

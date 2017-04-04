@@ -19,10 +19,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-/**
- * Created by Taylor on 2017-03-22.
- */
-
 public class FollowRequestActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;

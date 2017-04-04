@@ -20,11 +20,8 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by oahmad on 2017-03-01.
- *
  * Stores an {@link Account} and {@link Post}s for the current user
  */
-
 public class LocalData {
 
     // If null, try to read from filesystem

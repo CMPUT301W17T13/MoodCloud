@@ -22,10 +22,6 @@ import java.util.concurrent.TimeoutException;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-/**
- * Created by Taylor on 2017-03-21.
- */
-
 public class ViewPostActivity extends AppCompatActivity {
 
     private static final int GET_POST_REQUEST = 0;
