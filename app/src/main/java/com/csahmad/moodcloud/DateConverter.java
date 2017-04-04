@@ -3,10 +3,6 @@ package com.csahmad.moodcloud;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by linghou on 2017-03-31.
- */
-
 public class DateConverter {
 
     public  static Calendar toDate(int year, int month, int day) {
