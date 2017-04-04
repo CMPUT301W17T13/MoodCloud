@@ -147,13 +147,11 @@ public class FollowingActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
             public TextView mNameView;
-            public ImageView mImageView;
 
             public ViewHolder(View v) {
 
                 super(v);
                 mNameView = (TextView) v.findViewById(R.id.followerName);
-                mImageView = (ImageView) v.findViewById(R.id.followerImage);
                 v.setOnClickListener(this);
             }
 
@@ -188,10 +186,6 @@ public class FollowingActivity extends AppCompatActivity {
 
             Profile profile= mDataset.get(position);
             holder.mNameView.setText(profile.getName());
-            Bitmap image = profile.getImageBitmap();
-
-            if (image != null)
-                holder.mImageView.setImageBitmap(image);
         }
 
         @Override
