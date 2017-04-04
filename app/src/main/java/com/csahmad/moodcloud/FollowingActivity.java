@@ -3,6 +3,8 @@ package com.csahmad.moodcloud;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -142,13 +145,35 @@ public class FollowingActivity extends AppCompatActivity {
         private ArrayList<Profile> mDataset;
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
             public TextView mNameView;
+            public ImageView mImageView;
+            public Drawable defaultImage;
 
             public ViewHolder(View v) {
+
                 super(v);
                 mNameView = (TextView) v.findViewById(R.id.followerName);
+                mImageView = (ImageView) v.findViewById(R.id.followerImage);
+                defaultImage = mImageView.getDrawable();
                 v.setOnClickListener(this);
             }
+
+            /**
+             * If the given image is null, set the image displayed in mImageView to defaultImage.
+             * Otherwise, set the image displayed in mImageView to the given image.
+             *
+             * @param image The image to display in mImageView
+             */
+            public void setImage(Bitmap image) {
+
+                if (image == null)
+                    mImageView.setImageDrawable(defaultImage);
+
+                else
+                    mImageView.setImageBitmap(image);
+            }
+
             @Override
             public void onClick(View view) {
                 int position = mRecyclerView.getChildLayoutPosition(view);
@@ -179,6 +204,7 @@ public class FollowingActivity extends AppCompatActivity {
         public void onBindViewHolder(final FollowingActivity.MyAdapter.ViewHolder holder, int position) {
             Profile profile= mDataset.get(position);
             holder.mNameView.setText(profile.getName());
+            holder.setImage(profile.getImageBitmap());
         }
 
         @Override
