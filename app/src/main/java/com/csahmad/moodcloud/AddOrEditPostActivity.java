@@ -228,6 +228,38 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 READ_CAMERA_REQUEST);
     }
 
+    /**
+     * Return whether the given numeric field is empty.
+     *
+     * @param text the text of the field to check
+     */
+    private boolean numericFieldIsEmpty(String text) {
+
+        text = text.trim();
+        return text.equals("") || text.equals("-") || text.equals(".") || text.equals("-.");
+    }
+
+    /**
+     * Return whether the given numeric field is empty.
+     *
+     * @param field the field to check
+     */
+    private boolean numericFieldIsEmpty(EditText field) {
+
+        return numericFieldIsEmpty(field.getText().toString());
+    }
+
+    /**
+     * Return whether all the location fields are set.
+     *
+     * @return whether all the location fields are set
+     */
+    private boolean locationIsSet() {
+
+        return !(numericFieldIsEmpty(latitudetext) || numericFieldIsEmpty(longitudetext) ||
+                numericFieldIsEmpty(altitudetext));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -342,9 +374,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                                 date = Calendar.getInstance();
                             }
 
-                            if ((! latitudetext.getText().toString().equals("")) || (! latitudetext.getText().toString() .equals("-"))
-                                    || (! longitudetext.getText().toString().equals("")) || (! longitudetext.getText().toString().equals("-"))
-                                    || (! altitudetext.getText().toString().equals("")) || (! altitudetext.getText().toString().equals("-"))){
+                            // If all fields are set, store location
+                            if (locationIsSet()) {
+
                                 double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
                                         Double.parseDouble(longitudetext.getText().toString()),
                                         Double.parseDouble(altitudetext.getText().toString())};
@@ -482,14 +514,15 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         } else if (textTrigger.getText().toString().equals("") && image == null) {
                             Toast.makeText(getApplicationContext(), "Want to say why?", Toast.LENGTH_LONG).show();
                         } else {
+
                             post.setMood(onRadioButtonClicked(moodButtons));
                             post.setContext(socialContext);
                             post.setText(textExplanation.getText().toString().replace("\\s+$", ""));
                             post.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
                             post.setTriggerImage(image);
-                            if ((! latitudetext.getText().toString().equals("")) || (! latitudetext.getText().toString() .equals("-"))
-                                    || (! longitudetext.getText().toString().equals("")) || (! longitudetext.getText().toString().equals("-"))
-                                    || (! altitudetext.getText().toString().equals("")) || (! altitudetext.getText().toString().equals("-"))){
+
+                            if (locationIsSet()){
+
                                 double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
                                         Double.parseDouble(longitudetext.getText().toString()),
                                         Double.parseDouble(altitudetext.getText().toString())};
