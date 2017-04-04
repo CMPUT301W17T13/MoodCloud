@@ -99,6 +99,7 @@ public class Post extends ElasticSearchObject implements Parcelable {
     private String text;
     private int mood;
     private String triggerText;
+    /** The image encoded as a String in base64. */
     private String triggerImage;
     private Integer context;
     private String posterId;

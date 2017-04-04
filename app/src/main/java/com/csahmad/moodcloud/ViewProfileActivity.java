@@ -2,6 +2,7 @@ package com.csahmad.moodcloud;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -250,6 +251,22 @@ public class ViewProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        this.setImage(profile.getImageBitmap());
+    }
+
+    /**
+     * Set the image for the ImageView (to display the profile picture) to the given image. If the
+     * given image is null, do nothing.
+     *
+     * @param image the image to display in the ImageView
+     */
+    public void setImage(Bitmap image) {
+
+        if (image != null) {
+            ImageView imageView = (ImageView) this.findViewById(R.id.profilePictureView);
+            imageView.setImageBitmap(image);
+        }
     }
 
     @Override

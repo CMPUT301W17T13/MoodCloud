@@ -27,10 +27,8 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeoutException;
 import android.location.LocationManager;
 import com.google.android.gms.location.LocationRequest;
 
@@ -38,7 +36,7 @@ import com.google.android.gms.location.LocationRequest;
 public class AddOrEditPostActivity extends AppCompatActivity {
 
     public static final int READ_CAMERA_REQUEST = 0;
-    private static final int TAKE_IMAGE_REQUEST = 0;
+    private static final int TAKE_IMAGE_REQUEST = 2;
     private static final int READ_LOCATION_REQUEST = 1;
     private final static int REQUEST_GET_DATE = 3;
     private String image;
