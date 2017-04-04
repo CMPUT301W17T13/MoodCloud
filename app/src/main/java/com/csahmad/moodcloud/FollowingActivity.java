@@ -148,30 +148,13 @@ public class FollowingActivity extends AppCompatActivity {
 
             public TextView mNameView;
             public ImageView mImageView;
-            public Drawable defaultImage;
 
             public ViewHolder(View v) {
 
                 super(v);
                 mNameView = (TextView) v.findViewById(R.id.followerName);
                 mImageView = (ImageView) v.findViewById(R.id.followerImage);
-                defaultImage = mImageView.getDrawable();
                 v.setOnClickListener(this);
-            }
-
-            /**
-             * If the given image is null, set the image displayed in mImageView to defaultImage.
-             * Otherwise, set the image displayed in mImageView to the given image.
-             *
-             * @param image The image to display in mImageView
-             */
-            public void setImage(Bitmap image) {
-
-                if (image == null)
-                    mImageView.setImageDrawable(defaultImage);
-
-                else
-                    mImageView.setImageBitmap(image);
             }
 
             @Override
@@ -202,9 +185,13 @@ public class FollowingActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final FollowingActivity.MyAdapter.ViewHolder holder, int position) {
+
             Profile profile= mDataset.get(position);
             holder.mNameView.setText(profile.getName());
-            holder.setImage(profile.getImageBitmap());
+            Bitmap image = profile.getImageBitmap();
+
+            if (image != null)
+                holder.mImageView.setImageBitmap(image);
         }
 
         @Override
