@@ -132,7 +132,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 try {
                     Double count = followRequestController.getFollowRequestCount(profile);
 
-                    followeditbutton.setText("See Follow Requests");
+                    followeditbutton.setText("Follow Requests");
 
                     if (count != null){
 
@@ -144,7 +144,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                         }
 
                         else
-                            followeditbutton.setText("See Follow Requests (" +
+                            followeditbutton.setText("Follow Requests (" +
                                     Long.toString(longCount) + ")");
                     }
                 } catch (TimeoutException e) {}
@@ -169,7 +169,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                     followeditbutton.setText("Request Sent");
                     followeditbutton.setClickable(FALSE);
                 }else {
-                    followeditbutton.setText("Send Follow Request");
+                    followeditbutton.setText("Follow");
                     followeditbutton.setClickable(TRUE);
                     followeditbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
