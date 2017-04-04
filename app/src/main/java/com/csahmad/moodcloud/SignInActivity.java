@@ -46,7 +46,6 @@ public class SignInActivity extends AppCompatActivity {
         final EditText passwordText = (EditText) findViewById(R.id.password);
 
 
-        System.out.println("test");
         //when user presses the Sign In button
         Button button = (Button) findViewById(R.id.signIn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +71,12 @@ public class SignInActivity extends AppCompatActivity {
                     }
 
                     Account account = accountController.getAccountFromUsername(username);
+
+                    if (account == null) {
+                        Toast.makeText(getApplicationContext(), "Account does not exist",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
                     //check if password matches
                     //if password is correct, store profile in LocalData and move to news feed
