@@ -31,6 +31,9 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import android.location.LocationManager;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 /** The activity for adding a {@link Post} or editing an existing one. */
 public class AddOrEditPostActivity extends AppCompatActivity {
@@ -39,6 +42,8 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private static final int TAKE_IMAGE_REQUEST = 2;
     private static final int READ_LOCATION_REQUEST = 1;
     private final static int REQUEST_GET_DATE = 3;
+    private final static int PLACE_PICKER_REQUEST = 4;
+
     private String image;
     private Drawable defaultImage;
     private ImageButton moodPhoto;
@@ -50,9 +55,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     private int setYear;
     private ImageButton deletePhoto;
     private double[] locationArray = null;
-    EditText latitudetext = null; //(EditText) findViewById(R.id.latitude);
-    EditText longitudetext = null; //(EditText) findViewById(R.id.longitude);
-    EditText altitudetext = null; //(EditText)findViewById(R.id.altitude);
+    private ImageButton mapButton;
 
     /**
      * Methods to get the result from the camera and the date picker.
@@ -92,17 +95,26 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         }
 
         else if (requestCode == REQUEST_GET_DATE){
-            if(resultCode == RESULT_OK){
+
+            if (resultCode == RESULT_OK){
                 setDate = intent.getBundleExtra("set_date");
                 setDay = setDate.getInt("day");
                 setMonth = setDate.getInt("month");
                 setYear = setDate.getInt("year");
                 this.date = DateConverter.toDate(setYear,setMonth,setDay);
-
                 dateString.setText(DateConverter.dateToString(date));
 
             }
 
+        }
+
+        else if (requestCode == PLACE_PICKER_REQUEST) {
+
+            if (resultCode == RESULT_OK) {
+                LatLng latLng = PlacePicker.getPlace(this, intent).getLatLng();
+                locationArray = new double[]{latLng.latitude, latLng.longitude, 0.0d};
+                mapButton.setImageResource(R.drawable.pin_selected);
+            }
         }
     }
 
@@ -172,10 +184,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                         Log.i("LocationStatus", "Got location!");
                         locationArray = new double[]{location.getLatitude(),
                                 location.getLongitude(), location.getAltitude()};
-                        DecimalFormat format = new DecimalFormat("#.####");
-                        latitudetext.setText(format.format(locationArray[0]));
-                        longitudetext.setText(format.format(locationArray[1]));
-                        altitudetext.setText(format.format(locationArray[2]));
+                        mapButton.setImageResource(R.drawable.pin_selected);
 
                     }
 
@@ -205,8 +214,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                     }
                 };
 
-                //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
-                lm.requestLocationUpdates(provider, 2_000l, 100f, locationListener);
+                lm.requestSingleUpdate(provider, locationListener, null);
             }
 
             else {
@@ -229,35 +237,13 @@ public class AddOrEditPostActivity extends AppCompatActivity {
     }
 
     /**
-     * Return whether the given numeric field is empty.
-     *
-     * @param text the text of the field to check
-     */
-    private boolean numericFieldIsEmpty(String text) {
-
-        text = text.trim();
-        return text.equals("") || text.equals("-") || text.equals(".") || text.equals("-.");
-    }
-
-    /**
-     * Return whether the given numeric field is empty.
-     *
-     * @param field the field to check
-     */
-    private boolean numericFieldIsEmpty(EditText field) {
-
-        return numericFieldIsEmpty(field.getText().toString());
-    }
-
-    /**
      * Return whether all the location fields are set.
      *
      * @return whether all the location fields are set
      */
     private boolean locationIsSet() {
 
-        return !(numericFieldIsEmpty(latitudetext) || numericFieldIsEmpty(longitudetext) ||
-                numericFieldIsEmpty(altitudetext));
+        return locationArray != null;
     }
 
     @Override
@@ -270,13 +256,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
         defaultImage = moodPhoto.getDrawable();
         dateString = (TextView) findViewById(R.id.postDate);
         deletePhoto = (ImageButton) findViewById(R.id.delimage);
-
-        latitudetext = (EditText) findViewById(R.id.latitude);
-        longitudetext = (EditText) findViewById(R.id.longitude);
-        altitudetext = (EditText)findViewById(R.id.altitude);
-
-        latitudetext.setFilters(new InputFilter[]{new InputFilterMinMax(0.0d, 90.0d)});
-        longitudetext.setFilters(new InputFilter[]{new InputFilterMinMax(-180.0d, 180.0d)});
+        mapButton = (ImageButton) findViewById(R.id.mapButton);
 
 
 
@@ -309,10 +289,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 dateString.setText(DateConverter.dateToString(Calendar.getInstance()));
 
                 if (locationArray != null) {
-                    DecimalFormat format = new DecimalFormat("#.####");
-                    latitudetext.setText(format.format(locationArray[0]));
-                    longitudetext.setText(format.format(locationArray[1]));
-                    altitudetext.setText(format.format(locationArray[2]));
+                    mapButton.setImageResource(R.drawable.pin_selected);
                 }
 
                 final Context context = this;
@@ -372,16 +349,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             Profile profile = LocalData.getSignedInProfile(getApplicationContext());
                             if (date == null){
                                 date = Calendar.getInstance();
-                            }
-
-                            // If all fields are set, store location
-                            if (locationIsSet()) {
-
-                                double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
-                                        Double.parseDouble(longitudetext.getText().toString()),
-                                        Double.parseDouble(altitudetext.getText().toString())};
-                                //post.setLocation(newLocationArray);
-                                locationArray = newLocationArray;
                             }
 
                             Post post = new Post(textExplanation.getText().toString().replace("\\s+$", ""), onRadioButtonClicked(moodButtons),
@@ -458,27 +425,7 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 Integer oldcontext = post.getContext();
                 Calendar olddate = post.getDate();
 
-                double[] oldlocationArray = post.getLocation();
-
-                Double oldLatitude = null;
-                Double oldLongitude = null;
-                Double oldAltitude = null;
-
-
-                if (oldlocationArray == null) {
-
-                    if (locationArray != null) {
-                        oldLatitude = locationArray[0];
-                        oldLongitude = locationArray[1];
-                        oldAltitude = locationArray[2];
-                    }
-                }
-
-                else {
-                    oldLatitude = oldlocationArray[0];
-                    oldLongitude = oldlocationArray[1];
-                    oldAltitude = oldlocationArray[2];
-                }
+                locationArray = post.getLocation();
 
 
                 textTrigger.setText(oldTrigger);
@@ -490,11 +437,9 @@ public class AddOrEditPostActivity extends AppCompatActivity {
 
                 dateString.setText(DateConverter.dateToString(olddate));
 
-                if (oldLatitude != null) {
-                    DecimalFormat format = new DecimalFormat("#.####");
-                    latitudetext.setText(format.format(oldLatitude));
-                    altitudetext.setText(format.format(oldAltitude));
-                    longitudetext.setText(format.format(oldLongitude));}
+                if (locationArray != null) {
+                    mapButton.setImageResource(R.drawable.pin_selected);
+                }
 
 
 
@@ -520,16 +465,10 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                             post.setText(textExplanation.getText().toString().replace("\\s+$", ""));
                             post.setTriggerText(textTrigger.getText().toString().replace("\\s+$", ""));
                             post.setTriggerImage(image);
+                            post.setLocation(locationArray);
 
-                            if (locationIsSet()){
-
-                                double[] newLocationArray = {Double.parseDouble(latitudetext.getText().toString()),
-                                        Double.parseDouble(longitudetext.getText().toString()),
-                                        Double.parseDouble(altitudetext.getText().toString())};
-                            post.setLocation(newLocationArray);
-                            }
                             if (date != null)
-                            post.setDate(date);
+                                post.setDate(date);
 
 
                             if (isNetworkAvailable()){
@@ -549,12 +488,6 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 });
             }
 
-
-
-
-
-
-
         //a back button
         ImageButton imageButton = (ImageButton) findViewById(R.id.backButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -564,9 +497,30 @@ public class AddOrEditPostActivity extends AppCompatActivity {
                 finish();
             }}
         );
-
-
     }
+
+    public void onMapButtonClicked(View v) {
+
+        if (locationArray == null) {
+
+            try {
+                Intent intent = new PlacePicker.IntentBuilder().build(this);
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            }
+
+            catch (Exception e) {
+
+                Toast.makeText(getApplicationContext(), "Location picker error",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+        else {
+            locationArray = null;
+            mapButton.setImageResource(R.drawable.pin_unselected);
+        }
+    }
+
     //Based on https://developer.android.com/guide/topics/ui/controls/radiobutton.html
     //A converter function that converts the selected radio button in a radio group to a mood
     public Integer onRadioButtonClicked(View view) {

@@ -36,7 +36,8 @@
         android:scaleType="fitCenter"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/profileTitle"
-        android:onClick="onProfilePictureClicked"/>
+        android:onClick="onProfilePictureClicked"
+        android:background="@null"/>
 
     <ImageButton
         android:id="@+id/deleteProfilePicture"

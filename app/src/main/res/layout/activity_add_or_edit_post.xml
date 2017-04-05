@@ -46,7 +46,8 @@
         android:layout_height="30dp"
         android:src="@drawable/ic_action_name"
         android:layout_alignBottom="@+id/moodPhoto"
-        android:layout_toEndOf="@+id/moodPhoto" />
+        android:layout_toEndOf="@+id/moodPhoto"
+        android:background="@null"/>
 
     <ImageButton
         android:id="@+id/moodPhoto"
@@ -55,69 +56,25 @@
         android:src="@android:drawable/ic_menu_camera"
         android:scaleType="fitCenter"
         android:layout_below="@+id/body"
-        android:layout_alignParentLeft="true"/>
-
-    <EditText
-        android:id="@+id/latitude"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
-        android:background="@android:color/background_light"
-        android:hint="Latitude"
-        android:inputType="numberDecimal"
-        android:layout_below="@+id/textView3"
-        android:layout_alignStart="@+id/textView3" />
-    <TextView
-        android:layout_width="80dp"
-        android:layout_height="20dp"
-        android:text="Location:"
-        android:layout_below="@+id/body"
-        android:layout_alignStart="@+id/longitude"
-        android:textSize="18sp"
-        android:id="@+id/textView3"/>
-    <EditText
-        android:id="@+id/longitude"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
-        android:background="@android:color/background_light"
-        android:hint="Longitude"
-        android:layout_below="@+id/latitude"
-        android:inputType="numberDecimal|numberSigned"
-        android:layout_alignStart="@+id/altitude" />
+        android:layout_alignParentLeft="true"
+        android:background="@null"/>
 
     <ImageButton
         android:id="@+id/datebutton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/ic_action_date"
-        android:layout_above="@+id/textView4"
-        android:layout_alignStart="@+id/textView4" />
-
-    <EditText
-        android:id="@+id/altitude"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
-        android:layout_toEndOf="@+id/delimage"
-        android:layout_below="@+id/longitude"
-        android:background="@android:color/background_light"
-        android:hint="Altitude"
-        android:inputType="numberDecimal|numberSigned"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:text="Posted on:"
-        android:textSize="15sp"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/latitude"
-        android:layout_alignEnd="@+id/trigger" />
+        android:layout_below="@+id/body"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/postDate"
-        android:layout_width="100dp"
-        android:layout_height="20dp"
-        android:layout_below="@+id/textView4"
-        android:layout_alignStart="@+id/textView4" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/datebutton"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/angry"
@@ -431,6 +388,16 @@
         android:tint="@android:color/background_light"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
+    <ImageButton
+        android:id="@+id/mapButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/pin_unselected"
+        android:background="@null"
+        android:layout_toLeftOf="@+id/datebutton"
+        android:layout_below="@+id/body"
+        android:scaleType="fitCenter"
+        android:onClick="onMapButtonClicked"/>
 
 
 </RelativeLayout>
