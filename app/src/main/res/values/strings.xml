@@ -1,11 +1,14 @@
 <resources>
+
     <string name="app_name">MoodCloud</string>
     <string name="title_activity_search_moods">SearchMoods</string>
+
     <string-array name="whereArray">
         <item>Everyone</item>
         <item>Following</item>
         <item>My Moods</item>
     </string-array>
+
     <string-array name="moodsArray">
         <item>Any</item>
         <item>Angry</item>
@@ -17,10 +20,12 @@
         <item>Ashamed</item>
         <item>Surprised</item>
     </string-array>
+
     <string-array name="groupSoloArray">
         <item>Any</item>
         <item>Alone</item>
         <item>With A Group</item>
         <item>With A Crowd</item>
     </string-array>
+
 </resources>
