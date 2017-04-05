@@ -45,16 +45,23 @@ public class FollowController {
      * @return whether the given {@link Follow} relationship exists
      */
     public boolean followExists(Profile follower, Profile followee) {
+
+        SearchFilter filter = new SearchFilter()
+                .addFieldValue(new FieldValue("followerId", follower.getId()))
+                .addFieldValue(new FieldValue("followeeId", followee.getId()));
+
+        this.elasticSearch.setFilter(filter);
+
         try {
-            ArrayList<Follow> followers = getFollowers(followee, 0);
-            for (int i=0; i<followers.size(); i++){
-                if (follower.equals(followers.get(i).getFollower())){
-                    return true;
-                }
-            }
+            Follow result = this.elasticSearch.getSingleResult();
+            this.elasticSearch.setFilter(null);
+            return result != null;
+        }
+
+        catch (TimeoutException e) {
+            this.elasticSearch.setFilter(null);
             return false;
-        } catch (TimeoutException e){}
-        return false;
+        }
     }
 
     /**
@@ -69,8 +76,8 @@ public class FollowController {
      */
     public ArrayList<Follow> getFollowers(Profile followee, int from) throws TimeoutException {
 
-        SearchFilter filter = new SearchFilter().addFieldValue(new FieldValue("followeeId",
-                followee.getId()));
+        SearchFilter filter = new SearchFilter()
+                .addFieldValue(new FieldValue("followeeId", followee.getId()));
 
         this.elasticSearch.setFilter(filter);
 
@@ -148,7 +155,11 @@ public class FollowController {
      */
     public void addOrUpdateFollows(Follow... follows) {
 
-        this.elasticSearch.addOrUpdate(follows);
+        for (Follow follow: follows) {
+
+            if (!this.followExists(follow.getFollower(), follow.getFollowee()))
+                this.elasticSearch.addOrUpdate(follow);
+        }
     }
 
     /**

@@ -145,6 +145,33 @@ public class FollowRequestController {
     }
 
     /**
+     * Return whether the given {@link Follow} relationship exists.
+     *
+     * @param follower the follower in the {@link Follow} relationship
+     * @param followee the followee in the {@link Follow} relationship
+     * @return whether the given {@link Follow} relationship exists
+     */
+    public boolean followRequestExists(Profile follower, Profile followee) {
+
+        SearchFilter filter = new SearchFilter()
+                .addFieldValue(new FieldValue("followerId", follower.getId()))
+                .addFieldValue(new FieldValue("followeeId", followee.getId()));
+
+        this.elasticSearch.setFilter(filter);
+
+        try {
+            FollowRequest result = this.elasticSearch.getSingleResult();
+            this.elasticSearch.setFilter(null);
+            return result != null;
+        }
+
+        catch (TimeoutException e) {
+            this.elasticSearch.setFilter(null);
+            return false;
+        }
+    }
+
+    /**
      * Add or update the given {@link FollowRequest}s via elasticsearch.
      *
      * <p>
@@ -155,7 +182,11 @@ public class FollowRequestController {
      */
     public void addOrUpdateFollows(FollowRequest... followRequests) {
 
-        this.elasticSearch.addOrUpdate(followRequests);
+        for (FollowRequest followRequest: followRequests) {
+
+            if (!this.followRequestExists(followRequest.getFollower(), followRequest.getFollowee()))
+                this.elasticSearch.addOrUpdate(followRequest);
+        }
     }
 
     /**
