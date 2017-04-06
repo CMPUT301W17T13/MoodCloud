@@ -151,4 +151,17 @@
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:layout_marginLeft="10dp"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/pinProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profilePictureView"
+        android:layout_toRightOf="@+id/profilePictureView"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/pin_item"
+        android:layout_marginLeft="15dp"
+        android:onClick="onPinProfileClicked"
+        android:visibility="gone"/>
+
 </RelativeLayout>

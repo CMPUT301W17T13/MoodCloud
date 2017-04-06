@@ -2,7 +2,12 @@ package com.csahmad.moodcloud;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -56,6 +63,18 @@ public class ViewProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String id = intent.getStringExtra("ID");
         if (id == null) id = LocalData.getSignedInProfile(this).getId();
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+            if (!id.equals(LocalData.getSignedInProfile(this).getId())) {
+
+                FloatingActionButton pinButton =
+                        (FloatingActionButton) findViewById(R.id.pinProfileButton);
+
+                pinButton.setVisibility(View.VISIBLE);
+            }
+        }
+
         try {
             if(id.equals(LocalData.getSignedInProfile(getApplicationContext()).getId())){
                 profile = LocalData.getSignedInProfile(getApplicationContext());
@@ -254,6 +273,51 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
 
         this.setImage(profile.getImageBitmap());
+    }
+
+    // Modified from:
+    // https://developer.android.com/guide/topics/ui/shortcuts.html
+    // Accessed April 6, 2017
+    public void onPinProfileClicked(View v) {
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+            List<ShortcutInfo> existing = shortcutManager.getDynamicShortcuts();
+
+            for (ShortcutInfo existingShortcut: existing) {
+
+                // If shortcut already exists, remove it
+                if (existingShortcut.getId().equals(profile.getId())) {
+                    shortcutManager.removeDynamicShortcuts(Arrays.asList(profile.getId()));
+                    Toast.makeText(getApplicationContext(), "Removed " + profile.getName(),
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            Intent intent = new Intent(getApplicationContext(), ViewProfileActivity.class);
+            intent.putExtra("ID", profile.getId());
+            intent.setAction(Intent.ACTION_VIEW);
+
+            ShortcutInfo.Builder shortcut = new ShortcutInfo.Builder(this, profile.getId())
+                    .setShortLabel(profile.getName())
+                    .setLongLabel(profile.getName())
+                    .setIntent(intent)
+                    .setDisabledMessage(profile.getName() + " shortcut disabled");
+
+            Bitmap profileImage = profile.getImageBitmap();
+
+            if (profileImage != null)
+                shortcut.setIcon(Icon.createWithBitmap(profileImage));
+
+            shortcutManager.addDynamicShortcuts(Arrays.asList(shortcut.build()));
+
+            Toast.makeText(getApplicationContext(), "Hold app icon for " + profile.getName(),
+                    Toast.LENGTH_LONG).show();
+
+        }
     }
 
     /**
