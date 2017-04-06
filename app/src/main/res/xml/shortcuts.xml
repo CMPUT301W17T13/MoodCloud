@@ -1,0 +1,35 @@
+<!--
+Modified from:
+https://developer.android.com/guide/topics/ui/shortcuts.html
+Accessed April 6, 2017
+-->
+
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="addMoodEvent"
+        android:enabled="true"
+        android:icon="@mipmap/mood_event_launcher"
+        android:shortcutShortLabel="@string/addMoodShortcutShort"
+        android:shortcutLongLabel="@string/addMoodShortcutLong"
+        android:shortcutDisabledMessage="@string/addMoodShortcutDisabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.csahmad.moodcloud"
+            android:targetClass="com.csahmad.moodcloud.AddOrEditPostActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="myMoodHistory"
+        android:enabled="true"
+        android:icon="@mipmap/mood_history_launcher"
+        android:shortcutShortLabel="@string/moodHistoryShortcutShort"
+        android:shortcutLongLabel="@string/moodHistoryShortcutLong"
+        android:shortcutDisabledMessage="@string/moodHistoryShortcutDisabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.csahmad.moodcloud"
+            android:targetClass="com.csahmad.moodcloud.ViewProfileActivity" />
+    </shortcut>
+
+</shortcuts>

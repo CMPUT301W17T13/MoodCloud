@@ -28,4 +28,11 @@
         <item>With A Crowd</item>
     </string-array>
 
+    <string name="addMoodShortcutShort">Mood event</string>
+    <string name="addMoodShortcutLong">Add mood event</string>
+    <string name="addMoodShortcutDisabled">Mood event shortcut disabled</string>
+    <string name="moodHistoryShortcutShort">Mood history</string>
+    <string name="moodHistoryShortcutLong">My mood history</string>
+    <string name="moodHistoryShortcutDisabled">Mood history shortcut disabled</string>
+
 </resources>

@@ -55,6 +55,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
         String id = intent.getStringExtra("ID");
+        if (id == null) id = LocalData.getSignedInProfile(this).getId();
         try {
             if(id.equals(LocalData.getSignedInProfile(getApplicationContext()).getId())){
                 profile = LocalData.getSignedInProfile(getApplicationContext());

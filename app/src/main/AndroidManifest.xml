@@ -24,6 +24,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--
+            Taken from:
+            https://developer.android.com/guide/topics/ui/shortcuts.html
+            Accessed April 6, 2017
+            -->
+            <meta-data android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".SignInActivity"
