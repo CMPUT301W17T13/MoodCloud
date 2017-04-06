@@ -101,7 +101,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 FollowRequestController followRequestController = new FollowRequestController();
 
                 if (profile == null) {
-                    button.setText("Can't follow dummy");
+                    button.setText("Profile Deleted");
                     button.setClickable(FALSE);
                 } else if (followController.followExists(LocalData.getSignedInProfile(getApplicationContext()),profile)){
                     //Button button = (Button) findViewById(R.id.followeditbutton);
@@ -114,7 +114,7 @@ public class ViewPostActivity extends AppCompatActivity {
                         button.setClickable(FALSE);
                     }else {
                         //Button button = (Button) findViewById(R.id.followeditbutton);
-                        button.setText("Send Follow Request");
+                        button.setText("Follow");
                         button.setClickable(TRUE);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override

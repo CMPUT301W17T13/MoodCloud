@@ -37,7 +37,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/profileTitle"
         android:onClick="onProfilePictureClicked"
-        android:background="@null"/>
+        android:background="@null"
+        android:layout_marginLeft="10dp"/>
 
     <ImageButton
         android:id="@+id/deleteProfilePicture"
@@ -47,7 +48,8 @@
         android:src="@drawable/ic_action_name"
         android:layout_alignBottom="@+id/profilePicture"
         android:layout_toEndOf="@+id/profilePicture"
-        android:onClick="onDeleteProfilePictureClicked"/>
+        android:onClick="onDeleteProfilePictureClicked"
+        android:background="@null"/>
 
     <LinearLayout
         android:id="@+id/nameLayout"
@@ -156,8 +158,8 @@
 
     <Button
         android:id="@+id/saveProfileButton"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Colored"
         android:text="Save"
         android:onClick="onSaveProfileClick"

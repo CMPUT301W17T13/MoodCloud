@@ -148,6 +148,7 @@
         android:layout_width="@android:dimen/notification_large_icon_height"
         android:layout_height="@android:dimen/notification_large_icon_height"
         android:layout_below="@+id/profileName"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:layout_marginLeft="10dp"/>
 
 </RelativeLayout>
