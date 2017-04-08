@@ -1,5 +1,6 @@
 package com.csahmad.moodcloud;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -88,8 +89,15 @@ public class ViewPostActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View view){
+
                         if (ConnectionManager.haveConnection(getApplicationContext())){
-                        postController.deletePosts(post);}
+                            postController.deletePosts(post);
+                        }
+
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("DELETED_POST", post);
+                        setResult(Activity.RESULT_OK, returnIntent);
+
                         finish();
                     }}
                 );

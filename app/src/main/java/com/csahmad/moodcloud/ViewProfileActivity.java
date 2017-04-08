@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,13 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -52,7 +49,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private int visibleThreshold = 5;
     private int firstVisibleItems, visibleItemCount, totalItemCount;
     ArrayList<Post> mDataset;
-
+    Post deleted;
 
     @Override
     protected void onStart() {
@@ -62,6 +59,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.profilePostList);
         Intent intent = getIntent();
         String id = intent.getStringExtra("ID");
+
         if (id == null) id = LocalData.getSignedInProfile(this).getId();
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -275,6 +273,26 @@ public class ViewProfileActivity extends AppCompatActivity {
         this.setImage(profile.getImageBitmap());
     }
 
+    public void onUndoDeletePost(View v) {
+
+        PostController controller = new PostController();
+        // Setting ID to null because we're just adding a new post with same properties
+        deleted.setId(null);
+        controller.addOrUpdatePosts(deleted);
+
+        try {
+            controller.waitForTask();
+        }
+
+        catch (Exception e) {
+            ConnectionManager.showConnectionError(this);
+        }
+
+        Intent intent = new Intent(this, ViewPostActivity.class);
+        intent.putExtra("POST", deleted);
+        startActivityForResult(intent, GET_POST_REQUEST);
+    }
+
     // Modified from:
     // https://developer.android.com/guide/topics/ui/shortcuts.html
     // Accessed April 6, 2017
@@ -356,6 +374,27 @@ public class ViewProfileActivity extends AppCompatActivity {
                     }
 
                     mAdapter.notifyDataSetChanged();
+
+                    deleted = data.getParcelableExtra("DELETED_POST");
+
+                    if (deleted != null) {
+
+                        final ViewProfileActivity activity = this;
+
+                        View.OnClickListener onClickListener = new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                activity.onUndoDeletePost(v);
+                            }
+                        };
+
+                        Snackbar
+                                .make(findViewById(android.R.id.content), "Post deleted", Snackbar.LENGTH_LONG)
+                                .setAction("Undo", onClickListener)
+                                .setActionTextColor(Color.RED)
+                                .show();
+                    }
                 }
 
                 break;
